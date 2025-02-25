@@ -178,6 +178,16 @@ Popup is the wrapper of Overlay. It receives a node as a trigger node and pops u
 export type AnimationObjectType = Record<'in' | 'out', string>;
 ```
 
+### OnPositionResultType
+
+```typescript
+export type OnPositionResultType = {
+    config: { placement: string; points: string };
+    align: string[];
+    style?: CSSCounterStyleRule;
+};
+```
+
 ### PropTarget
 
 ```typescript

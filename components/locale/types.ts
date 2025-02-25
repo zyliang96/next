@@ -62,6 +62,11 @@ export interface BaseLocale extends LocaleConfig {
         minute: string;
         second: string;
         monthBeforeYear?: boolean;
+        /**
+         * 季度选择占位符（新增字段）
+         * @en Quarter picker placeholder (new field)
+         */
+        quarterPlaceholder?: string;
     };
     Dialog: Partial<{
         close: string;

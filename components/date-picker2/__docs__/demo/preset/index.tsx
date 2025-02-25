@@ -2,14 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { DatePicker2 } from '@alifd/next';
-import dayjs from 'dayjs';
+import dayjs, { type Dayjs } from 'dayjs';
 
 const { RangePicker } = DatePicker2;
-const RangePreset = {
+const RangePreset: Record<string, Dayjs[]> = {
     今天: [dayjs(), dayjs()],
     本月: [dayjs().startOf('month'), dayjs().endOf('month')],
 };
-const datePreset = {
+const datePreset: Record<string, () => Dayjs> = {
     此刻: () => dayjs(),
 };
 
