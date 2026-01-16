@@ -139,6 +139,10 @@ const demoPlugin = (dirName: string): VitePlugin => {
                             find: /^moment$/,
                             replacement: 'moment/moment.js',
                         },
+                        {
+                            find: '@alifd/apa-sdk',
+                            replacement: resolve(CWD, 'dependencies/apa-sdk'),
+                        },
                     ],
                 },
             };
@@ -295,7 +299,18 @@ const importNextPlugin = (): VitePlugin => {
         },
         root: __dirname,
         plugins: [
-            react({ exclude: /tools/ }),
+            react({
+                exclude: /tools/,
+                babel: {
+                    parserOpts: {
+                        plugins: ['decorators-legacy'],
+                    },
+                    plugins: [
+                        ['@babel/plugin-proposal-decorators', { legacy: true }],
+                        ['@babel/plugin-proposal-class-properties', { loose: true }],
+                    ],
+                },
+            }),
             demoPlugin(DIR_NAME),
             themePlugin(DIR_NAME),
             importNextPlugin(),

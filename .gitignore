@@ -91,3 +91,4 @@ src/core-temp
 # tests snapshots diff
 components/**/__tests__/snapshots/__diff__/**
 cypress/screenshots/**
+dependencies/

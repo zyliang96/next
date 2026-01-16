@@ -31,3 +31,7 @@ declare module 'react-lifecycles-compat' {
 
     export function polyfill<C extends ComponentType>(Component: C): C;
 }
+
+interface Window {
+    [key: string]: unknown;
+}

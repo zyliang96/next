@@ -1,7 +1,8 @@
 import React, { Component, Children, isValidElement } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { ButtonProps } from '../types';
+import { APAActionEnabled, APAAction } from '@alifd/apa-sdk';
+import type { ButtonProps } from '../types';
 import ConfigProvider from '../../config-provider';
 import { obj, log } from '../../util';
 
@@ -13,6 +14,7 @@ function mapIconSize(size: NonNullable<ButtonProps['size']>): ButtonProps['iconS
     }[size];
 }
 
+@APAActionEnabled
 export default class Button extends Component<ButtonProps> {
     static displayName = 'Button';
     static propTypes = {
@@ -66,6 +68,7 @@ export default class Button extends Component<ButtonProps> {
 
     button: HTMLButtonElement | HTMLAnchorElement | unknown;
 
+    @APAAction({ name: 'onMouseUp', desc: '按钮点击事件' })
     onMouseUp = (e: React.MouseEvent<HTMLElement>) => {
         // @ts-expect-error fixme: may have no blur
         this.button.blur();

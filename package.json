@@ -119,7 +119,8 @@
     "react-transition-group": "^2.2.1",
     "resize-observer-polyfill": "^1.5.1",
     "shallow-element-equals": "^1.0.1",
-    "tslib": "^2.6.2"
+    "tslib": "^2.6.2",
+    "zod": "^4.3.5"
   },
   "devDependencies": {
     "@alifd/adaptor-generate": "^0.2.3",
@@ -135,7 +136,8 @@
     "@alifd/sassdoc-parser": "^2.0.1",
     "@alifd/stylelint-config-next": "^1.0.0",
     "@babel/core": "^7.12.3",
-    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-proposal-decorators": "^7.28.6",
     "@babel/plugin-syntax-jsx": "^7.12.1",
     "@commitlint/cli": "^17.8.1",
     "@microsoft/tsdoc": "^0.14.2",
