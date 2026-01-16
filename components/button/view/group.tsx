@@ -1,6 +1,7 @@
 import React, { Component, Children } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import { GroupProps } from '../types';
 import ConfigProvider from '../../config-provider';
 
@@ -54,4 +55,16 @@ class ButtonGroup extends Component<GroupProps> {
 
 export type { ButtonGroup };
 
-export default ConfigProvider.config(ButtonGroup);
+export default ConfigProvider.config(
+    APAConfigProvider.config(ButtonGroup, {
+        isRegiserChildren: false,
+        desc: '按钮组组件',
+        props: [
+            {
+                key: 'size',
+                name: '尺寸',
+                desc: '按钮组尺寸',
+            },
+        ],
+    })
+);
