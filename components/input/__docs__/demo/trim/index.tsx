@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Input } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import type { InputProps } from '@alifd/next/types/input';
 
 class App extends React.Component {
@@ -33,4 +34,14 @@ class App extends React.Component {
         );
     }
 }
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="Input去除空格Demo"
+        regionId="Input-trim-demo"
+        regionDesc="Input去除空格示例"
+        isRegiserChildren
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);

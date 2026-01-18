@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { APAConfigProvider, APAState } from '@alifd/apa-sdk';
 import Icon from '../icon';
 import { obj, func } from '../util';
 import Base from './base';
@@ -24,6 +25,12 @@ function preventDefault(e: UIEvent) {
 class Input<P extends InputProps = InputProps> extends Base<P> {
     static displayName = 'Input';
     static getDerivedStateFromProps = Base.getDerivedStateFromProps;
+
+    @APAState([
+        { name: 'value', desc: '输入框的值' },
+        { name: 'composition', desc: '是否处于输入法输入状态' },
+    ])
+    state!: { value: string | number; composition?: boolean };
     static propTypes = {
         ...Base.propTypes,
         label: PropTypes.node,
@@ -73,6 +80,7 @@ class Input<P extends InputProps = InputProps> extends Base<P> {
 
         this.state = {
             value: typeof value === 'undefined' ? '' : value,
+            composition: false,
         };
     }
 
@@ -350,4 +358,21 @@ class Input<P extends InputProps = InputProps> extends Base<P> {
     }
 }
 
-export default Input;
+// 导出原始类供 Password 等子类继承
+export { Input };
+
+// 导出包装后的组件作为默认导出
+export default APAConfigProvider.config(Input, {
+    isRegiserChildren: false,
+    desc: '输入框组件',
+    props: [
+        { key: 'value', name: 'value', desc: '输入框当前的值' },
+        { key: 'disabled', name: 'disabled', desc: '是否禁用输入框' },
+        { key: 'placeholder', name: 'placeholder', desc: '输入框占位符文本' },
+        { key: 'maxLength', name: 'maxLength', desc: '输入框最大字符长度' },
+        { key: 'readOnly', name: 'readOnly', desc: '是否只读' },
+        { key: 'addonTextBefore', name: 'addonTextBefore', desc: '输入框前附加文字' },
+        { key: 'addonTextAfter', name: 'addonTextAfter', desc: '输入框后附加文字' },
+        { key: 'size', name: 'size', desc: '输入框尺寸大小' },
+    ],
+});

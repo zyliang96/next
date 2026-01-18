@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Input } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 function Demo() {
     const [value, setValue] = React.useState('');
@@ -24,4 +25,14 @@ function Demo() {
     );
 }
 
-ReactDOM.render(<Demo />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="Input中文输入法Demo"
+        regionId="Input-ime-demo"
+        regionDesc="Input中文输入法示例"
+        isRegiserChildren
+    >
+        <Demo />
+    </APAConfigProvider>,
+    mountNode
+);
