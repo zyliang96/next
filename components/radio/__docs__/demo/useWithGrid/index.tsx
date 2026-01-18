@@ -1,6 +1,7 @@
 import React, { type MouseEvent } from 'react';
 import ReactDOM from 'react-dom';
 import { Radio, Grid } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const { Row, Col } = Grid;
 const RadioGroup = Radio.Group;
@@ -68,4 +69,14 @@ class ControlApp extends React.Component {
     }
 }
 
-ReactDOM.render(<ControlApp />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="使用 Grid 快速布局"
+        regionId="Radio-useWithGrid-demo"
+        regionDesc="使用Grid布局RadioGroup中的选项"
+        isRegiserChildren
+    >
+        <ControlApp />
+    </APAConfigProvider>,
+    mountNode
+);

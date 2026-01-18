@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Radio, Switch } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 class App extends React.Component {
     state = {
@@ -41,4 +42,14 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="禁用状态"
+        regionId="Radio-disabled-demo"
+        regionDesc="Radio禁用状态"
+        isRegiserChildren
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);

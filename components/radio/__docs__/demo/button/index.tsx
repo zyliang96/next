@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Radio } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const RadioGroup = Radio.Group;
 
@@ -102,4 +103,14 @@ class ControlApp extends React.Component {
     }
 }
 
-ReactDOM.render(<ControlApp />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="按钮样式与大小"
+        regionId="Radio-button-demo"
+        regionDesc="使用RadioGroup渲染的组，通过设置shape和size控制样式和大小"
+        isRegiserChildren
+    >
+        <ControlApp />
+    </APAConfigProvider>,
+    mountNode
+);
