@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Radio } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const RadioGroup = Radio.Group;
 
@@ -56,4 +57,14 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="传入数组配置"
+        regionId="Radio-dataSource-demo"
+        regionDesc="通过配置dataSource参数来渲染单选框分组"
+        isRegiserChildren
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);

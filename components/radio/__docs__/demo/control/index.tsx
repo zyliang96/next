@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Radio } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const RadioGroup = Radio.Group;
 
@@ -51,4 +52,14 @@ class ControlApp extends React.Component {
     }
 }
 
-ReactDOM.render(<ControlApp />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="受控组件"
+        regionId="Radio-control-demo"
+        regionDesc="使用RadioGroup渲染的组，通过设置value属性让组件变成受控组件"
+        isRegiserChildren
+    >
+        <ControlApp />
+    </APAConfigProvider>,
+    mountNode
+);

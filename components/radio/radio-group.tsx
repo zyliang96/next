@@ -2,6 +2,15 @@ import React, { Component, type ChangeEvent, type ReactNode } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
+import { z } from 'zod';
+import {
+    APAActionEnabled,
+    APAAction,
+    APAStateEnabled,
+    APAState,
+    APAConfigProvider,
+    type APAComponentConfigContextInfo,
+} from '@alifd/apa-sdk';
 import ConfigProvider from '../config-provider';
 import { obj, func, focus } from '../util';
 import Radio from './radio';
@@ -20,8 +29,11 @@ const { pickOthers } = obj;
 
 export interface GroupState {
     value: RadioValue | undefined;
+    [key: string]: unknown; // ← 添加索引签名，让它兼容 Record
 }
 
+@APAActionEnabled
+@APAStateEnabled
 class RadioGroup extends Component<GroupProps, GroupState> {
     static propTypes = {
         ...ConfigProvider.propTypes,
@@ -69,6 +81,9 @@ class RadioGroup extends Component<GroupProps, GroupState> {
     radioRefs: unknown[];
     hasFocus: boolean;
 
+    @APAState([{ name: 'value', desc: '当前选中的值' }])
+    state: GroupState;
+
     constructor(props: GroupProps) {
         super(props);
         let value: RadioValue | undefined = '';
@@ -108,9 +123,25 @@ class RadioGroup extends Component<GroupProps, GroupState> {
         };
     }
 
+    @APAAction({
+        name: 'setValue',
+        desc: '设置选中的值',
+        params: z.tuple([z.union([z.string(), z.number(), z.boolean()]).describe('要选中的值')]),
+    })
     onChange(currentValue: RadioValue, e: ChangeEvent<HTMLInputElement>) {
         if (!('value' in this.props)) {
             this.setState({ value: currentValue });
+        } else {
+            // 受控模式：手动同步状态到 APA
+            const { apaNode } = (this.context as APAComponentConfigContextInfo) || {};
+            if (apaNode) {
+                apaNode.updateState({
+                    value: {
+                        value: currentValue,
+                        desc: '当前选中的值',
+                    },
+                });
+            }
         }
         if (currentValue !== this.state.value) {
             this.props.onChange!(currentValue, e);
@@ -288,4 +319,21 @@ class RadioGroup extends Component<GroupProps, GroupState> {
 
 export type { RadioGroup };
 
-export default polyfill(RadioGroup);
+export default ConfigProvider.config(
+    APAConfigProvider.config(polyfill(RadioGroup), {
+        isRegiserChildren: false,
+        desc: '单选框组组件',
+        props: [
+            {
+                key: 'disabled',
+                name: '禁用状态',
+                desc: '是否禁用所有单选框',
+            },
+            {
+                key: 'value',
+                name: '选中值',
+                desc: '当前选中的值',
+            },
+        ],
+    })
+);

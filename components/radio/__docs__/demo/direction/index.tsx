@@ -1,6 +1,7 @@
 import React, { type ChangeEvent } from 'react';
 import ReactDOM from 'react-dom';
 import { Radio, Input, Switch } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 class App extends React.Component {
     state = {
@@ -52,4 +53,14 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="垂直展示"
+        regionId="Radio-direction-demo"
+        regionDesc="垂直展示Radio.Group，配合更多输入框"
+        isRegiserChildren
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);

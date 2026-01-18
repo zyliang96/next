@@ -2,6 +2,13 @@ import React, { type ChangeEvent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
+import {
+    APAActionEnabled,
+    APAAction,
+    APAStateEnabled,
+    APAState,
+    APAConfigProvider,
+} from '@alifd/apa-sdk';
 import UIState, { type UIStateState } from '../mixin-ui-state';
 import ConfigProvider from '../config-provider';
 import withContext from './with-context';
@@ -12,8 +19,11 @@ const { makeChain, noop } = func;
 
 interface RadioState extends UIStateState {
     checked?: boolean;
+    [key: string]: unknown; // ← 添加索引签名，让它兼容 Record
 }
 
+@APAActionEnabled
+@APAStateEnabled
 class Radio extends UIState<RadioWithContextProps, RadioState> {
     static displayName = 'Radio';
     static propTypes = {
@@ -69,6 +79,9 @@ class Radio extends UIState<RadioWithContextProps, RadioState> {
 
     radioRef: HTMLInputElement | null;
 
+    @APAState([{ name: 'checked', desc: '是否选中' }])
+    state: RadioState;
+
     constructor(props: RadioWithContextProps) {
         super(props);
         const { context } = props;
@@ -119,6 +132,7 @@ class Radio extends UIState<RadioWithContextProps, RadioState> {
         }
     }
 
+    @APAAction({ name: 'onChange', desc: '切换选中状态' })
     onChange(e: ChangeEvent<HTMLInputElement>) {
         const checked = e.target.checked;
         const { context, value } = this.props;
@@ -268,4 +282,21 @@ class Radio extends UIState<RadioWithContextProps, RadioState> {
 
 export type { Radio };
 
-export default ConfigProvider.config(withContext(polyfill(Radio)));
+export default ConfigProvider.config(
+    APAConfigProvider.config(withContext(polyfill(Radio)), {
+        isRegiserChildren: false,
+        desc: '单选框组件',
+        props: [
+            {
+                key: 'disabled',
+                name: '禁用状态',
+                desc: '是否禁用单选框，true表示禁用，false表示启用',
+            },
+            {
+                key: 'checked',
+                name: '选中状态',
+                desc: '是否选中，true表示选中，false表示未选中',
+            },
+        ],
+    })
+);
