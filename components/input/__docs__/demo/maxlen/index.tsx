@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Input } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import type { InputProps } from '@alifd/next/types/input';
 
 class App extends React.Component {
@@ -83,4 +84,14 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="Input最大长度Demo"
+        regionId="Input-maxlen-demo"
+        regionDesc="Input最大长度示例"
+        isRegiserChildren
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);

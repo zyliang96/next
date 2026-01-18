@@ -2,6 +2,7 @@ import React, { type CSSProperties, type DOMAttributes } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { APAState, APAActionEnabled, APAStateEnabled } from '@alifd/apa-sdk';
 import zhCN from '../locale/zh-cn';
 import { obj, env } from '../util';
 import Base from './base';
@@ -42,9 +43,24 @@ const hiddenStyle: CSSProperties = {
  * Input.TextArea
  * @order 2
  */
-export default class TextArea extends Base<TextAreaProps> {
+@APAActionEnabled
+@APAStateEnabled
+class TextArea extends Base<TextAreaProps> {
     static displayName = 'TextArea';
     static getDerivedStateFromProps = Base.getDerivedStateFromProps;
+
+    @APAState([
+        { name: 'value', desc: '文本域的值' },
+        { name: 'composition', desc: '是否处于输入法输入状态' },
+    ])
+    state!: {
+        value: string | number;
+        composition?: boolean;
+        height?: number;
+        minHeight?: number;
+        maxHeight?: number;
+        overflowY?: 'hidden';
+    };
     static propTypes = {
         ...Base.propTypes,
         hasBorder: PropTypes.bool,
@@ -79,6 +95,7 @@ export default class TextArea extends Base<TextAreaProps> {
 
         this.state = {
             value: typeof value === 'undefined' || value === null ? '' : value,
+            composition: false,
         };
     }
 
@@ -352,3 +369,5 @@ export default class TextArea extends Base<TextAreaProps> {
         );
     }
 }
+
+export default TextArea;

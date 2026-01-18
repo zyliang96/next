@@ -1,7 +1,7 @@
 import React, { type MouseEvent, type UIEvent } from 'react';
 import PropTypes from 'prop-types';
 
-import Input from './input';
+import { Input } from './input';
 import Icon from '../icon/index';
 import type { PasswordProps } from './types';
 
@@ -10,6 +10,7 @@ function preventDefault(e: UIEvent) {
 }
 export default class Password extends Input<PasswordProps> {
     state = {
+        value: '',
         hint: 'eye-close',
         htmlType: 'password',
     };
