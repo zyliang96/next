@@ -1,7 +1,7 @@
 import React, { Component, Children, isValidElement } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { APAActionEnabled, APAAction } from '@alifd/apa-sdk';
+import { APAActionEnabled, APAAction, APAConfigProvider } from '@alifd/apa-sdk';
 import type { ButtonProps } from '../types';
 import ConfigProvider from '../../config-provider';
 import { obj, log } from '../../util';
@@ -15,7 +15,7 @@ function mapIconSize(size: NonNullable<ButtonProps['size']>): ButtonProps['iconS
 }
 
 @APAActionEnabled
-export default class Button extends Component<ButtonProps> {
+class Button extends Component<ButtonProps> {
     static displayName = 'Button';
     static propTypes = {
         ...ConfigProvider.propTypes,
@@ -204,3 +204,15 @@ export default class Button extends Component<ButtonProps> {
         );
     }
 }
+
+export default APAConfigProvider.config(Button, {
+    isRegiserChildren: false,
+    desc: '按钮组件',
+    props: [
+        {
+            key: 'disabled',
+            name: '禁用状态',
+            desc: '是否禁用按钮，true 表示禁用，false 表示启用，禁用状态不能触发点击事件',
+        },
+    ],
+});
