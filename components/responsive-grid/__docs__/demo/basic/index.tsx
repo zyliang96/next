@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ResponsiveGrid, Radio } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const { Cell } = ResponsiveGrid;
 
@@ -67,4 +68,14 @@ class Demo extends React.Component {
     }
 }
 
-ReactDOM.render(<Demo />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="响应式网格布局组件基本使用示例"
+        regionId="responsive-grid-basic-demo"
+        regionDesc="响应式网格布局组件基本使用示例"
+        isRegiserChildren
+    >
+        <Demo />
+    </APAConfigProvider>,
+    mountNode
+);

@@ -201,11 +201,6 @@ export default ConfigProvider.config(
         desc: '开关组件',
         props: [
             {
-                key: 'checked',
-                name: '开关是否打开',
-                desc: '开关是否打开，true 表示打开，false 表示关闭',
-            },
-            {
                 key: 'disabled',
                 name: '禁用状态',
                 desc: '是否禁用开关，true 表示禁用，false 表示启用，禁用状态不能触发开关状态改变事件',

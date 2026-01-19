@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import ConfigProvider from '../config-provider';
 import { obj } from '../util';
 import type { CellProps } from './types';
@@ -35,4 +36,20 @@ class Cell extends Component<CellProps> {
     }
 }
 
-export default ConfigProvider.config(Cell);
+export default ConfigProvider.config(
+    APAConfigProvider.config(Cell, {
+        desc: '响应式网格单元组件',
+        props: [
+            {
+                key: 'colSpan',
+                name: '横向占据几列',
+                desc: '横向占据几列，可选值为 number 或 object',
+            },
+            {
+                key: 'rowSpan',
+                name: '纵向占据几行',
+                desc: '纵向占据几行，可选值为 number',
+            },
+        ],
+    })
+);

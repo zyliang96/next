@@ -331,21 +331,6 @@ export default APAConfigProvider.config(polyfill(Calendar), {
     desc: '日历组件',
     props: [
         {
-            key: 'value',
-            name: '选中的日期值',
-            desc: '选中的日期值，moment 对象',
-        },
-        {
-            key: 'mode',
-            name: '面板模式',
-            desc: '面板模式, 可选择的值为 date, month, year',
-        },
-        {
-            key: 'visibleMonth',
-            name: '当前展示的月份',
-            desc: '当前展示的月份，moment 对象',
-        },
-        {
             key: 'disabledDate',
             name: '不可选择的日期的回调函数',
             desc: '不可选择的日期的回调函数，参数为当前日期，返回 true 表示不可选择，可用于禁用部分日期',

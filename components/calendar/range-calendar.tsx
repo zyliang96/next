@@ -376,21 +376,6 @@ export default ConfigProvider.config(
         desc: '日历区间组件',
         props: [
             {
-                key: 'startValue',
-                name: '开始日期',
-                desc: '开始日期，moment 对象',
-            },
-            {
-                key: 'endValue',
-                name: '结束日期',
-                desc: '结束日期，moment 对象',
-            },
-            {
-                key: 'mode',
-                name: '面板模式',
-                desc: '面板模式, 可选择的值为 date, month, year',
-            },
-            {
                 key: 'disabledDate',
                 name: '禁用日期的回调函数',
                 desc: '禁用日期的回调函数，返回 true 表示不可选择，可用于禁用部分日期',

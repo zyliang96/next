@@ -382,16 +382,6 @@ export default APAConfigProvider.config(polyfill(WeekPicker), {
     desc: '周选择器组件',
     props: [
         {
-            key: 'value',
-            name: '周值',
-            desc: '周值，moment 对象',
-        },
-        {
-            key: 'visible',
-            name: '显示状态',
-            desc: '显示状态，true 表示显示，false 表示隐藏',
-        },
-        {
             key: 'disabledDate',
             name: '禁用日期的回调函数',
             desc: '禁用日期的回调函数，返回 true 表示不可选择，可用于禁用部分日期',

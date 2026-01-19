@@ -1145,26 +1145,6 @@ export default APAConfigProvider.config(polyfill(RangePicker), {
     desc: '日期范围选择器组件',
     props: [
         {
-            key: 'startValue',
-            name: '开始日期',
-            desc: '开始日期，moment 对象',
-        },
-        {
-            key: 'endValue',
-            name: '结束日期',
-            desc: '结束日期，moment 对象',
-        },
-        {
-            key: 'visible',
-            name: '显示状态',
-            desc: '显示状态, 可选择的值为 true, false',
-        },
-        {
-            key: 'panel',
-            name: '面板类型',
-            desc: '面板类型, 可选择的值为 date-panel, time-panel',
-        },
-        {
             key: 'disabled',
             name: '是否禁用',
             desc: '是否禁用，true 表示禁用，false 表示启用',

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { APAAction, APAActionEnabled, APAConfigProvider } from '@alifd/apa-sdk';
 import moment from 'moment';
 import nextLocale from '../locale/zh-cn';
 import { func } from '../util';
@@ -10,6 +11,7 @@ import type { TimePickerPanelProps } from './types';
 
 const { noop } = func;
 
+@APAActionEnabled
 class TimePickerPanel extends Component<TimePickerPanelProps> {
     static propTypes = {
         prefix: PropTypes.string,
@@ -94,6 +96,7 @@ class TimePickerPanel extends Component<TimePickerPanelProps> {
         locale: nextLocale.TimePicker,
     };
 
+    @APAAction({ name: 'onSelectMenuItem', desc: '选择某个时间值时的回调' })
     onSelectMenuItem = (index: number, type: 'hour' | 'minute' | 'second') => {
         const { value } = this.props;
         const clonedValue = value ? value.clone() : moment('00:00:00', 'HH:mm:ss', true);
@@ -194,4 +197,7 @@ class TimePickerPanel extends Component<TimePickerPanelProps> {
     }
 }
 
-export default TimePickerPanel;
+export default APAConfigProvider.config(TimePickerPanel, {
+    desc: '时间选择器面板组件',
+    props: [{ key: 'value', name: '时间值', desc: '时间值，moment 对象' }],
+});
