@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Component } from 'react';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import { obj } from '../util';
 import type { IconProps } from './types';
 import ConfigProvider from '../config-provider';
@@ -87,4 +88,18 @@ class Icon extends Component<IconProps> {
     }
 }
 
-export default Icon;
+export default APAConfigProvider.config(Icon, {
+    desc: '图标组件',
+    props: [
+        {
+            key: 'type',
+            name: '图标类型',
+            desc: '指定显示哪种图标',
+        },
+        {
+            key: 'size',
+            name: '图标大小',
+            desc: '指定图标大小，如 xxs, xs, small, medium, large, xl, xxl, xxxl, inherit',
+        },
+    ],
+});
