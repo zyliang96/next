@@ -1,4 +1,11 @@
 import React, { type HTMLAttributes, type KeyboardEvent, type MouseEvent } from 'react';
+import {
+    APAAction,
+    APAActionEnabled,
+    APAConfigProvider,
+    APAState,
+    APAStateEnabled,
+} from '@alifd/apa-sdk';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
@@ -8,7 +15,12 @@ import ConfigProvider from '../config-provider';
 import zhCN from '../locale/zh-cn';
 import type { SwitchProps, SwitchState } from './types';
 
+@APAActionEnabled
+@APAStateEnabled
 class Switch extends React.Component<SwitchProps, SwitchState> {
+    @APAState([{ name: 'checked', desc: '开关是否打开' }])
+    state: SwitchState;
+
     static displayName = 'Switch';
     static propTypes = {
         ...ConfigProvider.propTypes,
@@ -69,6 +81,7 @@ class Switch extends React.Component<SwitchProps, SwitchState> {
         };
     }
 
+    @APAAction({ name: 'onChange', desc: '开关状态改变事件' })
     onChange(ev: MouseEvent<HTMLDivElement> | KeyboardEvent<HTMLDivElement>) {
         const checked = !this.state.checked;
 
@@ -183,4 +196,25 @@ class Switch extends React.Component<SwitchProps, SwitchState> {
 
 export type { SwitchProps, SwitchLocale } from './types';
 
-export default ConfigProvider.config(polyfill(Switch));
+export default ConfigProvider.config(
+    APAConfigProvider.config(polyfill(Switch), {
+        desc: '开关组件',
+        props: [
+            {
+                key: 'disabled',
+                name: '禁用状态',
+                desc: '是否禁用开关，true 表示禁用，false 表示启用，禁用状态不能触发开关状态改变事件',
+            },
+            {
+                key: 'loading',
+                name: '加载状态',
+                desc: '是否加载中，true 表示加载中，false 表示未加载',
+            },
+            {
+                key: 'readOnly',
+                name: '只读状态',
+                desc: '是否只读，true 表示只读，false 表示可读',
+            },
+        ],
+    })
+);
