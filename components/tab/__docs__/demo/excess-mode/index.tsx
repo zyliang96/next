@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Tab } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const tabs = [
     { tab: 'Home', key: 1 },
@@ -26,23 +27,30 @@ function onClick(key: string) {
 }
 
 ReactDOM.render(
-    <div className="fusion-demo" style={{ maxWidth: '520px' }}>
-        <Tab excessMode="dropdown">
-            {tabs.map(item => (
-                <Tab.Item key={item.key} title={item.tab} onClick={onClick}>
-                    {item.tab} content, content, content
-                </Tab.Item>
-            ))}
-        </Tab>
+    <APAConfigProvider
+        regionName="超出时滑动"
+        regionId="Tab-excess-mode-demo"
+        regionDesc="Tab超出时滑动示例"
+        isRegiserChildren
+    >
+        <div className="fusion-demo" style={{ maxWidth: '520px' }}>
+            <Tab excessMode="dropdown">
+                {tabs.map(item => (
+                    <Tab.Item key={item.key} title={item.tab} onClick={onClick}>
+                        {item.tab} content, content, content
+                    </Tab.Item>
+                ))}
+            </Tab>
 
-        <br />
-        <Tab excessMode="slide">
-            {tabs.map(item => (
-                <Tab.Item key={item.key} title={item.tab} onClick={onClick}>
-                    {item.tab} content, content, content
-                </Tab.Item>
-            ))}
-        </Tab>
-    </div>,
+            <br />
+            <Tab excessMode="slide">
+                {tabs.map(item => (
+                    <Tab.Item key={item.key} title={item.tab} onClick={onClick}>
+                        {item.tab} content, content, content
+                    </Tab.Item>
+                ))}
+            </Tab>
+        </div>
+    </APAConfigProvider>,
     mountNode
 );

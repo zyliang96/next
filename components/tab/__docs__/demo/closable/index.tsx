@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Tab, Button, Icon } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const panes = [
     { tab: 'Mail', key: '1', closeable: false },
@@ -93,4 +94,14 @@ class CloseableTab extends React.Component<CloseableTabProps, CloseableTabState>
     }
 }
 
-ReactDOM.render(<CloseableTab />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="可关闭/新增选项卡"
+        regionId="Tab-closable-demo"
+        regionDesc="Tab可关闭/新增选项卡示例"
+        isRegiserChildren
+    >
+        <CloseableTab />
+    </APAConfigProvider>,
+    mountNode
+);

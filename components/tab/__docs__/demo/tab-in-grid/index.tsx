@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Tab, Grid } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const { Row, Col } = Grid;
 
@@ -13,21 +14,28 @@ const tabs = (function (length) {
 })(15);
 
 ReactDOM.render(
-    <div className="custom-wrapper">
-        <Row className="custom-row">
-            <Col fixedSpan="12" className="custom-col-sidebar">
-                Sidebar
-            </Col>
-            <Col className="custom-col-content">
-                <Tab>
-                    {tabs.map(item => (
-                        <Tab.Item key={item.key} title={item.tab}>
-                            {item.content}
-                        </Tab.Item>
-                    ))}
-                </Tab>
-            </Col>
-        </Row>
-    </div>,
+    <APAConfigProvider
+        regionName="在 Grid 中使用 Tab"
+        regionId="Tab-tab-in-grid-demo"
+        regionDesc="Tab在 Grid 中使用 Tab示例"
+        isRegiserChildren
+    >
+        <div className="custom-wrapper">
+            <Row className="custom-row">
+                <Col fixedSpan="12" className="custom-col-sidebar">
+                    Sidebar
+                </Col>
+                <Col className="custom-col-content">
+                    <Tab>
+                        {tabs.map(item => (
+                            <Tab.Item key={item.key} title={item.tab}>
+                                {item.content}
+                            </Tab.Item>
+                        ))}
+                    </Tab>
+                </Col>
+            </Row>
+        </div>
+    </APAConfigProvider>,
     mountNode
 );

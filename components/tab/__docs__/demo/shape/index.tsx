@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Tab, Radio } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 function onChange(key: string) {
     console.log(key);
@@ -42,4 +43,14 @@ const Demo = () => {
     );
 };
 
-ReactDOM.render(<Demo />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="形态"
+        regionId="Tab-shape-demo"
+        regionDesc="Tab形态示例"
+        isRegiserChildren
+    >
+        <Demo />
+    </APAConfigProvider>,
+    mountNode
+);

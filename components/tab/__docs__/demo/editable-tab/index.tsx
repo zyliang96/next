@@ -2,6 +2,7 @@ import React, { type KeyboardEvent, type FocusEvent } from 'react';
 
 import ReactDOM from 'react-dom';
 import { Tab, Input } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 interface EditableTabPaneProps {
     defaultTitle: string;
@@ -66,13 +67,20 @@ const tabRender = (key: string, { title }: { title: string }) => (
 );
 
 ReactDOM.render(
-    <Tab defaultActiveKey="1" tabRender={tabRender}>
-        <Tab.Item title="Double Click To Edit Me" key="1">
-            Editable tab
-        </Tab.Item>
-        <Tab.Item title="Double Click To Edit Me" key="2">
-            Editable tab
-        </Tab.Item>
-    </Tab>,
+    <APAConfigProvider
+        regionName="可编辑的 Tab"
+        regionId="Tab-editable-tab-demo"
+        regionDesc="Tab可编辑的 Tab示例"
+        isRegiserChildren
+    >
+        <Tab defaultActiveKey="1" tabRender={tabRender}>
+            <Tab.Item title="Double Click To Edit Me" key="1">
+                Editable tab
+            </Tab.Item>
+            <Tab.Item title="Double Click To Edit Me" key="2">
+                Editable tab
+            </Tab.Item>
+        </Tab>
+    </APAConfigProvider>,
     mountNode
 );

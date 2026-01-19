@@ -2,6 +2,7 @@ import React, { type MouseEvent } from 'react';
 import ReactDOM from 'react-dom';
 import { Tab } from '@alifd/next';
 import type { ItemProps, TabProps } from '@alifd/next/types/tab';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const tabs = [
     { tab: 'Home', key: 0, content: 'This is home page' },
@@ -26,29 +27,36 @@ const onMouseLeave: ItemProps['onMouseLeave'] = (key, e) => {
 };
 
 ReactDOM.render(
-    <div className="fusion-demo">
-        <div className="demo-item-title">Click to change</div>
-        <Tab triggerType="click" onChange={onChange}>
-            {tabs.map(item => (
-                <Tab.Item key={item.key} title={item.tab} onClick={handleClick}>
-                    {item.content}
-                </Tab.Item>
-            ))}
-        </Tab>
-        <div className="demo-item-title">Hover to change</div>
-        <Tab triggerType="hover" onChange={onChange}>
-            {tabs.map(item => (
-                <Tab.Item
-                    key={item.key}
-                    title={item.tab}
-                    onClick={handleClick}
-                    onMouseEnter={onMouseEnter}
-                    onMouseLeave={onMouseLeave}
-                >
-                    {item.content}
-                </Tab.Item>
-            ))}
-        </Tab>
-    </div>,
+    <APAConfigProvider
+        regionName="触发类型"
+        regionId="Tab-trigger-type-demo"
+        regionDesc="Tab触发类型示例"
+        isRegiserChildren
+    >
+        <div className="fusion-demo">
+            <div className="demo-item-title">Click to change</div>
+            <Tab triggerType="click" onChange={onChange}>
+                {tabs.map(item => (
+                    <Tab.Item key={item.key} title={item.tab} onClick={handleClick}>
+                        {item.content}
+                    </Tab.Item>
+                ))}
+            </Tab>
+            <div className="demo-item-title">Hover to change</div>
+            <Tab triggerType="hover" onChange={onChange}>
+                {tabs.map(item => (
+                    <Tab.Item
+                        key={item.key}
+                        title={item.tab}
+                        onClick={handleClick}
+                        onMouseEnter={onMouseEnter}
+                        onMouseLeave={onMouseLeave}
+                    >
+                        {item.content}
+                    </Tab.Item>
+                ))}
+            </Tab>
+        </div>
+    </APAConfigProvider>,
     mountNode
 );
