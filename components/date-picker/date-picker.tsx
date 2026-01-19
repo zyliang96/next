@@ -2,6 +2,13 @@ import React, { Component, type HTMLAttributes, type KeyboardEvent, type UIEvent
 import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
 import classnames from 'classnames';
+import {
+    APAAction,
+    APAActionEnabled,
+    APAConfigProvider,
+    APAState,
+    APAStateEnabled,
+} from '@alifd/apa-sdk';
 import moment, { type Moment } from 'moment';
 import ConfigProvider from '../config-provider';
 import Overlay from '../overlay';
@@ -31,6 +38,8 @@ type InnerDatePickerProps = ClassPropsWithDefault<DatePickerProps, typeof DatePi
 /**
  * DatePicker
  */
+@APAActionEnabled
+@APAStateEnabled
 class DatePicker extends Component<DatePickerProps, DatePickerState> {
     static propTypes = {
         ...ConfigProvider.propTypes,
@@ -102,6 +111,12 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
     static displayName = 'DatePicker';
 
     readonly props: InnerDatePickerProps;
+
+    @APAState([
+        { name: 'value', desc: '日期值，moment 对象' },
+        { name: 'panel', desc: '当前展示的面板类型，可选择的值为 date, time' },
+    ])
+    state: DatePickerState;
 
     constructor(props: DatePickerProps) {
         super(props);
@@ -188,6 +203,7 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
         this.handleChange(value, this.state.value, { inputing: false });
     };
 
+    @APAAction({ name: 'clearValue', desc: '清空日期值' })
     clearValue = () => {
         this.setState({
             dateInputStr: '',
@@ -301,6 +317,7 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
         this.onTimeInputChange(timeStr);
     };
 
+    @APAAction({ name: 'handleChange', desc: '日期值改变时的回调' })
     handleChange = (newValue: Moment | null, prevValue: Moment | null, others = {}) => {
         if (!('value' in this.props)) {
             this.setState({
@@ -337,6 +354,7 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
         }
     };
 
+    @APAAction({ name: 'onVisibleChange', desc: '弹层显示状态变化时的回调' })
     onVisibleChange = (visible: boolean, type: string) => {
         if (!('visible' in this.props)) {
             this.setState({
@@ -352,6 +370,7 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
         });
     };
 
+    @APAAction({ name: 'onOk', desc: '点击确认按钮时的回调' })
     onOk = (value?: Moment | null) => {
         this.onVisibleChange(false, 'okBtnClick');
         this.onValueChange(value || this.state.value, 'onOk');
@@ -631,4 +650,23 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
     }
 }
 
-export default polyfill(DatePicker);
+export default APAConfigProvider.config(polyfill(DatePicker), {
+    desc: '日期选择器组件',
+    props: [
+        {
+            key: 'visible',
+            name: '是否可见',
+            desc: '是否可见，true 表示可见，false 表示不可见',
+        },
+        {
+            key: 'disabled',
+            name: '是否禁用',
+            desc: '是否禁用，true 表示禁用，false 表示启用',
+        },
+        {
+            key: 'disabledDate',
+            name: '禁用日期的回调函数',
+            desc: '禁用日期的回调函数，参数为当前日期，返回 true 表示不可选择，可用于禁用部分日期',
+        },
+    ],
+});

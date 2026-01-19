@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { DatePicker } from '@alifd/next';
 import moment from 'moment';
 import type { DatePickerProps } from '@alifd/next/types/date-picker';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const { RangePicker, MonthPicker, YearPicker } = DatePicker;
 const currentDate = moment();
@@ -24,24 +25,39 @@ const disabledDate: DatePickerProps['disabledDate'] = function (date, view) {
 };
 
 ReactDOM.render(
-    <div>
-        <DatePicker disabledDate={disabledDate} onChange={val => console.log(val)} />
-        <br />
-        <br />
-        <MonthPicker disabledDate={disabledDate} onChange={val => console.log(val)} />
-        <br />
-        <br />
-        <YearPicker disabledDate={disabledDate} onChange={val => console.log(val)} />
-        <br />
-        <br />
+    <APAConfigProvider
+        regionName="DatePicker禁用日期的Demo"
+        regionId="date-picker-disabled-date-demo"
+        regionDesc="DatePicker禁用日期的Demo"
+        isRegiserChildren
+    >
+        <div>
+            <DatePicker disabledDate={disabledDate} onChange={val => console.log(val)} />
+            <br />
+            <br />
+            <MonthPicker disabledDate={disabledDate} onChange={val => console.log(val)} />
+            <br />
+            <br />
+            <YearPicker disabledDate={disabledDate} onChange={val => console.log(val)} />
+            <br />
+            <br />
 
-        <RangePicker disabledDate={disabledDate} onChange={val => console.log(val)} />
-        <br />
-        <br />
-        <RangePicker type="month" disabledDate={disabledDate} onChange={val => console.log(val)} />
-        <br />
-        <br />
-        <RangePicker type="year" disabledDate={disabledDate} onChange={val => console.log(val)} />
-    </div>,
+            <RangePicker disabledDate={disabledDate} onChange={val => console.log(val)} />
+            <br />
+            <br />
+            <RangePicker
+                type="month"
+                disabledDate={disabledDate}
+                onChange={val => console.log(val)}
+            />
+            <br />
+            <br />
+            <RangePicker
+                type="year"
+                disabledDate={disabledDate}
+                onChange={val => console.log(val)}
+            />
+        </div>
+    </APAConfigProvider>,
     mountNode
 );
