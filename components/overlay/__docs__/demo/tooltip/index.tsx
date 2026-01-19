@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Overlay, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const { Popup } = Overlay;
 
@@ -122,4 +123,14 @@ const Demo = () => (
     </div>
 );
 
-ReactDOM.render(<Demo />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="动效"
+        regionId="Overlay-tooltip-demo"
+        regionDesc="Overlay动效示例"
+        isRegiserChildren
+    >
+        <Demo />
+    </APAConfigProvider>,
+    mountNode
+);

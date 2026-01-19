@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Overlay, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const { Popup } = Overlay;
 
@@ -100,4 +101,14 @@ class Demo extends Component {
     }
 }
 
-ReactDOM.render(<Demo />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="受控显示隐藏"
+        regionId="Overlay-controlled-demo"
+        regionDesc="Overlay受控显示隐藏示例"
+        isRegiserChildren
+    >
+        <Demo />
+    </APAConfigProvider>,
+    mountNode
+);

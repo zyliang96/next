@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Overlay } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const { Popup } = Overlay;
 
@@ -86,4 +87,14 @@ const App = () => {
     );
 };
 
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="弹层自动跟随滚动"
+        regionId="Overlay-scroll-demo"
+        regionDesc="Overlay弹层自动跟随滚动示例"
+        isRegiserChildren
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);

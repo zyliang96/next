@@ -10,6 +10,14 @@ import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
+import { z } from 'zod';
+import {
+    APAActionEnabled,
+    APAAction,
+    APAStateEnabled,
+    APAState,
+    type APAComponentConfigContextInfo,
+} from '@alifd/apa-sdk';
 import { dom, events, focus, func, guid, KEYCODE, support } from '../util';
 import overlayManager from './manager';
 import Gateway from './gateway';
@@ -50,6 +58,8 @@ const containerNodeList = [] as Array<{
 /**
  * Overlay
  */
+@APAActionEnabled
+@APAStateEnabled
 class Overlay extends Component<OverlayV1Props, OverlayState> {
     static propTypes = {
         prefix: PropTypes.string,
@@ -155,6 +165,12 @@ class Overlay extends Component<OverlayV1Props, OverlayState> {
         off: () => void;
     } | null;
     overlay: InstanceType<typeof Overlay> | null;
+
+    @APAState([
+        { name: 'visible', desc: '是否显示浮层' },
+        { name: 'status', desc: '浮层状态' },
+    ])
+    state!: OverlayState;
 
     constructor(props: OverlayV1Props) {
         super(props);
@@ -679,6 +695,20 @@ class Overlay extends Component<OverlayV1Props, OverlayState> {
         if (e.currentTarget === e.target && this.props.canCloseByMask) {
             this.props.onRequestClose!('maskClick', e);
         }
+    }
+
+    @APAAction({
+        name: 'requestClose',
+        desc: '请求关闭浮层',
+        params: z.tuple([z.string().optional().describe('关闭原因')]),
+    })
+    requestClose(reason: string = 'api') {
+        // 手动同步状态到 APA（因为是受控组件）
+        const { apaNode } = (this.context as APAComponentConfigContextInfo) || {};
+        if (apaNode) {
+            apaNode.updateState({ visible: false });
+        }
+        this.props.onRequestClose!(reason, {} as any);
     }
 
     saveContentRef = (

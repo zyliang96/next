@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Select } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 function TableDemo() {
     const columns: Array<{
@@ -91,4 +92,14 @@ function TableDemo() {
     );
 }
 
-ReactDOM.render(<TableDemo />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="弹层跟随问题"
+        regionId="Overlay-scroll-debug-demo"
+        regionDesc="Overlay弹层跟随问题示例"
+        isRegiserChildren
+    >
+        <TableDemo />
+    </APAConfigProvider>,
+    mountNode
+);

@@ -8,6 +8,14 @@ import React, {
 import { findDOMNode } from 'react-dom';
 import { polyfill } from 'react-lifecycles-compat';
 import PropTypes from 'prop-types';
+import { z } from 'zod';
+import {
+    APAActionEnabled,
+    APAAction,
+    APAStateEnabled,
+    APAState,
+    type APAComponentConfigContextInfo,
+} from '@alifd/apa-sdk';
 
 import { func, KEYCODE } from '../util';
 import Overlay from './overlay';
@@ -19,6 +27,8 @@ const { noop, makeChain, bindCtx } = func;
  * Overlay.Popup
  * 继承 Overlay 的 API，除非特别说明
  * */
+@APAActionEnabled
+@APAStateEnabled
 class Popup extends Component<PopupProps, PopupState> {
     static propTypes = {
         /**
@@ -123,6 +133,9 @@ class Popup extends Component<PopupProps, PopupState> {
     _hideTimer: number | null;
     _showTimer: number | null;
 
+    @APAState([{ name: 'visible', desc: '弹层是否显示' }])
+    state!: PopupState;
+
     constructor(props: PopupProps) {
         super(props);
 
@@ -163,11 +176,26 @@ class Popup extends Component<PopupProps, PopupState> {
         });
     }
 
-    handleVisibleChange(visible: boolean, type: string | object, e?: MouseEvent | KeyboardEvent) {
+    @APAAction({
+        name: 'setVisible',
+        desc: '设置弹层显示或隐藏',
+        params: z.tuple([z.boolean().describe('是否显示弹层')]),
+    })
+    handleVisibleChange(
+        visible: boolean,
+        type: string | object = 'api',
+        e?: MouseEvent | KeyboardEvent
+    ) {
         if (!('visible' in this.props)) {
             this.setState({
                 visible,
             });
+        } else {
+            // 受控模式：手动同步状态到 APA
+            const { apaNode } = (this.context as APAComponentConfigContextInfo) || {};
+            if (apaNode) {
+                apaNode.updateState({ visible });
+            }
         }
 
         this.props.onVisibleChange!(visible, type, e);

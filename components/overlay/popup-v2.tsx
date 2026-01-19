@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, cloneElement, type ReactElement } from 'react';
 import classNames from 'classnames';
 import Overlay from '@alifd/overlay';
+import { useApaState, useApaAction } from '@alifd/apa-sdk';
+import { z } from 'zod';
 
 import Animate from '../animate';
 
@@ -37,13 +39,17 @@ const Popup = (props: PopupProps) => {
         ...others
     } = props;
 
-    const [visible, setVisible] = useState(defaultVisible);
+    // 使用 useApaState 暴露 visible 状态
+    const [visible, setVisible] = useApaState(defaultVisible ?? false, {
+        name: 'visible',
+        desc: '弹层是否显示',
+    });
     const [animation, setAnimation] = useState(panimation);
     const [isAnimationEnd, markAnimationEnd] = useState(true);
     const overlayRef = useRef(null);
 
     useEffect(() => {
-        if ('visible' in props) {
+        if ('visible' in props && props.visible !== undefined) {
             setVisible(props.visible);
         }
     }, [props.visible]);
@@ -53,6 +59,22 @@ const Popup = (props: PopupProps) => {
             setAnimation(panimation);
         }
     }, [panimation]);
+
+    // 暴露 setVisible 动作
+    useApaAction(
+        (newVisible: boolean) => {
+            if (!('visible' in props)) {
+                setVisible(newVisible);
+            }
+            onVisibleChange(newVisible, 'api', {});
+        },
+        {
+            name: 'setVisible',
+            desc: '设置弹层显示或隐藏',
+            params: z.tuple([z.boolean().describe('是否显示弹层')]),
+        }
+    );
+
     const handleVisibleChange = (visible: boolean, ...args: [string, object]) => {
         if (!('visible' in props)) {
             setVisible(visible);

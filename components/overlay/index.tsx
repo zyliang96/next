@@ -1,6 +1,7 @@
 /* eslint-disable react/no-multi-comp */
 import React, { Component } from 'react';
 import ConfigProvider from '../config-provider';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import { assignSubComponent } from '../util/component';
 
 import Overlay1 from './overlay';
@@ -93,12 +94,45 @@ class Popup extends Component<PopupProps> {
     }
 }
 
-const WithSubOverlay = assignSubComponent(Overlay, {
+// 先用 APAConfigProvider 包装 Popup
+const PopupWithAPA = APAConfigProvider.config(Popup, {
+    isRegiserChildren: false,
+    desc: '弹出层组件',
+    props: [
+        { key: 'visible', name: 'visible', desc: '弹层是否显示' },
+        { key: 'trigger', name: 'trigger', desc: '触发元素' },
+        { key: 'triggerType', name: 'triggerType', desc: '触发类型' },
+        { key: 'disabled', name: 'disabled', desc: '是否禁用' },
+    ],
+});
+
+// 再用 ConfigProvider 包装 Popup
+const PopupConfigured = ConfigProvider.config(PopupWithAPA, {
+    exportNames: ['overlay'],
+});
+
+// 先用 APAConfigProvider 包装 Overlay
+const OverlayWithAPA = APAConfigProvider.config(Overlay, {
+    isRegiserChildren: false,
+    desc: '浮层组件',
+    props: [
+        { key: 'visible', name: 'visible', desc: '是否显示浮层' },
+        { key: 'align', name: 'align', desc: '浮层对齐方式' },
+        { key: 'hasMask', name: 'hasMask', desc: '是否显示遮罩' },
+        { key: 'canCloseByEsc', name: 'canCloseByEsc', desc: '是否可通过ESC键关闭' },
+        {
+            key: 'canCloseByOutSideClick',
+            name: 'canCloseByOutSideClick',
+            desc: '是否可通过点击外部关闭',
+        },
+        { key: 'canCloseByMask', name: 'canCloseByMask', desc: '是否可通过点击遮罩关闭' },
+    ],
+});
+
+const WithSubOverlay = assignSubComponent(OverlayWithAPA, {
     Gateway: Gateway,
     Position: Position,
-    Popup: ConfigProvider.config(Popup, {
-        exportNames: ['overlay'],
-    }),
+    Popup: PopupConfigured,
 });
 
 export default ConfigProvider.config(WithSubOverlay, {

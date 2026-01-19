@@ -1219,10 +1219,12 @@ export interface OverlayState {
     animation?: string | boolean | AnimationObjectType | undefined;
     willOpen?: boolean;
     willClose?: boolean;
+    [key: string]: unknown; // 添加索引签名以兼容 APA 装饰器
 }
 
 export interface PopupState {
     visible?: boolean;
+    [key: string]: unknown; // 添加索引签名以兼容 APA 装饰器
 }
 
 /**

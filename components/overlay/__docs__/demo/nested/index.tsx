@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Overlay, Select, Balloon, DatePicker2 } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const { Popup } = Overlay;
 const { Tooltip } = Balloon;
@@ -58,4 +59,14 @@ const Demo = () => {
     );
 };
 
-ReactDOM.render(<Demo />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="弹层嵌套"
+        regionId="Overlay-nested-demo"
+        regionDesc="Overlay弹层嵌套示例"
+        isRegiserChildren
+    >
+        <Demo />
+    </APAConfigProvider>,
+    mountNode
+);

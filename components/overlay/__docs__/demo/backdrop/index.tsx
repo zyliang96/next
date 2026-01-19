@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Overlay, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 class Demo extends Component {
     state = {
@@ -48,4 +49,14 @@ class Demo extends Component {
     }
 }
 
-ReactDOM.render(<Demo />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="遮罩层"
+        regionId="Overlay-backdrop-demo"
+        regionDesc="Overlay遮罩层示例"
+        isRegiserChildren
+    >
+        <Demo />
+    </APAConfigProvider>,
+    mountNode
+);
