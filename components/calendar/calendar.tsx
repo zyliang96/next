@@ -104,7 +104,7 @@ class Calendar extends Component<CalendarProps, CalendarState> {
         { name: 'mode', desc: '面板模式, 可选择的值为 date, month, year' },
         { name: 'visibleMonth', desc: '当前展示的月份，moment 对象' },
     ])
-    state: CalendarState;
+    state: CalendarState & Record<string, unknown>;
 
     constructor(props: CalendarProps) {
         super(props);

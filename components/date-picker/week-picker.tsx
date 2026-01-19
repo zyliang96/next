@@ -7,6 +7,13 @@ import React, {
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import moment, { type Moment } from 'moment';
+import {
+    APAAction,
+    APAActionEnabled,
+    APAConfigProvider,
+    APAState,
+    APAStateEnabled,
+} from '@alifd/apa-sdk';
 import { polyfill } from 'react-lifecycles-compat';
 import Overlay from '../overlay';
 import Input from '../input';
@@ -25,7 +32,15 @@ type InnerWeekPickerProps = ClassPropsWithDefault<WeekPickerProps, typeof WeekPi
 /**
  * DatePicker.WeekPicker
  */
+@APAActionEnabled
+@APAStateEnabled
 class WeekPicker extends Component<WeekPickerProps, WeekPickerState> {
+    @APAState([
+        { name: 'value', desc: '周值，moment 对象' },
+        { name: 'visible', desc: '显示状态，true 表示显示，false 表示隐藏' },
+    ])
+    state: WeekPickerState & Record<string, unknown>;
+
     static displayName = 'WeekPicker';
     static propTypes = {
         ...ConfigProvider.propTypes,
@@ -110,6 +125,7 @@ class WeekPicker extends Component<WeekPickerProps, WeekPickerState> {
         return st;
     }
 
+    @APAAction({ name: 'handleChange', desc: '周值改变时的回调' })
     handleChange = (newValue: Moment | null, prevValue: Moment | null) => {
         if (!('value' in this.props)) {
             this.setState({
@@ -174,6 +190,7 @@ class WeekPicker extends Component<WeekPickerProps, WeekPickerState> {
         this.handleChange(date, this.state.value);
     };
 
+    @APAAction({ name: 'onVisibleChange', desc: '显示状态变化时的回调' })
     onVisibleChange = (visible: boolean, type: string) => {
         if (!('visible' in this.props)) {
             this.setState({
@@ -361,4 +378,28 @@ class WeekPicker extends Component<WeekPickerProps, WeekPickerState> {
     }
 }
 
-export default polyfill(WeekPicker);
+export default APAConfigProvider.config(polyfill(WeekPicker), {
+    desc: '周选择器组件',
+    props: [
+        {
+            key: 'value',
+            name: '周值',
+            desc: '周值，moment 对象',
+        },
+        {
+            key: 'visible',
+            name: '显示状态',
+            desc: '显示状态，true 表示显示，false 表示隐藏',
+        },
+        {
+            key: 'disabledDate',
+            name: '禁用日期的回调函数',
+            desc: '禁用日期的回调函数，返回 true 表示不可选择，可用于禁用部分日期',
+        },
+        {
+            key: 'disabled',
+            name: '是否禁用',
+            desc: '是否禁用，true 表示禁用，false 表示启用',
+        },
+    ],
+});

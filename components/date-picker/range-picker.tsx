@@ -9,6 +9,13 @@ import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
 import classnames from 'classnames';
 import moment, { type Moment } from 'moment';
+import {
+    APAAction,
+    APAActionEnabled,
+    APAConfigProvider,
+    APAState,
+    APAStateEnabled,
+} from '@alifd/apa-sdk';
 import ConfigProvider from '../config-provider';
 import Overlay from '../overlay';
 import Input from '../input';
@@ -68,7 +75,17 @@ type InnerRangePickerProps = ClassPropsWithDefault<
 /**
  * DatePicker.RangePicker
  */
+@APAActionEnabled
+@APAStateEnabled
 class RangePicker extends Component<RangePickerProps, RangePickerState> {
+    @APAState([
+        { name: 'startValue', desc: '开始日期，moment 对象' },
+        { name: 'endValue', desc: '结束日期，moment 对象' },
+        { name: 'visible', desc: '显示状态，true 表示显示，false 表示隐藏' },
+        { name: 'panel', desc: '面板类型，可选择的值为 date-panel, time-panel' },
+    ])
+    state: RangePickerState & Record<string, unknown>;
+
     static displayName = 'RangePicker';
     static propTypes = {
         ...ConfigProvider.propTypes,
@@ -337,6 +354,7 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
         this.onValueChange([newStartValue, newEndValue]);
     };
 
+    @APAAction({ name: 'clearRange', desc: '清空日期范围值' })
     clearRange = () => {
         this.setState({
             startDateInputStr: '',
@@ -441,6 +459,7 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
         }
     };
 
+    @APAAction({ name: 'onSelectStartTime', desc: '选择开始时间' })
     onSelectStartTime = (value: Moment) => {
         if (!('value' in this.props)) {
             this.setState({
@@ -455,6 +474,7 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
         }
     };
 
+    @APAAction({ name: 'onSelectEndTime', desc: '选择结束时间' })
     onSelectEndTime = (value: Moment) => {
         if (!('value' in this.props)) {
             this.setState({
@@ -542,6 +562,7 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
         this.onTimeInputChange(timeStr);
     };
 
+    @APAAction({ name: 'handleChange', desc: '日期范围值改变时的回调' })
     handleChange = (valueName: 'startValue' | 'endValue', newValue?: Moment | null) => {
         const values = (['startValue', 'endValue'] as const).map(name =>
             valueName === name ? newValue : this.state[name]
@@ -561,6 +582,7 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
         this.onValueChange(values);
     };
 
+    @APAAction({ name: 'onVisibleChange', desc: '显示状态变化时的回调' })
     onVisibleChange = (visible: boolean, type: string) => {
         if (!('visible' in this.props)) {
             this.setState({
@@ -570,6 +592,7 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
         this.props.onVisibleChange(visible, type);
     };
 
+    @APAAction({ name: 'changePanel', desc: '切换面板类型' })
     changePanel = (panel: PanelType) => {
         const { startValue, endValue } = this.state;
         this.setState({
@@ -583,6 +606,7 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
         });
     };
 
+    @APAAction({ name: 'onOk', desc: '点击确认按钮时的回调' })
     onOk = (value?: (Moment | null | undefined)[]) => {
         this.onVisibleChange(false, 'okBtnClick');
         this.onValueChange(value || [this.state.startValue, this.state.endValue], 'onOk');
@@ -651,13 +675,21 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
         switch (this.state.activeDateInput) {
             case 'startValue': {
                 if (this.startDateInputRef.current) {
-                    this.startDateInputRef.current.getInstance().focus();
+                    (
+                        this.startDateInputRef.current.getInstance() as unknown as {
+                            focus: () => void;
+                        }
+                    )?.focus();
                 }
                 break;
             }
             case 'endValue': {
                 if (this.endDateInputRef.current) {
-                    this.endDateInputRef.current.getInstance().focus();
+                    (
+                        this.endDateInputRef.current.getInstance() as unknown as {
+                            focus: () => void;
+                        }
+                    )?.focus();
                 }
                 break;
             }
@@ -1109,4 +1141,33 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
     }
 }
 
-export default polyfill(RangePicker);
+export default APAConfigProvider.config(polyfill(RangePicker), {
+    desc: '日期范围选择器组件',
+    props: [
+        {
+            key: 'startValue',
+            name: '开始日期',
+            desc: '开始日期，moment 对象',
+        },
+        {
+            key: 'endValue',
+            name: '结束日期',
+            desc: '结束日期，moment 对象',
+        },
+        {
+            key: 'visible',
+            name: '显示状态',
+            desc: '显示状态, 可选择的值为 true, false',
+        },
+        {
+            key: 'panel',
+            name: '面板类型',
+            desc: '面板类型, 可选择的值为 date-panel, time-panel',
+        },
+        {
+            key: 'disabled',
+            name: '是否禁用',
+            desc: '是否禁用，true 表示禁用，false 表示启用',
+        },
+    ],
+});

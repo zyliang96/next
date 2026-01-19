@@ -7,6 +7,13 @@ import React, {
 import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
 import classnames from 'classnames';
+import {
+    APAAction,
+    APAActionEnabled,
+    APAConfigProvider,
+    APAState,
+    APAStateEnabled,
+} from '@alifd/apa-sdk';
 import moment, { type Moment } from 'moment';
 import ConfigProvider from '../config-provider';
 import Overlay from '../overlay';
@@ -28,7 +35,15 @@ type InnerMonthPickerProps = ClassPropsWithDefault<
 /**
  * DatePicker.MonthPicker
  */
+@APAActionEnabled
+@APAStateEnabled
 class MonthPicker extends Component<MonthPickerProps, MonthPickerState> {
+    @APAState([
+        { name: 'value', desc: '月份值，moment 对象' },
+        { name: 'visible', desc: '显示状态，true 表示显示，false 表示隐藏' },
+    ])
+    state: MonthPickerState & Record<string, unknown>;
+
     static displayName = 'MonthPicker';
     static propTypes = {
         ...ConfigProvider.propTypes,
@@ -133,6 +148,7 @@ class MonthPicker extends Component<MonthPickerProps, MonthPickerState> {
         });
     };
 
+    @APAAction({ name: 'clearValue', desc: '清空月份值' })
     clearValue = () => {
         this.setState({
             dateInputStr: '',
@@ -183,6 +199,7 @@ class MonthPicker extends Component<MonthPickerProps, MonthPickerState> {
         this.onDateInputChange(dateStr);
     };
 
+    @APAAction({ name: 'handleChange', desc: '月份值改变时的回调' })
     handleChange = (
         newValue: Moment | null,
         prevValue: Moment | null,
@@ -213,6 +230,7 @@ class MonthPicker extends Component<MonthPickerProps, MonthPickerState> {
         }
     };
 
+    @APAAction({ name: 'onVisibleChange', desc: '显示状态变化时的回调' })
     onVisibleChange = (visible: boolean, type: string) => {
         if (!('visible' in this.props)) {
             this.setState({
@@ -405,4 +423,23 @@ class MonthPicker extends Component<MonthPickerProps, MonthPickerState> {
     }
 }
 
-export default polyfill(MonthPicker);
+export default APAConfigProvider.config(polyfill(MonthPicker), {
+    desc: '月份选择器组件',
+    props: [
+        {
+            key: 'value',
+            name: '月份值',
+            desc: '月份值，moment 对象',
+        },
+        {
+            key: 'visible',
+            name: '显示状态',
+            desc: '显示状态，true 表示显示，false 表示隐藏',
+        },
+        {
+            key: 'disabled',
+            name: '是否禁用',
+            desc: '是否禁用，true 表示禁用，false 表示启用',
+        },
+    ],
+});

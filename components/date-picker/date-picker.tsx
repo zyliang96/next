@@ -114,7 +114,7 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
 
     @APAState([
         { name: 'value', desc: '日期值，moment 对象' },
-        { name: 'panel', desc: '当前展示的面板类型，可选择的值为 date, time' },
+        { name: 'panel', desc: '当前展示的面板类型，可选择的值为 date-panel, time-panel' },
         { name: 'visible', desc: '弹层显示状态，true 表示显示，false 表示隐藏' },
     ])
     state: DatePickerState;
@@ -662,7 +662,7 @@ export default APAConfigProvider.config(polyfill(DatePicker), {
         {
             key: 'panel',
             name: '当前展示的面板类型',
-            desc: '当前展示的面板类型，可选择的值为 date, time',
+            desc: '当前展示的面板类型，可选择的值为 date-panel, time-panel',
         },
         {
             key: 'visible',

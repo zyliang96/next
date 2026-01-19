@@ -8,6 +8,13 @@ import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
 import classnames from 'classnames';
 import moment, { type Moment } from 'moment';
+import {
+    APAAction,
+    APAActionEnabled,
+    APAConfigProvider,
+    APAState,
+    APAStateEnabled,
+} from '@alifd/apa-sdk';
 import Overlay from '../overlay';
 import Input from '../input';
 import Icon from '../icon';
@@ -24,6 +31,8 @@ type InnerYearPickerProps = ClassPropsWithDefault<YearPickerProps, typeof YearPi
 /**
  * DatePicker.YearPicker
  */
+@APAActionEnabled
+@APAStateEnabled
 class YearPicker extends Component<YearPickerProps, YearPickerState> {
     static displayName = 'YearPicker';
     static propTypes = {
@@ -80,6 +89,12 @@ class YearPicker extends Component<YearPickerProps, YearPickerState> {
 
     readonly props: InnerYearPickerProps;
 
+    @APAState([
+        { name: 'value', desc: '年值，moment 对象' },
+        { name: 'visible', desc: '显示状态，true 表示显示，false 表示隐藏' },
+    ])
+    state: YearPickerState & Record<string, unknown>;
+
     constructor(props: YearPickerProps) {
         super(props);
 
@@ -126,6 +141,7 @@ class YearPicker extends Component<YearPickerProps, YearPickerState> {
         });
     };
 
+    @APAAction({ name: 'clearValue', desc: '清空年值' })
     clearValue = () => {
         this.setState({
             dateInputStr: '',
@@ -172,6 +188,7 @@ class YearPicker extends Component<YearPickerProps, YearPickerState> {
         this.onDateInputChange(dateStr);
     };
 
+    @APAAction({ name: 'handleChange', desc: '年值改变时的回调' })
     handleChange = (
         newValue: Moment | null,
         prevValue: Moment | null,
@@ -202,6 +219,7 @@ class YearPicker extends Component<YearPickerProps, YearPickerState> {
         }
     };
 
+    @APAAction({ name: 'onVisibleChange', desc: '显示状态变化时的回调' })
     onVisibleChange = (visible: boolean, reason: string) => {
         if (!('visible' in this.props)) {
             this.setState({
@@ -388,4 +406,28 @@ class YearPicker extends Component<YearPickerProps, YearPickerState> {
     }
 }
 
-export default polyfill(YearPicker);
+export default APAConfigProvider.config(polyfill(YearPicker), {
+    desc: '年选择器组件',
+    props: [
+        {
+            key: 'value',
+            name: '年值',
+            desc: '年值，moment 对象',
+        },
+        {
+            key: 'visible',
+            name: '显示状态',
+            desc: '显示状态，true 表示显示，false 表示隐藏',
+        },
+        {
+            key: 'disabled',
+            name: '是否禁用',
+            desc: '是否禁用，true 表示禁用，false 表示启用',
+        },
+        {
+            key: 'disabledDate',
+            name: '禁用日期的回调函数',
+            desc: '禁用日期的回调函数，返回 true 表示不可选择，可用于禁用部分日期',
+        },
+    ],
+});
