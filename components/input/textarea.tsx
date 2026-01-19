@@ -2,7 +2,7 @@ import React, { type CSSProperties, type DOMAttributes } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { APAState, APAActionEnabled, APAStateEnabled } from '@alifd/apa-sdk';
+import { APAState, APAActionEnabled, APAStateEnabled, APAConfigProvider } from '@alifd/apa-sdk';
 import zhCN from '../locale/zh-cn';
 import { obj, env } from '../util';
 import Base from './base';
@@ -370,4 +370,15 @@ class TextArea extends Base<TextAreaProps> {
     }
 }
 
-export default TextArea;
+export default APAConfigProvider.config(TextArea, {
+    isRegiserChildren: false,
+    desc: '文本域组件',
+    props: [
+        { key: 'value', name: 'value', desc: '文本域当前的值' },
+        { key: 'disabled', name: 'disabled', desc: '是否禁用文本域' },
+        { key: 'placeholder', name: 'placeholder', desc: '文本域占位符文本' },
+        { key: 'maxLength', name: 'maxLength', desc: '文本域最大字符长度' },
+        { key: 'rows', name: 'rows', desc: '文本域显示的行数' },
+        { key: 'autoHeight', name: 'autoHeight', desc: '是否自动调整高度' },
+    ],
+});

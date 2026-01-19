@@ -1,5 +1,6 @@
 import React, { type MouseEvent, type UIEvent } from 'react';
 import PropTypes from 'prop-types';
+import { APAConfigProvider, APAStateEnabled, APAActionEnabled, APAState } from '@alifd/apa-sdk';
 
 import { Input } from './input';
 import Icon from '../icon/index';
@@ -8,7 +9,15 @@ import type { PasswordProps } from './types';
 function preventDefault(e: UIEvent) {
     e.preventDefault();
 }
-export default class Password extends Input<PasswordProps> {
+
+@APAActionEnabled
+@APAStateEnabled
+class Password extends Input<PasswordProps> {
+    @APAState([
+        { name: 'value', desc: '密码输入框当前的值' },
+        { name: 'hint', desc: '密码可见性图标状态' },
+        { name: 'htmlType', desc: '输入框HTML类型' },
+    ])
     state = {
         value: '',
         hint: 'eye-close',
@@ -50,3 +59,13 @@ export default class Password extends Input<PasswordProps> {
         return <Input {...others} extra={extra} htmlType={htmlType} />;
     }
 }
+
+export default APAConfigProvider.config(Password, {
+    isRegiserChildren: false,
+    desc: '密码输入框组件',
+    props: [
+        { key: 'value', name: 'value', desc: '密码输入框当前的值' },
+        { key: 'disabled', name: 'disabled', desc: '是否禁用密码输入框' },
+        { key: 'showToggle', name: 'showToggle', desc: '是否显示密码可见性切换按钮' },
+    ],
+});
