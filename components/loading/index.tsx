@@ -4,10 +4,23 @@ import classNames from 'classnames';
 import Overlay from '../overlay';
 import ConfigProvider from '../config-provider';
 import { obj, func } from '../util';
+import {
+    APAActionEnabled,
+    APAStateEnabled,
+    APAState,
+    APAAction,
+    APAConfigProvider,
+    type APAComponentConfigContextInfo,
+} from '@alifd/apa-sdk';
+import { z } from 'zod';
 import type { LoadingProps } from './types';
 
 /** Loading */
+@APAActionEnabled
+@APAStateEnabled
 class Loading extends React.Component<LoadingProps> {
+    static displayName = 'Loading';
+
     static propTypes = {
         ...ConfigProvider.propTypes,
         prefix: PropTypes.string,
@@ -38,6 +51,42 @@ class Loading extends React.Component<LoadingProps> {
         inline: true,
         disableScroll: false,
     };
+
+    @APAState([{ name: 'visible', desc: '加载状态是否可见' }])
+    state = {
+        visible: this.props.visible !== undefined ? this.props.visible : true,
+    };
+
+    static getDerivedStateFromProps(nextProps: LoadingProps) {
+        if ('visible' in nextProps) {
+            return {
+                visible: nextProps.visible,
+            };
+        }
+        return null;
+    }
+
+    @APAAction({
+        name: 'setVisible',
+        desc: '设置加载状态的可见性',
+        params: z.tuple([z.boolean().describe('是否显示加载状态')]),
+    })
+    setVisible(visible: boolean) {
+        if (!('visible' in this.props)) {
+            // 非受控模式
+            this.setState({ visible });
+        } else {
+            // 受控模式：手动同步状态到 APA
+            const { apaNode } = (this.context as APAComponentConfigContextInfo) || {};
+            if (apaNode) {
+                apaNode.updateState({ visible });
+            }
+        }
+        // 触发回调
+        if (this.props.onVisibleChange) {
+            this.props.onVisibleChange('setVisible', {} as React.MouseEvent);
+        }
+    }
 
     render() {
         const {
@@ -143,4 +192,17 @@ class Loading extends React.Component<LoadingProps> {
 }
 
 export type { LoadingProps };
-export default ConfigProvider.config(Loading);
+export default ConfigProvider.config(
+    APAConfigProvider.config(Loading, {
+        isRegiserChildren: false,
+        desc: '加载组件',
+        props: [
+            { key: 'visible', name: 'visible', desc: '加载状态是否可见' },
+            { key: 'tip', name: 'tip', desc: '加载提示文本' },
+            { key: 'size', name: 'size', desc: '加载动画尺寸' },
+            { key: 'fullScreen', name: 'fullScreen', desc: '是否全屏展示' },
+            { key: 'color', name: 'color', desc: '动画颜色' },
+            { key: 'tipAlign', name: 'tipAlign', desc: '提示文本位置' },
+        ],
+    })
+);

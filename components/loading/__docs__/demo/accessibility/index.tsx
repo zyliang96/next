@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Loading, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 class App extends React.Component {
     state = {
@@ -37,4 +38,14 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="无障碍支持"
+        regionId="Loading-accessibility-demo"
+        regionDesc="Loading无障碍支持示例"
+        isRegiserChildren
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);
