@@ -394,6 +394,7 @@ export interface CalendarState {
     visibleMonth: Moment;
     mode: CalendarMode;
     MODES: CalendarMode[];
+    [key: string]: unknown;
 }
 
 export interface RangeCalendarState {

@@ -3,6 +3,13 @@ import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
 import moment, { type MomentInput, type Moment } from 'moment';
 import classnames from 'classnames';
+import {
+    APAAction,
+    APAActionEnabled,
+    APAConfigProvider,
+    APAState,
+    APAStateEnabled,
+} from '@alifd/apa-sdk';
 import ConfigProvider from '../config-provider';
 import nextLocale from '../locale/zh-cn';
 import { type ClassPropsWithDefault, func, obj } from '../util';
@@ -43,6 +50,8 @@ const isValueChanged = (value: MomentInput, oldValue: MomentInput) => {
 type InnerCalendarProps = ClassPropsWithDefault<CalendarProps, typeof Calendar.defaultProps>;
 
 /** Calendar */
+@APAActionEnabled
+@APAStateEnabled
 class Calendar extends Component<CalendarProps, CalendarState> {
     static propTypes = {
         ...ConfigProvider.propTypes,
@@ -90,6 +99,13 @@ class Calendar extends Component<CalendarProps, CalendarState> {
 
     readonly props: InnerCalendarProps;
 
+    @APAState([
+        { name: 'value', desc: '选中的日期值，moment 对象' },
+        { name: 'mode', desc: '面板模式, 可选择的值为 date, month, year' },
+        { name: 'visibleMonth', desc: '当前展示的月份，moment 对象' },
+    ])
+    state: CalendarState;
+
     constructor(props: CalendarProps) {
         super(props);
         const value = formatDateValue(props.value || props.defaultValue);
@@ -122,6 +138,7 @@ class Calendar extends Component<CalendarProps, CalendarState> {
         return st;
     }
 
+    @APAAction({ name: 'onSelectCell', desc: '选择日期单元格时的回调' })
     onSelectCell = (date: Moment, nextMode: CalendarMode | MouseEvent<HTMLElement>) => {
         const { visibleMonth } = this.state;
         const { shape, showOtherMonth } = this.props;
@@ -150,6 +167,7 @@ class Calendar extends Component<CalendarProps, CalendarState> {
         }
     };
 
+    @APAAction({ name: 'changeMode', desc: '切换面板模式' })
     changeMode = (nextMode: CalendarMode) => {
         if (nextMode && this.MODES.indexOf(nextMode) > -1 && nextMode !== this.state.mode) {
             this.setState({ mode: nextMode });
@@ -157,6 +175,7 @@ class Calendar extends Component<CalendarProps, CalendarState> {
         }
     };
 
+    @APAAction({ name: 'changeVisibleMonth', desc: '切换展示的月份' })
     changeVisibleMonth = (date: Moment, reason: VisibleMonthChangeType) => {
         if (!isSameYearMonth(date, this.state.visibleMonth)) {
             this.setState({ visibleMonth: date });
@@ -308,4 +327,13 @@ class Calendar extends Component<CalendarProps, CalendarState> {
     }
 }
 
-export default polyfill(Calendar);
+export default APAConfigProvider.config(polyfill(Calendar), {
+    desc: '日历组件',
+    props: [
+        {
+            key: 'disabledDate',
+            name: '不可选择的日期的回调函数',
+            desc: '不可选择的日期的回调函数，参数为当前日期，返回 true 表示不可选择，可用于禁用部分日期',
+        },
+    ],
+});
