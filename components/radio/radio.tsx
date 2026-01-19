@@ -53,14 +53,6 @@ class Radio extends UIState<RadioWithContextProps, RadioState> {
         isPreview: false,
     };
 
-    static contextTypes = {
-        onChange: PropTypes.func,
-        __group__: PropTypes.bool,
-        isButton: PropTypes.bool,
-        selectedValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
-        disabled: PropTypes.bool,
-    };
-
     static getDerivedStateFromProps(nextProps: RadioWithContextProps) {
         const { context: nextContext } = nextProps;
 
@@ -120,7 +112,7 @@ class Radio extends UIState<RadioWithContextProps, RadioState> {
         return (
             !shallowEqual(this.props, nextProps) ||
             !shallowEqual(this.state, nextState) ||
-            !shallowEqual(this.context, nextContext)
+            !shallowEqual(this.props.context, nextProps.context)
         );
     }
 
