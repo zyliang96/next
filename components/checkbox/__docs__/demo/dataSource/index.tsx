@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Checkbox } from '@alifd/next';
 import { type GroupProps } from '@alifd/next/types/checkbox';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const list = [
     {
@@ -38,4 +39,14 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="传入数组配置"
+        regionId="Checkbox-dataSource-demo"
+        regionDesc="Checkbox传入数组配置示例"
+        isRegiserChildren
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);

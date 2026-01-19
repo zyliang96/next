@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Checkbox, Divider } from '@alifd/next';
 import type { CheckboxProps, GroupProps } from '@alifd/next/types/checkbox';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const CheckboxGroup = Checkbox.Group;
 
@@ -36,4 +37,14 @@ const App = () => {
     );
 };
 
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="全选"
+        regionId="Checkbox-all-check-demo"
+        regionDesc="Checkbox全选示例"
+        isRegiserChildren
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);

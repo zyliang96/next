@@ -125,6 +125,7 @@ export interface GroupProps extends HTMLAttributesWeak, CommonProps {
 
 export interface GroupState {
     value: ValueItem[];
+    [key: string]: unknown;
 }
 
 /**

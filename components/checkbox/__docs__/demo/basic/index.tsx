@@ -1,5 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Checkbox } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
-ReactDOM.render(<Checkbox>Checkbox</Checkbox>, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="基本"
+        regionId="Checkbox-basic-demo"
+        regionDesc="Checkbox基本使用示例"
+        isRegiserChildren
+    >
+        <Checkbox>Checkbox</Checkbox>
+    </APAConfigProvider>,
+    mountNode
+);

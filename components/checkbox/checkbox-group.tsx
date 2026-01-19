@@ -5,12 +5,25 @@ import { polyfill } from 'react-lifecycles-compat';
 import { obj } from '../util';
 import Checkbox from './checkbox';
 import type { CheckboxData, GroupProps, GroupState, ValueItem } from './types';
+import {
+    APAActionEnabled,
+    APAAction,
+    APAStateEnabled,
+    APAState,
+    type APAComponentConfigContextInfo,
+} from '@alifd/apa-sdk';
+import { z } from 'zod';
 
 const { pickOthers } = obj;
 
 /** Checkbox.Group */
+@APAActionEnabled
+@APAStateEnabled
 class CheckboxGroup extends React.Component<GroupProps, GroupState> {
     static displayName = 'CheckboxGroup';
+
+    @APAState([{ name: 'value', desc: '当前选中的值列表' }])
+    state!: GroupState;
 
     static propTypes = {
         prefix: PropTypes.string,
@@ -104,6 +117,26 @@ class CheckboxGroup extends React.Component<GroupProps, GroupState> {
         return null;
     }
 
+    @APAAction({
+        name: 'setValue',
+        desc: '设置选中的值列表',
+        params: z.tuple([
+            z.array(z.union([z.string(), z.number(), z.boolean()])).describe('要选中的值列表'),
+        ]),
+    })
+    setValue(newValue: ValueItem[]) {
+        if (!('value' in this.props)) {
+            this.setState({ value: newValue });
+        } else {
+            // 受控模式：手动同步状态到 APA
+            const { apaNode } = (this.context as APAComponentConfigContextInfo) || {};
+            if (apaNode) {
+                apaNode.updateState({ value: newValue });
+            }
+        }
+        this.props.onChange?.(newValue, {} as React.ChangeEvent<HTMLInputElement>);
+    }
+
     onChange(currentValue: ValueItem, event: React.ChangeEvent<HTMLInputElement>) {
         const { value } = this.state;
         const index = value.indexOf(currentValue);
@@ -117,6 +150,12 @@ class CheckboxGroup extends React.Component<GroupProps, GroupState> {
 
         if (!('value' in this.props)) {
             this.setState({ value: valTemp });
+        } else {
+            // 受控模式：手动同步状态到 APA
+            const { apaNode } = (this.context as APAComponentConfigContextInfo) || {};
+            if (apaNode) {
+                apaNode.updateState({ value: valTemp });
+            }
         }
         this.props.onChange?.(valTemp, event);
     }

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import { Checkbox } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const CheckboxGroup = () => (
     <div>
@@ -16,4 +16,14 @@ const CheckboxGroup = () => (
     </div>
 );
 
-ReactDOM.render(<CheckboxGroup />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="无障碍支持"
+        regionId="Checkbox-accessibility-demo"
+        regionDesc="Checkbox无障碍支持示例"
+        isRegiserChildren
+    >
+        <CheckboxGroup />
+    </APAConfigProvider>,
+    mountNode
+);

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Checkbox } from '@alifd/next';
 import { type GroupProps } from '@alifd/next/types/checkbox';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const { Group: CheckboxGroup } = Checkbox;
 const list = [
@@ -39,4 +40,14 @@ class UnControlApp extends React.Component {
     }
 }
 
-ReactDOM.render(<UnControlApp />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="非受控组件"
+        regionId="Checkbox-uncontrol-demo"
+        regionDesc="Checkbox非受控组件示例"
+        isRegiserChildren
+    >
+        <UnControlApp />
+    </APAConfigProvider>,
+    mountNode
+);

@@ -8,6 +8,14 @@ import Icon from '../icon';
 import withCheckboxContext, { type CheckboxContext } from './with-context';
 import { obj, func } from '../util';
 import type { CheckboxProps } from './types';
+import {
+    APAActionEnabled,
+    APAAction,
+    APAStateEnabled,
+    APAState,
+    APAConfigProvider,
+    type APAComponentConfigContextInfo,
+} from '@alifd/apa-sdk';
 
 const noop = func.noop;
 function isChecked(
@@ -21,6 +29,8 @@ interface CheckboxState extends UIStateState {
     value?: CheckboxProps['value'];
     checked?: boolean;
     indeterminate?: boolean;
+    disabled?: boolean;
+    [key: string]: unknown;
 }
 
 export interface PrivateCheckboxProps extends CheckboxProps {
@@ -31,8 +41,17 @@ export interface PrivateCheckboxProps extends CheckboxProps {
  * Checkbox
  * @order 1
  */
+@APAActionEnabled
+@APAStateEnabled
 class Checkbox extends UIState<PrivateCheckboxProps, CheckboxState> {
     static displayName = 'Checkbox';
+
+    @APAState([
+        { name: 'checked', desc: '是否选中' },
+        { name: 'indeterminate', desc: '是否为半选状态' },
+        { name: 'disabled', desc: '是否禁用' },
+    ])
+    state!: CheckboxState;
     static propTypes = {
         ...ConfigProvider.propTypes,
         prefix: PropTypes.string,
@@ -68,7 +87,7 @@ class Checkbox extends UIState<PrivateCheckboxProps, CheckboxState> {
     constructor(props: PrivateCheckboxProps) {
         super(props);
         const { context } = props;
-        let checked, indeterminate;
+        let checked, indeterminate, disabled;
 
         if ('checked' in props) {
             checked = props.checked;
@@ -81,12 +100,16 @@ class Checkbox extends UIState<PrivateCheckboxProps, CheckboxState> {
         } else {
             indeterminate = props.defaultIndeterminate;
         }
+
+        disabled = props.disabled || ('disabled' in context && context.disabled);
+
         if (context.__group__) {
             checked = isChecked(context.selectedValue, props.value);
         }
         this.state = {
-            checked,
-            indeterminate,
+            checked: checked ?? false,
+            indeterminate: indeterminate ?? false,
+            disabled: disabled ?? false,
         };
 
         this.onChange = this.onChange.bind(this);
@@ -107,14 +130,13 @@ class Checkbox extends UIState<PrivateCheckboxProps, CheckboxState> {
             state.indeterminate = nextProps.indeterminate;
         }
 
+        state.disabled = nextProps.disabled || ('disabled' in nextContext && nextContext.disabled);
+
         return state;
     }
 
     get disabled() {
-        const { props } = this;
-        const { context } = props;
-
-        return props.disabled || ('disabled' in context && context.disabled);
+        return this.state.disabled ?? false;
     }
 
     shouldComponentUpdate(
@@ -130,6 +152,10 @@ class Checkbox extends UIState<PrivateCheckboxProps, CheckboxState> {
         );
     }
 
+    @APAAction({
+        name: 'onChange',
+        desc: '切换选中状态',
+    })
     onChange(event: React.ChangeEvent<HTMLInputElement>) {
         const { context, value } = this.props;
         const checked = event.target.checked;
@@ -144,12 +170,24 @@ class Checkbox extends UIState<PrivateCheckboxProps, CheckboxState> {
                 this.setState({
                     checked: checked,
                 });
+            } else {
+                // 受控模式：手动同步状态到 APA
+                const { apaNode } = (this.context as APAComponentConfigContextInfo) || {};
+                if (apaNode) {
+                    apaNode.updateState({ checked });
+                }
             }
 
             if (!('indeterminate' in this.props)) {
                 this.setState({
                     indeterminate: false,
                 });
+            } else {
+                // 受控模式：手动同步状态到 APA
+                const { apaNode } = (this.context as APAComponentConfigContextInfo) || {};
+                if (apaNode) {
+                    apaNode.updateState({ indeterminate: false });
+                }
             }
             this.props.onChange?.(checked, event);
         }
@@ -271,5 +309,16 @@ class Checkbox extends UIState<PrivateCheckboxProps, CheckboxState> {
 }
 
 export default ConfigProvider.config(
-    withCheckboxContext(polyfill(Checkbox) as React.ComponentType<PrivateCheckboxProps>)
+    APAConfigProvider.config(
+        withCheckboxContext(polyfill(Checkbox) as React.ComponentType<PrivateCheckboxProps>),
+        {
+            isRegiserChildren: false,
+            desc: '复选框组件',
+            props: [
+                { key: 'checked', name: 'checked', desc: '是否选中' },
+                { key: 'disabled', name: 'disabled', desc: '是否禁用' },
+                { key: 'indeterminate', name: 'indeterminate', desc: '是否为半选状态' },
+            ],
+        }
+    )
 );

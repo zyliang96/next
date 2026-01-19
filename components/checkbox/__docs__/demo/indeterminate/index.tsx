@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Checkbox, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 class IndeterminateApp extends React.Component {
     state = {
@@ -37,4 +38,14 @@ class IndeterminateApp extends React.Component {
     }
 }
 
-ReactDOM.render(<IndeterminateApp />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="中间状态"
+        regionId="Checkbox-indeterminate-demo"
+        regionDesc="Checkbox中间状态示例"
+        isRegiserChildren
+    >
+        <IndeterminateApp />
+    </APAConfigProvider>,
+    mountNode
+);
