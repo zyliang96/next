@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Form, Input, Radio } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -17,64 +18,75 @@ const formItemLayout = {
 class Demo extends React.Component {
     render() {
         return (
-            <Form {...formItemLayout} useLabelForErrorMessage colon>
-                <FormItem label="Account" required name="valUsername">
-                    <Input placeholder="Input frank" />
-                </FormItem>
-                <FormItem
-                    label="Email"
-                    required
-                    requiredTrigger="onBlur"
-                    format="email"
-                    name="valEmail"
-                >
-                    <Input placeholder="Both trigget onBlur and onChange" />
-                </FormItem>
-
-                <FormItem
-                    label="Password"
-                    hasFeedback
-                    required
-                    requiredMessage="Please enter password"
-                    name="valPasswd"
-                >
-                    <Input htmlType="password" />
-                </FormItem>
-
-                <FormItem
-                    label="Gender"
-                    hasFeedback
-                    required
-                    requiredMessage="Please select your gender"
-                    name="valSex"
-                >
-                    <RadioGroup>
-                        <Radio value="male">Male</Radio>
-                        <Radio value="female">Female</Radio>
-                    </RadioGroup>
-                </FormItem>
-
-                <FormItem
-                    label="Remarks"
-                    required
-                    requiredMessage="Really do not intend to write anything?"
-                    name="valTextarea"
-                >
-                    <Input.TextArea maxLength={20} showLimitHint placeholder="Everything is ok!" />
-                </FormItem>
-
-                <FormItem wrapperCol={{ offset: 6 }}>
-                    <Form.Submit
-                        validate
-                        type="primary"
-                        onClick={(v, e) => console.log(v, e)}
-                        style={{ marginRight: 10 }}
+            <APAConfigProvider
+                regionName="表单验证标签作为名称 Demo"
+                regionId="Form-validate-label-as-name-demo"
+                regionDesc="表单验证标签作为名称 Demo"
+                isRegiserChildren
+            >
+                <Form {...formItemLayout} useLabelForErrorMessage colon>
+                    <FormItem label="Account" required name="valUsername">
+                        <Input placeholder="Input frank" />
+                    </FormItem>
+                    <FormItem
+                        label="Email"
+                        required
+                        requiredTrigger="onBlur"
+                        format="email"
+                        name="valEmail"
                     >
-                        Submit
-                    </Form.Submit>
-                    <Form.Reset>Reset</Form.Reset>
-                </FormItem>
-            </Form>
+                        <Input placeholder="Both trigget onBlur and onChange" />
+                    </FormItem>
+
+                    <FormItem
+                        label="Password"
+                        hasFeedback
+                        required
+                        requiredMessage="Please enter password"
+                        name="valPasswd"
+                    >
+                        <Input htmlType="password" />
+                    </FormItem>
+
+                    <FormItem
+                        label="Gender"
+                        hasFeedback
+                        required
+                        requiredMessage="Please select your gender"
+                        name="valSex"
+                    >
+                        <RadioGroup>
+                            <Radio value="male">Male</Radio>
+                            <Radio value="female">Female</Radio>
+                        </RadioGroup>
+                    </FormItem>
+
+                    <FormItem
+                        label="Remarks"
+                        required
+                        requiredMessage="Really do not intend to write anything?"
+                        name="valTextarea"
+                    >
+                        <Input.TextArea
+                            maxLength={20}
+                            showLimitHint
+                            placeholder="Everything is ok!"
+                        />
+                    </FormItem>
+
+                    <FormItem wrapperCol={{ offset: 6 }}>
+                        <Form.Submit
+                            validate
+                            type="primary"
+                            onClick={(v, e) => console.log(v, e)}
+                            style={{ marginRight: 10 }}
+                        >
+                            Submit
+                        </Form.Submit>
+                        <Form.Reset>Reset</Form.Reset>
+                    </FormItem>
+                </Form>
+            </APAConfigProvider>
         );
     }
 }

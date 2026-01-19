@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Form, Field, Input, Radio, Switch } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 function handleSubmit(v: unknown) {
     console.log(v);
@@ -23,32 +24,39 @@ const App = () => {
     const layout = inline ? {} : formItemLayout;
 
     return (
-        <Form field={field} inline={inline} labelAlign={labelAlign} {...layout}>
-            <Form.Item label="Inline Layout" name="inline">
-                <Switch />
-            </Form.Item>
-
-            {inline ? null : (
-                <Form.Item label="Label align" name="labelAlign">
-                    <Radio.Group shape="button">
-                        <Radio value="left">left</Radio>
-                        <Radio value="top">top</Radio>
-                        <Radio value="inset">inset</Radio>
-                    </Radio.Group>
+        <APAConfigProvider
+            regionName="表单布局 Demo"
+            regionId="Form-layout-demo"
+            regionDesc="表单布局 Demo"
+            isRegiserChildren
+        >
+            <Form field={field} inline={inline} labelAlign={labelAlign} {...layout}>
+                <Form.Item label="Inline Layout" name="inline">
+                    <Switch />
                 </Form.Item>
-            )}
 
-            <Form.Item label="Username:" name="inlineUser">
-                <Input placeholder="first" />
-            </Form.Item>
-            <Form.Item label="Password:" hasFeedback={false} name="inlinePass">
-                <Input.Password placeholder="Please enter your password!" />
-            </Form.Item>
+                {inline ? null : (
+                    <Form.Item label="Label align" name="labelAlign">
+                        <Radio.Group shape="button">
+                            <Radio value="left">left</Radio>
+                            <Radio value="top">top</Radio>
+                            <Radio value="inset">inset</Radio>
+                        </Radio.Group>
+                    </Form.Item>
+                )}
 
-            <Form.Item label=" ">
-                <Form.Submit onClick={handleSubmit}>Submit</Form.Submit>
-            </Form.Item>
-        </Form>
+                <Form.Item label="Username:" name="inlineUser">
+                    <Input placeholder="first" />
+                </Form.Item>
+                <Form.Item label="Password:" hasFeedback={false} name="inlinePass">
+                    <Input.Password placeholder="Please enter your password!" />
+                </Form.Item>
+
+                <Form.Item label=" ">
+                    <Form.Submit onClick={handleSubmit}>Submit</Form.Submit>
+                </Form.Item>
+            </Form>
+        </APAConfigProvider>
     );
 };
 

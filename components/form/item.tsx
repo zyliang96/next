@@ -1,20 +1,22 @@
 import React, { Children, Component, type ReactElement, type ReactNode, cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 import Grid from '../grid';
 import RGrid from '../responsive-grid';
 import { obj } from '../util';
 import Error from './error';
 import { getFieldInitCfg } from './enhance';
-import type { ChildExtraProperties, ItemContext, ItemProps } from './types';
+import type { ChildExtraProperties, ItemProps } from './types';
+import { FormContextConsumer, type FormContextValue } from './context';
 
 const { Row, Col } = Grid;
 const { Cell } = RGrid;
 
 const { isNil } = obj;
 
-export default class Item extends Component<ItemProps> {
+class Item extends Component<ItemProps> {
     static displayName = 'Item';
     static propTypes = {
         prefix: PropTypes.string,
@@ -79,19 +81,10 @@ export default class Item extends Component<ItemProps> {
         labelWidth: 100,
     };
 
-    static contextTypes = {
-        _formField: PropTypes.object,
-        _formSize: PropTypes.oneOf(['large', 'small', 'medium']),
-        _formDisabled: PropTypes.bool,
-        _formPreview: PropTypes.bool,
-        _formFullWidth: PropTypes.bool,
-        _formLabelForErrorMessage: PropTypes.bool,
-        _formMarginToDisplayHelp: PropTypes.bool,
-    };
-
     static _typeMark = 'form_item';
 
-    readonly context: ItemContext;
+    formContext: FormContextValue | null = null;
+
     /**
      * 从子元素里面提取表单组件。TODO: 2.x 中改为只获取一个元素
      */
@@ -117,7 +110,7 @@ export default class Item extends Component<ItemProps> {
 
     getHelper(children: ReactNode) {
         const { help, preferMarginToDisplayHelp } = this.props;
-        const { _formField, _formMarginToDisplayHelp } = this.context;
+        const { _formField, _formMarginToDisplayHelp } = this.formContext || {};
 
         const useMargin =
             typeof preferMarginToDisplayHelp !== 'undefined'
@@ -127,7 +120,7 @@ export default class Item extends Component<ItemProps> {
         return (
             <Error
                 name={help === undefined ? this.getNames(children) : undefined}
-                field={_formField}
+                field={_formField || undefined}
                 preferMarginToDisplayHelp={useMargin}
             >
                 {help}
@@ -140,9 +133,8 @@ export default class Item extends Component<ItemProps> {
         if (validateState) {
             return validateState;
         }
-
-        if (this.context._formField) {
-            const { getState } = this.context._formField;
+        if (this.formContext?._formField) {
+            const { getState } = this.formContext?._formField || {};
             const names = this.getNames(children);
             if (!names.length) {
                 return '';
@@ -156,19 +148,21 @@ export default class Item extends Component<ItemProps> {
     }
 
     getSize() {
-        return this.props.size || this.context._formSize;
+        return this.props.size || (this.formContext?._formSize as string);
     }
 
     getDisabled() {
-        return 'disabled' in this.props ? this.props.disabled : this.context._formDisabled;
+        return 'disabled' in this.props ? this.props.disabled : this.formContext?._formDisabled;
     }
 
     getIsPreview() {
-        return 'isPreview' in this.props ? this.props.isPreview : this.context._formPreview;
+        return 'isPreview' in this.props ? this.props.isPreview : this.formContext?._formPreview;
     }
 
     getFullWidth() {
-        return isNil(this.props.fullWidth) ? !!this.context._formFullWidth : this.props.fullWidth;
+        return isNil(this.props.fullWidth)
+            ? !!this.formContext?._formFullWidth
+            : this.props.fullWidth;
     }
 
     getLabelForErrorMessage() {
@@ -187,7 +181,7 @@ export default class Item extends Component<ItemProps> {
         const labelForErrorMessage =
             useLabelForErrorMessage !== undefined
                 ? useLabelForErrorMessage
-                : this.context._formLabelForErrorMessage;
+                : this.formContext?._formLabelForErrorMessage;
         if (labelForErrorMessage && newLabel) {
             return newLabel;
         }
@@ -301,13 +295,13 @@ export default class Item extends Component<ItemProps> {
                 // 自己直接使用 field.init 会在 props 上面留下 data-meta
                 // name 挪到 FormItem 上面，默认把第一个元素当做 Form 组件
                 if (
-                    this.context._formField &&
+                    this.formContext?._formField &&
                     !('data-meta' in child.props) &&
                     ('name' in child.props || (name && idx === 0)) //TODO：1.x 为了不 BR, 2.x 中把优先级调换下，优先取 FormItem 的 name
                 ) {
                     const initName =
                         'name' in child.props && child.props.name ? child.props.name : name;
-                    extraProps = this.context._formField.init(
+                    extraProps = this.formContext?._formField.init(
                         initName,
                         {
                             ...getFieldInitCfg(
@@ -355,47 +349,87 @@ export default class Item extends Component<ItemProps> {
     }
 
     render() {
-        const { className, style, prefix, wrapperCol, labelCol, responsive, children } = this.props;
-
-        const labelAlign = this.getLabelAlign(this.props.labelAlign, this.props.device);
-
-        let childrenNode = children;
-        if (typeof children === 'function' && this.context._formField) {
-            childrenNode = children(this.context._formField.getValues());
-        }
-
-        const state = this.getState(childrenNode);
-        const size = this.getSize();
-        const fullWidth = this.getFullWidth();
-        const isPreview = this.getIsPreview();
-
-        const itemClassName = classNames({
-            [`${prefix}form-item`]: true,
-            [`${prefix}${labelAlign}`]: labelAlign,
-            [`has-${state}`]: !!state,
-            [`${prefix}${size}`]: !!size,
-            [`${prefix}form-item-fullwidth`]: fullWidth,
-            [`${className}`]: !!className,
-            [`${prefix}form-preview`]: isPreview,
-        });
-
-        // 垂直模式并且左对齐才用到
-        const Tag = responsive
-            ? Cell
-            : (wrapperCol || labelCol) && labelAlign !== 'top'
-              ? Row
-              : 'div';
-        const label = labelAlign === 'inset' ? null : this.getItemLabel(childrenNode);
-
         return (
-            <Tag
-                {...obj.pickOthers(Item.propTypes, this.props)}
-                className={itemClassName}
-                style={style}
-            >
-                {label}
-                {this.getItemWrapper(childrenNode)}
-            </Tag>
+            <FormContextConsumer>
+                {(value: FormContextValue) => {
+                    this.formContext = value;
+                    const { className, style, prefix, wrapperCol, labelCol, responsive, children } =
+                        this.props;
+
+                    const labelAlign = this.getLabelAlign(this.props.labelAlign, this.props.device);
+
+                    let childrenNode = children;
+                    if (typeof children === 'function' && this.formContext._formField) {
+                        childrenNode = children(this.formContext._formField.getValues());
+                    }
+
+                    const state = this.getState(childrenNode);
+                    const size = this.getSize();
+                    const fullWidth = this.getFullWidth();
+                    const isPreview = this.getIsPreview();
+
+                    const itemClassName = classNames({
+                        [`${prefix}form-item`]: true,
+                        [`${prefix}${labelAlign}`]: labelAlign,
+                        [`has-${state}`]: !!state,
+                        [`${prefix}${size}`]: !!size,
+                        [`${prefix}form-item-fullwidth`]: fullWidth,
+                        [`${className}`]: !!className,
+                        [`${prefix}form-preview`]: isPreview,
+                    });
+
+                    // 垂直模式并且左对齐才用到
+                    const Tag = responsive
+                        ? Cell
+                        : (wrapperCol || labelCol) && labelAlign !== 'top'
+                          ? Row
+                          : 'div';
+                    const label = labelAlign === 'inset' ? null : this.getItemLabel(childrenNode);
+
+                    return (
+                        <Tag
+                            {...obj.pickOthers(Item.propTypes, this.props)}
+                            className={itemClassName}
+                            style={style}
+                        >
+                            {label}
+                            {this.getItemWrapper(childrenNode)}
+                        </Tag>
+                    );
+                }}
+            </FormContextConsumer>
         );
     }
 }
+
+export default APAConfigProvider.config(Item, {
+    isRegiserChildren: true,
+    desc: '表单项组件',
+    props: [
+        {
+            key: 'required',
+            name: '是否必填',
+            desc: '是否必填，true 表示必填，false 表示非必填',
+        },
+        {
+            key: 'label',
+            name: '标签',
+            desc: '标签文本',
+        },
+        {
+            key: 'name',
+            name: '字段名',
+            desc: '字段名',
+        },
+        {
+            key: 'isPreview',
+            name: '是否预览态',
+            desc: '是否预览态，true 表示预览态，false 表示非预览态',
+        },
+        {
+            key: 'disabled',
+            name: '是否禁用',
+            desc: '是否禁用，true 表示禁用，false 表示非禁用',
+        },
+    ],
+});

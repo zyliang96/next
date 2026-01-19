@@ -7,6 +7,7 @@ import Error from './error';
 import type { FormProps, ItemProps, SubmitProps, ResetProps, ErrorProps } from './types';
 import { assignSubComponent } from '../util/component';
 
+export { FormContext, useFormContext, type FormContextValue } from './context';
 export type { FormProps, ItemProps, SubmitProps, ResetProps, ErrorProps };
 
 const FormWithSub = assignSubComponent(Form, {

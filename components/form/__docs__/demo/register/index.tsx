@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Form, Input } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const FormItem = Form.Item;
 
@@ -41,50 +42,57 @@ class Demo extends React.Component {
         const { code } = this.state;
 
         return (
-            <Form
-                style={{ width: 400 }}
-                {...formItemLayout}
-                labelTextAlign="left"
-                size="large"
-                labelAlign="inset"
+            <APAConfigProvider
+                regionName="表单注册 Demo"
+                regionId="Form-register-demo"
+                regionDesc="表单注册 Demo"
+                isRegiserChildren
             >
-                <FormItem name="username" label="name" required asterisk={false}>
-                    <Input trim defaultValue="frank" />
-                </FormItem>
-                <FormItem name="phone" label="phone" format="tel" required asterisk={false}>
-                    <Input
-                        trim
-                        innerAfter={
-                            <Form.Submit
-                                text
-                                type="primary"
-                                disabled={!!code}
-                                validate={['phone']}
-                                onClick={this.sendCode}
-                                style={{ marginRight: 10 }}
-                            >
-                                {code ? `retry after ${this.state.second}s` : 'send code'}
-                            </Form.Submit>
-                        }
-                    />
-                </FormItem>
-                {this.state.code ? (
-                    <FormItem name="code" label="code" required asterisk={false}>
-                        <Input trim defaultValue={this.state.code} />
+                <Form
+                    style={{ width: 400 }}
+                    {...formItemLayout}
+                    labelTextAlign="left"
+                    size="large"
+                    labelAlign="inset"
+                >
+                    <FormItem name="username" label="name" required asterisk={false}>
+                        <Input trim defaultValue="frank" />
                     </FormItem>
-                ) : null}
+                    <FormItem name="phone" label="phone" format="tel" required asterisk={false}>
+                        <Input
+                            trim
+                            innerAfter={
+                                <Form.Submit
+                                    text
+                                    type="primary"
+                                    disabled={!!code}
+                                    validate={['phone']}
+                                    onClick={this.sendCode}
+                                    style={{ marginRight: 10 }}
+                                >
+                                    {code ? `retry after ${this.state.second}s` : 'send code'}
+                                </Form.Submit>
+                            }
+                        />
+                    </FormItem>
+                    {this.state.code ? (
+                        <FormItem name="code" label="code" required asterisk={false}>
+                            <Input trim defaultValue={this.state.code} />
+                        </FormItem>
+                    ) : null}
 
-                <FormItem label=" ">
-                    <Form.Submit
-                        style={{ width: '100%' }}
-                        type="primary"
-                        validate
-                        onClick={this.handleSubmit}
-                    >
-                        Submit
-                    </Form.Submit>
-                </FormItem>
-            </Form>
+                    <FormItem label=" ">
+                        <Form.Submit
+                            style={{ width: '100%' }}
+                            type="primary"
+                            validate
+                            onClick={this.handleSubmit}
+                        >
+                            Submit
+                        </Form.Submit>
+                    </FormItem>
+                </Form>
+            </APAConfigProvider>
         );
     }
 }

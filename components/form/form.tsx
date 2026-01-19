@@ -1,11 +1,12 @@
 import React, { Children, Component, type ReactElement, type ReactNode, cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-
+import { APAActionEnabled, APAConfigProvider } from '@alifd/apa-sdk';
 import { obj, func, type ClassPropsWithDefault } from '../util';
 import NextField, { type FieldOption } from '../field';
 import RGrid from '../responsive-grid';
 import type { ChildExtraProperties, FormProps, RemoveUndefined } from './types';
+import { FormContextProvider, type FormContextValue } from './context';
 
 export type FormWithDefaultProps = ClassPropsWithDefault<FormProps, typeof Form.defaultProps>;
 
@@ -62,7 +63,8 @@ const getNewChildren: (children: ReactNode, props: FormProps) => ReactNode = (
 };
 
 /** Form */
-export default class Form extends Component<FormProps> {
+@APAActionEnabled<typeof Form>({ fields: ['_formField'] })
+class Form extends Component<FormProps> {
     static displayName = 'Form';
     static propTypes = {
         prefix: PropTypes.string,
@@ -111,16 +113,6 @@ export default class Form extends Component<FormProps> {
 
     readonly props: FormWithDefaultProps;
 
-    static childContextTypes = {
-        _formField: PropTypes.object,
-        _formSize: PropTypes.string,
-        _formDisabled: PropTypes.bool,
-        _formPreview: PropTypes.bool,
-        _formFullWidth: PropTypes.bool,
-        _formLabelForErrorMessage: PropTypes.bool,
-        _formMarginToDisplayHelp: PropTypes.bool,
-    };
-
     _formField: NextField | null;
     constructor(props: FormProps) {
         super(props);
@@ -148,21 +140,8 @@ export default class Form extends Component<FormProps> {
             if (props.locale && props.locale.Validate) {
                 this._formField.setOptions({ messages: props.locale.Validate });
             }
-
             props.saveField!(this._formField);
         }
-    }
-
-    getChildContext() {
-        return {
-            _formField: this.props.field ? this.props.field : this._formField,
-            _formSize: this.props.size,
-            _formDisabled: this.props.disabled,
-            _formPreview: this.props.isPreview,
-            _formFullWidth: this.props.fullWidth,
-            _formLabelForErrorMessage: this.props.useLabelForErrorMessage,
-            _formMarginToDisplayHelp: this.props.preferMarginToDisplayHelp,
-        };
     }
 
     componentDidUpdate(prevProps: FormProps) {
@@ -176,6 +155,21 @@ export default class Form extends Component<FormProps> {
                 this._formField.setValues(props.error);
             }
         }
+    }
+
+    /**
+     * 获取 Form Context 的值
+     */
+    getFormContextValue(): FormContextValue {
+        return {
+            _formField: this.props.field ? this.props.field : this._formField,
+            _formSize: this.props.size,
+            _formDisabled: this.props.disabled,
+            _formPreview: this.props.isPreview,
+            _formFullWidth: this.props.fullWidth,
+            _formLabelForErrorMessage: this.props.useLabelForErrorMessage,
+            _formMarginToDisplayHelp: this.props.preferMarginToDisplayHelp,
+        };
     }
 
     onChange = (name: string, value: string) => {
@@ -215,22 +209,63 @@ export default class Form extends Component<FormProps> {
         const newChildren = getNewChildren(children, this.props);
 
         return (
-            <Tag
-                role="form"
-                {...obj.pickOthers(Form.propTypes, this.props)}
-                className={formClassName}
-                style={style}
-                dir={rtl ? 'rtl' : undefined}
-                onSubmit={onSubmit}
-            >
-                {responsive ? (
-                    <RGrid gap={gap} device={device}>
-                        {newChildren}
-                    </RGrid>
-                ) : (
-                    newChildren
-                )}
-            </Tag>
+            <FormContextProvider value={this.getFormContextValue()}>
+                <Tag
+                    role="form"
+                    {...obj.pickOthers(Form.propTypes, this.props)}
+                    className={formClassName}
+                    style={style}
+                    dir={rtl ? 'rtl' : undefined}
+                    onSubmit={onSubmit}
+                >
+                    {responsive ? (
+                        <RGrid gap={gap} device={device}>
+                            {newChildren}
+                        </RGrid>
+                    ) : (
+                        newChildren
+                    )}
+                </Tag>
+            </FormContextProvider>
         );
     }
 }
+
+// 先应用 APAActionEnabled，再应用 APAConfigProvider.config
+
+export default APAConfigProvider.config(Form, {
+    isRegiserChildren: true,
+    desc: '表单组件',
+    props: [
+        {
+            key: 'disabled',
+            name: '禁用状态',
+            desc: '是否禁用表单，true 表示禁用，false 表示启用，禁用状态不能触发提交事件',
+        },
+        {
+            key: 'isPreview',
+            name: '预览态',
+            desc: '是否开启预览态，true 表示开启，false 表示关闭',
+        },
+        {
+            key: 'inline',
+            name: '内联',
+            desc: '是否开启内联，true 表示开启，false 表示关闭',
+        },
+        {
+            key: 'labelAlign',
+            name: '标签位置',
+            desc: '标签位置，top 表示在上，left 表示在左，inset 表示在右',
+        },
+        {
+            key: 'labelTextAlign',
+            name: '标签对齐方式',
+            desc: '标签对齐方式，left 表示左对齐，right 表示右对齐',
+        },
+        {
+            key: 'rtl',
+            name: '从右到左 布局',
+            desc: '是否开启 从右到左 布局，true 表示开启，false 表示默认从左到右布局',
+        },
+    ],
+});

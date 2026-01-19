@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Form, Input, Grid } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const FormItem = Form.Item;
 const { Row, Col } = Grid;
@@ -15,67 +16,75 @@ const insetLayout = {
 };
 
 ReactDOM.render(
-    <Form {...formItemLayout}>
-        <FormItem id="control-input" label="Input Something：">
-            <Row gutter="4">
-                <Col>
-                    <FormItem
-                        name="firstname"
-                        style={{ margin: 0 }}
-                        label="Nest"
-                        labelAlign="inset"
-                        {...insetLayout}
-                        required
-                        requiredTrigger="onBlur"
-                        asterisk={false}
-                    >
-                        <Input placeholder="Please enter..." />
-                    </FormItem>
-                </Col>
-                <Col>
-                    <FormItem
-                        name="secondname"
-                        style={{ margin: 0 }}
-                        label="Nest"
-                        labelAlign="inset"
-                        {...insetLayout}
-                        required
-                        asterisk={false}
-                    >
-                        <Input placeholder="need onChange" />
-                    </FormItem>
-                </Col>
-            </Row>
-        </FormItem>
-        <FormItem label="Bank Account：">
-            <Row gutter="4">
-                <Col>
-                    <FormItem name="A" required requiredTrigger="onBlur">
-                        <Input />
-                    </FormItem>
-                </Col>
-                <Col>
-                    <FormItem name="B" required requiredTrigger="onBlur">
-                        <Input />
-                    </FormItem>
-                </Col>
-                <Col>
-                    <FormItem name="C" required requiredTrigger="onBlur">
-                        <Input />
-                    </FormItem>
-                </Col>
-                <Col>
-                    <FormItem name="D" required requiredTrigger="onBlur">
-                        <Input />
-                    </FormItem>
-                </Col>
-            </Row>
-        </FormItem>
-        <FormItem label=" ">
-            <Form.Submit validate onClick={v => console.log(v)}>
-                Submit
-            </Form.Submit>
-        </FormItem>
-    </Form>,
+    <APAConfigProvider
+        regionName="表单嵌套 Demo"
+        regionId="Form-nest-demo"
+        regionDesc="表单嵌套 Demo"
+        isRegiserChildren
+    >
+        <Form {...formItemLayout}>
+            <FormItem id="control-input" label="Input Something：">
+                <Row gutter="4">
+                    <Col>
+                        <FormItem
+                            name="firstname"
+                            style={{ margin: 0 }}
+                            label="Nest"
+                            labelAlign="inset"
+                            {...insetLayout}
+                            required
+                            requiredTrigger="onBlur"
+                            asterisk={false}
+                        >
+                            <Input placeholder="Please enter..." />
+                        </FormItem>
+                    </Col>
+                    <Col>
+                        <FormItem
+                            name="secondname"
+                            style={{ margin: 0 }}
+                            label="Nest"
+                            labelAlign="inset"
+                            {...insetLayout}
+                            required
+                            asterisk={false}
+                        >
+                            <Input placeholder="need onChange" />
+                        </FormItem>
+                    </Col>
+                </Row>
+            </FormItem>
+            <FormItem label="Bank Account：">
+                <Row gutter="4">
+                    <Col>
+                        <FormItem name="A" required requiredTrigger="onBlur">
+                            <Input />
+                        </FormItem>
+                    </Col>
+                    <Col>
+                        <FormItem name="B" required requiredTrigger="onBlur">
+                            <Input />
+                        </FormItem>
+                    </Col>
+                    <Col>
+                        <FormItem name="C" required requiredTrigger="onBlur">
+                            <Input />
+                        </FormItem>
+                    </Col>
+                    <Col>
+                        <FormItem name="D" required requiredTrigger="onBlur">
+                            <Input />
+                        </FormItem>
+                    </Col>
+                </Row>
+            </FormItem>
+            <FormItem label=" ">
+                <Form.Submit validate onClick={v => console.log(v)}>
+                    Submit
+                </Form.Submit>
+            </FormItem>
+        </Form>
+    </APAConfigProvider>,
+
     mountNode
 );

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Form, Input, Radio } from '@alifd/next';
 import type { ItemProps } from '@alifd/next/types/form';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -34,73 +35,84 @@ class BasicDemo extends React.Component {
 
     render() {
         return (
-            <Form {...formItemLayout}>
-                <FormItem
-                    label="Account:"
-                    hasFeedback
-                    validator={this.userExists.bind(this)}
-                    help=""
-                    name="valUsername"
-                >
-                    <Input placeholder="Input frank" />
-                    <Form.Error name="valUsername">
-                        {(errors, state) => {
-                            if (state === 'loading') {
-                                return 'loading...';
-                            } else {
-                                return errors;
-                            }
-                        }}
-                    </Form.Error>
-                </FormItem>
-                <FormItem label="Email:" hasFeedback required format="email" name="valEmail">
-                    <Input placeholder="Both trigget onBlur and onChange" />
-                </FormItem>
-
-                <FormItem
-                    label="Password:"
-                    hasFeedback
-                    required
-                    requiredMessage="Please enter password"
-                    name="valPasswd"
-                >
-                    <Input htmlType="password" />
-                </FormItem>
-
-                <FormItem
-                    label="Gender:"
-                    hasFeedback
-                    required
-                    requiredMessage="Please select your gender"
-                    name="valSex"
-                >
-                    <RadioGroup>
-                        <Radio value="male">Male</Radio>
-                        <Radio value="female">Female</Radio>
-                    </RadioGroup>
-                </FormItem>
-
-                <FormItem
-                    label="Remarks:"
-                    required
-                    requiredMessage="Really do not intend to write anything?"
-                    name="valTextarea"
-                >
-                    <Input.TextArea maxLength={20} showLimitHint placeholder="Everything is ok!" />
-                </FormItem>
-
-                <FormItem wrapperCol={{ offset: 6 }}>
-                    <Form.Submit
-                        validate
-                        type="primary"
-                        onClick={(v, e) => console.log(v, e)}
-                        style={{ marginRight: 10 }}
+            <APAConfigProvider
+                regionName="Form验证基础Demo"
+                regionId="Form-validate-basic-demo"
+                regionDesc="Form验证基础Demo"
+                isRegiserChildren
+            >
+                <Form {...formItemLayout}>
+                    <FormItem
+                        label="Account:"
+                        hasFeedback
+                        validator={this.userExists.bind(this)}
+                        help=""
+                        name="valUsername"
                     >
-                        Submit
-                    </Form.Submit>
-                    <Form.Reset>Reset</Form.Reset>
-                </FormItem>
-            </Form>
+                        <Input placeholder="Input frank" />
+                        <Form.Error name="valUsername">
+                            {(errors, state) => {
+                                if (state === 'loading') {
+                                    return 'loading...';
+                                } else {
+                                    return errors;
+                                }
+                            }}
+                        </Form.Error>
+                    </FormItem>
+                    <FormItem label="Email:" hasFeedback required format="email" name="valEmail">
+                        <Input placeholder="Both trigget onBlur and onChange" />
+                    </FormItem>
+
+                    <FormItem
+                        label="Password:"
+                        hasFeedback
+                        required
+                        requiredMessage="Please enter password"
+                        name="valPasswd"
+                    >
+                        <Input htmlType="password" />
+                    </FormItem>
+
+                    <FormItem
+                        label="Gender:"
+                        hasFeedback
+                        required
+                        requiredMessage="Please select your gender"
+                        name="valSex"
+                    >
+                        <RadioGroup>
+                            <Radio value="male">Male</Radio>
+                            <Radio value="female">Female</Radio>
+                        </RadioGroup>
+                    </FormItem>
+
+                    <FormItem
+                        label="Remarks:"
+                        required
+                        requiredMessage="Really do not intend to write anything?"
+                        name="valTextarea"
+                    >
+                        <Input.TextArea
+                            maxLength={20}
+                            showLimitHint
+                            placeholder="Everything is ok!"
+                        />
+                    </FormItem>
+
+                    <FormItem wrapperCol={{ offset: 6 }}>
+                        <Form.Submit
+                            validate
+                            type="primary"
+                            onClick={(v, e) => console.log(v, e)}
+                            style={{ marginRight: 10 }}
+                        >
+                            Submit
+                        </Form.Submit>
+                        <Form.Reset>Reset</Form.Reset>
+                    </FormItem>
+                </Form>
+            </APAConfigProvider>
         );
     }
 }

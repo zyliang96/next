@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Form, Input, Radio, Field, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -58,69 +59,78 @@ class BasicDemo extends React.Component {
         const { getState, getValue, getError } = this.field;
 
         return (
-            <Form {...formItemLayout} field={this.field}>
-                <FormItem
-                    label="Username:"
-                    hasFeedback
-                    required
-                    validator={this.userExists.bind(this)}
-                    help={
-                        getState('username') === 'loading' ? 'Checking ...' : getError('username')
-                    }
-                    name="username"
-                >
-                    <Input placeholder="Input frank" />
-                    <p>Hello {getValue('username')}</p>
-                </FormItem>
-
-                <FormItem
-                    label="Password:"
-                    hasFeedback
-                    required
-                    requiredMessage="Please enter password"
-                    validator={this.checkPass.bind(this)}
-                    name="passwd"
-                >
-                    <Input htmlType="password" />
-                </FormItem>
-
-                <FormItem
-                    label="Check your password:"
-                    hasFeedback
-                    required
-                    requiredMessage="Enter your password again"
-                    validator={this.checkPass2.bind(this)}
-                    name="rePasswd"
-                >
-                    <Input htmlType="password" placeholder="Enter the same password twice" />
-                </FormItem>
-
-                <FormItem
-                    label="Gender:"
-                    hasFeedback
-                    required
-                    requiredMessage="Please select your gender"
-                    name="sex"
-                >
-                    <RadioGroup>
-                        <Radio value="male">Male</Radio>
-                        <Radio value="female">Female</Radio>
-                    </RadioGroup>
-                </FormItem>
-
-                <FormItem wrapperCol={{ offset: 6 }}>
-                    <Button onClick={this.validate}>Validate by Field</Button>
-                    <Form.Submit
-                        validate
-                        type="primary"
-                        onClick={(v, e) => console.log(v, e)}
-                        style={{ margin: '0 10px' }}
+            <APAConfigProvider
+                regionName="Field 表单 Demo"
+                regionId="Field-form-demo"
+                regionDesc="Field 表单 Demo"
+                isRegiserChildren
+            >
+                <Form {...formItemLayout} field={this.field}>
+                    <FormItem
+                        label="Username:"
+                        hasFeedback
+                        required
+                        validator={this.userExists.bind(this)}
+                        help={
+                            getState('username') === 'loading'
+                                ? 'Checking ...'
+                                : getError('username')
+                        }
+                        name="username"
                     >
-                        Submit
-                    </Form.Submit>
-                    <Form.Reset>Reset</Form.Reset>
-                </FormItem>
-            </Form>
+                        <Input placeholder="Input frank" />
+                        <p>Hello {getValue('username')}</p>
+                    </FormItem>
+
+                    <FormItem
+                        label="Password:"
+                        hasFeedback
+                        required
+                        requiredMessage="Please enter password"
+                        validator={this.checkPass.bind(this)}
+                        name="passwd"
+                    >
+                        <Input htmlType="password" />
+                    </FormItem>
+
+                    <FormItem
+                        label="Check your password:"
+                        hasFeedback
+                        required
+                        requiredMessage="Enter your password again"
+                        validator={this.checkPass2.bind(this)}
+                        name="rePasswd"
+                    >
+                        <Input htmlType="password" placeholder="Enter the same password twice" />
+                    </FormItem>
+
+                    <FormItem
+                        label="Gender:"
+                        hasFeedback
+                        required
+                        requiredMessage="Please select your gender"
+                        name="sex"
+                    >
+                        <RadioGroup>
+                            <Radio value="male">Male</Radio>
+                            <Radio value="female">Female</Radio>
+                        </RadioGroup>
+                    </FormItem>
+
+                    <FormItem wrapperCol={{ offset: 6 }}>
+                        <Button onClick={this.validate}>Validate by Field</Button>
+                        <Form.Submit
+                            validate
+                            type="primary"
+                            onClick={(v, e) => console.log(v, e)}
+                            style={{ margin: '0 10px' }}
+                        >
+                            Submit
+                        </Form.Submit>
+                        <Form.Reset>Reset</Form.Reset>
+                    </FormItem>
+                </Form>
+            </APAConfigProvider>
         );
     }
 }

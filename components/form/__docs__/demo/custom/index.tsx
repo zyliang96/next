@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Form, Input, Switch, Grid, Button, Icon, Balloon } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const FormItem = Form.Item;
 const { Row, Col } = Grid;
@@ -37,161 +38,168 @@ class Demo extends React.Component {
         const labelAlign = this.state.labelAlign;
 
         return (
-            <div>
-                <Form inline>
-                    <Form.Item label="label Position">
-                        <Switch
-                            checkedChildren="left"
-                            unCheckedChildren="top"
-                            checked={this.state.labelAlign === 'left'}
-                            onChange={this.handleChange}
-                            autoWidth
-                        />
-                    </Form.Item>
-                </Form>
+            <APAConfigProvider
+                regionName="自定义表单 Demo"
+                regionId="Custom-demo"
+                regionDesc="自定义表单 Demo"
+                isRegiserChildren
+            >
+                <div>
+                    <Form inline>
+                        <Form.Item label="label Position">
+                            <Switch
+                                checkedChildren="left"
+                                unCheckedChildren="top"
+                                checked={this.state.labelAlign === 'left'}
+                                onChange={this.handleChange}
+                                autoWidth
+                            />
+                        </Form.Item>
+                    </Form>
 
-                <Form style={style}>
-                    <Row gutter="4">
-                        <Col>
-                            <FormItem
-                                {...formItemLayout}
-                                labelAlign={labelAlign}
-                                label={label}
-                                required
-                            >
-                                <Input placeholder="Enter a search name:" />
-                            </FormItem>
-                            <FormItem
-                                {...formItemLayout}
-                                labelAlign={labelAlign}
-                                label="Long search name:"
-                            >
-                                <Input placeholder="Enter a search name:" />
-                            </FormItem>
-                            <FormItem
-                                {...formItemLayout}
-                                labelAlign={labelAlign}
-                                label="Search name:"
-                            >
-                                <Input placeholder="Enter a search name:" />
-                            </FormItem>
-                        </Col>
-                        <Col>
-                            <FormItem
-                                {...formItemLayout}
-                                labelAlign={labelAlign}
-                                label="Search name:"
-                            >
-                                <Input placeholder="Enter a search name:" />
-                            </FormItem>
-                            <FormItem
-                                {...formItemLayout}
-                                labelAlign={labelAlign}
-                                label="Long search name:"
-                            >
-                                <Input placeholder="Enter a search name:" />
-                            </FormItem>
-                            <FormItem
-                                {...formItemLayout}
-                                labelAlign={labelAlign}
-                                label="Search name:"
-                            >
-                                <Input placeholder="Enter a search name:" />
-                            </FormItem>
-                        </Col>
-                        <Col>
-                            <FormItem
-                                {...formItemLayout}
-                                labelAlign={labelAlign}
-                                label="Search name:"
-                            >
-                                <Input placeholder="Enter a search name:" />
-                            </FormItem>
-                            <FormItem
-                                {...formItemLayout}
-                                labelAlign={labelAlign}
-                                label="Long search name:"
-                            >
-                                <Input placeholder="Enter a search name:" />
-                            </FormItem>
-                            <FormItem
-                                {...formItemLayout}
-                                labelAlign={labelAlign}
-                                label="Search name:"
-                            >
-                                <Input placeholder="Enter a search name:" />
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col style={{ textAlign: 'right' }}>
-                            <Button type="primary" style={{ marginRight: '5px' }}>
-                                Search
-                            </Button>
-                            <Button>Clear All</Button>
-                        </Col>
-                    </Row>
-                </Form>
+                    <Form style={style}>
+                        <Row gutter="4">
+                            <Col>
+                                <FormItem
+                                    {...formItemLayout}
+                                    labelAlign={labelAlign}
+                                    label={label}
+                                    required
+                                >
+                                    <Input placeholder="Enter a search name:" />
+                                </FormItem>
+                                <FormItem
+                                    {...formItemLayout}
+                                    labelAlign={labelAlign}
+                                    label="Long search name:"
+                                >
+                                    <Input placeholder="Enter a search name:" />
+                                </FormItem>
+                                <FormItem
+                                    {...formItemLayout}
+                                    labelAlign={labelAlign}
+                                    label="Search name:"
+                                >
+                                    <Input placeholder="Enter a search name:" />
+                                </FormItem>
+                            </Col>
+                            <Col>
+                                <FormItem
+                                    {...formItemLayout}
+                                    labelAlign={labelAlign}
+                                    label="Search name:"
+                                >
+                                    <Input placeholder="Enter a search name:" />
+                                </FormItem>
+                                <FormItem
+                                    {...formItemLayout}
+                                    labelAlign={labelAlign}
+                                    label="Long search name:"
+                                >
+                                    <Input placeholder="Enter a search name:" />
+                                </FormItem>
+                                <FormItem
+                                    {...formItemLayout}
+                                    labelAlign={labelAlign}
+                                    label="Search name:"
+                                >
+                                    <Input placeholder="Enter a search name:" />
+                                </FormItem>
+                            </Col>
+                            <Col>
+                                <FormItem
+                                    {...formItemLayout}
+                                    labelAlign={labelAlign}
+                                    label="Search name:"
+                                >
+                                    <Input placeholder="Enter a search name:" />
+                                </FormItem>
+                                <FormItem
+                                    {...formItemLayout}
+                                    labelAlign={labelAlign}
+                                    label="Long search name:"
+                                >
+                                    <Input placeholder="Enter a search name:" />
+                                </FormItem>
+                                <FormItem
+                                    {...formItemLayout}
+                                    labelAlign={labelAlign}
+                                    label="Search name:"
+                                >
+                                    <Input placeholder="Enter a search name:" />
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col style={{ textAlign: 'right' }}>
+                                <Button type="primary" style={{ marginRight: '5px' }}>
+                                    Search
+                                </Button>
+                                <Button>Clear All</Button>
+                            </Col>
+                        </Row>
+                    </Form>
 
-                <Form style={style}>
-                    <Row gutter="4">
-                        <Col>
-                            <FormItem
-                                {...formItemLayout}
-                                labelAlign={labelAlign}
-                                label={label}
-                                required
-                            >
-                                <Input placeholder="Enter a search name:" />
-                            </FormItem>
-                        </Col>
-                        <Col>
-                            <FormItem
-                                {...formItemLayout}
-                                labelAlign={labelAlign}
-                                label="Long search name:"
-                            >
-                                <Input placeholder="Enter a search name:" />
-                            </FormItem>
-                        </Col>
-                        <Col>
-                            <FormItem
-                                {...formItemLayout}
-                                labelAlign={labelAlign}
-                                label="Search name:"
-                            >
-                                <Input placeholder="Enter a search name:" />
-                            </FormItem>
-                        </Col>
-                        <Col>
-                            <FormItem
-                                {...formItemLayout}
-                                labelAlign={labelAlign}
-                                label="Search name:"
-                            >
-                                <Input placeholder="Enter a search name:" />
-                            </FormItem>
-                        </Col>
-                        <Col>
-                            <FormItem
-                                {...formItemLayout}
-                                labelAlign={labelAlign}
-                                label="Search name:"
-                            >
-                                <Input placeholder="Enter a search name:" />
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col style={{ textAlign: 'right' }}>
-                            <Button type="primary" style={{ marginRight: '5px' }}>
-                                Search
-                            </Button>
-                            <Button>Clear All</Button>
-                        </Col>
-                    </Row>
-                </Form>
-            </div>
+                    <Form style={style}>
+                        <Row gutter="4">
+                            <Col>
+                                <FormItem
+                                    {...formItemLayout}
+                                    labelAlign={labelAlign}
+                                    label={label}
+                                    required
+                                >
+                                    <Input placeholder="Enter a search name:" />
+                                </FormItem>
+                            </Col>
+                            <Col>
+                                <FormItem
+                                    {...formItemLayout}
+                                    labelAlign={labelAlign}
+                                    label="Long search name:"
+                                >
+                                    <Input placeholder="Enter a search name:" />
+                                </FormItem>
+                            </Col>
+                            <Col>
+                                <FormItem
+                                    {...formItemLayout}
+                                    labelAlign={labelAlign}
+                                    label="Search name:"
+                                >
+                                    <Input placeholder="Enter a search name:" />
+                                </FormItem>
+                            </Col>
+                            <Col>
+                                <FormItem
+                                    {...formItemLayout}
+                                    labelAlign={labelAlign}
+                                    label="Search name:"
+                                >
+                                    <Input placeholder="Enter a search name:" />
+                                </FormItem>
+                            </Col>
+                            <Col>
+                                <FormItem
+                                    {...formItemLayout}
+                                    labelAlign={labelAlign}
+                                    label="Search name:"
+                                >
+                                    <Input placeholder="Enter a search name:" />
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col style={{ textAlign: 'right' }}>
+                                <Button type="primary" style={{ marginRight: '5px' }}>
+                                    Search
+                                </Button>
+                                <Button>Clear All</Button>
+                            </Col>
+                        </Row>
+                    </Form>
+                </div>
+            </APAConfigProvider>
         );
     }
 }
