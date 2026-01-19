@@ -406,4 +406,5 @@ export interface RangeCalendarState {
     lastMode?: CalendarMode;
     activePanel?: 'start' | 'end';
     lastPanelType: 'start' | 'end';
+    [key: string]: unknown;
 }

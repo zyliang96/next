@@ -3,6 +3,13 @@ import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
 import classnames from 'classnames';
 import moment, { type Moment } from 'moment';
+import {
+    APAAction,
+    APAActionEnabled,
+    APAConfigProvider,
+    APAState,
+    APAStateEnabled,
+} from '@alifd/apa-sdk';
 import ConfigProvider from '../config-provider';
 import nextLocale from '../locale/zh-cn';
 import { obj, func, type ClassPropsWithDefault } from '../util';
@@ -35,7 +42,16 @@ type InnerRangeCalendarProps = ClassPropsWithDefault<
     typeof RangeCalendar.defaultProps
 >;
 
+@APAActionEnabled
+@APAStateEnabled
 class RangeCalendar extends React.Component<RangeCalendarProps, RangeCalendarState> {
+    @APAState([
+        { name: 'startValue', desc: '开始日期，moment 对象' },
+        { name: 'endValue', desc: '结束日期，moment 对象' },
+        { name: 'mode', desc: '面板模式' },
+    ])
+    state: RangeCalendarState;
+
     static propTypes = {
         ...ConfigProvider.propTypes,
         prefix: PropTypes.string,
@@ -118,6 +134,7 @@ class RangeCalendar extends React.Component<RangeCalendarProps, RangeCalendarSta
         return st;
     }
 
+    @APAAction({ name: 'onSelectCell', desc: '选择日期单元格时的回调' })
     onSelectCell = (date: Moment, nextMode: CalendarMode | MouseEvent<HTMLElement>) => {
         if (this.state.mode === CALENDAR_MODE_DATE) {
             this.props.onSelect(date);
@@ -128,6 +145,7 @@ class RangeCalendar extends React.Component<RangeCalendarProps, RangeCalendarSta
         this.changeMode(nextMode as CalendarMode);
     };
 
+    @APAAction({ name: 'changeMode', desc: '切换面板模式' })
     changeMode = (mode: CalendarMode, activePanel?: 'start' | 'end') => {
         const { lastMode, lastPanelType } = this.state;
 
@@ -353,6 +371,18 @@ class RangeCalendar extends React.Component<RangeCalendarProps, RangeCalendarSta
     }
 }
 
-export default ConfigProvider.config(polyfill(RangeCalendar), {
-    componentName: 'Calendar',
-});
+export default ConfigProvider.config(
+    APAConfigProvider.config(polyfill(RangeCalendar), {
+        desc: '日历区间组件',
+        props: [
+            {
+                key: 'disabledDate',
+                name: '禁用日期的回调函数',
+                desc: '禁用日期的回调函数，返回 true 表示不可选择，可用于禁用部分日期',
+            },
+        ],
+    }),
+    {
+        componentName: 'Calendar',
+    }
+);
