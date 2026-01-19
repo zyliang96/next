@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import ConfigProvider from '../config-provider';
 import type { CardDividerProps } from './types';
 
@@ -39,4 +40,10 @@ class CardDivider extends Component<CardDividerProps> {
     }
 }
 
-export default ConfigProvider.config(CardDivider);
+const APACardDivider = APAConfigProvider.config(CardDivider, {
+    isRegiserChildren: true,
+    desc: '卡片分割线组件',
+    props: [],
+});
+
+export default ConfigProvider.config(APACardDivider);

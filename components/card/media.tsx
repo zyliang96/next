@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import ConfigProvider from '../config-provider';
 import { log } from '../util';
 import type { CardMediaProps } from './types';
@@ -57,4 +58,21 @@ class CardMedia extends Component<CardMediaProps> {
     }
 }
 
-export default ConfigProvider.config(CardMedia);
+const APACardMedia = APAConfigProvider.config(CardMedia, {
+    isRegiserChildren: true,
+    desc: '卡片媒体组件',
+    props: [
+        {
+            key: 'image',
+            name: '背景图片地址',
+            desc: '背景图片地址',
+        },
+        {
+            key: 'src',
+            name: '媒体源文件地址',
+            desc: '媒体源文件地址',
+        },
+    ],
+});
+
+export default ConfigProvider.config(APACardMedia);

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 import ConfigProvider from '../config-provider';
 import BulletHeader from './bullet-header';
@@ -12,7 +13,7 @@ import type { CardProps } from './types';
 
 const { pickOthers } = obj;
 
-export default class Card extends Component<CardProps> {
+class Card extends Component<CardProps> {
     static displayName = 'Card';
 
     static propTypes = {
@@ -94,3 +95,9 @@ export default class Card extends Component<CardProps> {
         );
     }
 }
+
+export default APAConfigProvider.config(Card, {
+    isRegiserChildren: true,
+    desc: '按钮组件',
+    props: [],
+});

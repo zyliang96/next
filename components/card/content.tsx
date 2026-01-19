@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import ConfigProvider from '../config-provider';
 import type { CardContentProps } from './types';
 
@@ -32,4 +33,12 @@ class CardContent extends Component<CardContentProps> {
     }
 }
 
-export default ConfigProvider.config(CardContent);
+const APACardContent = APAConfigProvider.config(CardContent, {
+    isRegiserChildren: true,
+    desc: '卡片内容组件',
+    props: [],
+});
+
+export default ConfigProvider.config(APACardContent, {
+    componentName: 'Card',
+});

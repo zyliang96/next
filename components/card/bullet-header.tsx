@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import {
+    APAConfigProvider,
+    APANodeShowStatus,
+    APAShowStateEnabled,
+    APAShowStateSource,
+} from '@alifd/apa-sdk';
 import ConfigProvider from '../config-provider';
 import type { CardBulletHeaderProps } from './types';
 
+@APAShowStateEnabled
 class CardBulletHeader extends Component<CardBulletHeaderProps> {
     static displayName = 'CardBulletHeader';
     static propTypes = {
@@ -18,6 +25,11 @@ class CardBulletHeader extends Component<CardBulletHeaderProps> {
         prefix: 'next-',
         showTitleBullet: true,
     };
+
+    @APAShowStateSource({ initialShowState: false })
+    get showBulletHeaderState() {
+        return !!this.props.title;
+    }
 
     render() {
         const { prefix, title, subTitle, extra, showTitleBullet } = this.props;
@@ -47,6 +59,23 @@ class CardBulletHeader extends Component<CardBulletHeaderProps> {
     }
 }
 
-export default ConfigProvider.config(CardBulletHeader, {
+const APACardBulletHeader = APAConfigProvider.config(CardBulletHeader, {
+    isRegiserChildren: true,
+    desc: '卡片标题组件',
+    props: [
+        {
+            key: 'title',
+            name: '标题',
+            desc: '卡片标题',
+        },
+        {
+            key: 'subTitle',
+            name: '副标题',
+            desc: '卡片副标题',
+        },
+    ],
+});
+
+export default ConfigProvider.config(APACardBulletHeader, {
     componentName: 'Card',
 });

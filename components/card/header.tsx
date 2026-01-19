@@ -1,6 +1,7 @@
 import React, { Component, type ElementType } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import ConfigProvider from '../config-provider';
 import type { CardHeaderProps } from './types';
 
@@ -47,4 +48,21 @@ class CardHeader extends Component<CardHeaderProps> {
     }
 }
 
-export default ConfigProvider.config(CardHeader);
+const APACardHeader = APAConfigProvider.config(CardHeader, {
+    isRegiserChildren: true,
+    desc: '卡片标题组件',
+    props: [
+        {
+            key: 'title',
+            name: '标题',
+            desc: '卡片标题',
+        },
+        {
+            key: 'subTitle',
+            name: '副标题',
+            desc: '卡片副标题',
+        },
+    ],
+});
+
+export default ConfigProvider.config(APACardHeader);

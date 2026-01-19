@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import Icon from '../icon';
 import Button from '../button';
 import ConfigProvider from '../config-provider';
@@ -142,6 +143,18 @@ class CardCollapseContent extends Component<CardCollapseContentProps, CardCollap
     }
 }
 
-export default ConfigProvider.config(CardCollapseContent, {
+const APACardCollapseContent = APAConfigProvider.config(CardCollapseContent, {
+    isRegiserChildren: true,
+    desc: '卡片内容组件',
+    props: [
+        {
+            key: 'contentHeight',
+            name: '内容区域高度',
+            desc: '内容区域高度',
+        },
+    ],
+});
+
+export default ConfigProvider.config(APACardCollapseContent, {
     componentName: 'Card',
 });
