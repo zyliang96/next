@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Drawer } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import type { DrawerProps } from '@alifd/next/types/drawer';
 
 class Demo extends React.Component {
@@ -23,21 +24,28 @@ class Demo extends React.Component {
 
     render() {
         return (
-            <div>
-                <Button type="primary" onClick={this.onOpen}>
-                    {' '}
-                    open{' '}
-                </Button>
-                <Drawer
-                    v2
-                    title="标题"
-                    placement="right"
-                    visible={this.state.visible}
-                    onClose={this.onClose}
-                >
-                    Start your business here by searching a popular product
-                </Drawer>
-            </div>
+            <APAConfigProvider
+                regionName="基本"
+                regionId="Drawer-basic-demo"
+                regionDesc="第一个抽屉"
+                isRegiserChildren
+            >
+                <div>
+                    <Button type="primary" onClick={this.onOpen}>
+                        {' '}
+                        open{' '}
+                    </Button>
+                    <Drawer
+                        v2
+                        title="标题"
+                        placement="right"
+                        visible={this.state.visible}
+                        onClose={this.onClose}
+                    >
+                        Start your business here by searching a popular product
+                    </Drawer>
+                </div>
+            </APAConfigProvider>
         );
     }
 }

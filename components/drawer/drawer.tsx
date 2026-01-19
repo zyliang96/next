@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component, type ComponentRef, type ComponentType } from 'react';
 import Overlay from '../overlay';
+import { APAActionEnabled, APAStateEnabled, APAState, APAAction } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import Inner from './inner';
 import zhCN from '../locale/zh-cn';
 import { obj } from '../util';
@@ -20,7 +22,9 @@ interface CloseConfig {
  * Drawer
  * 继承 Overlay.Popup 的 API，除非特别说明
  * */
-export default class Drawer extends Component<DrawerProps> {
+@APAActionEnabled
+@APAStateEnabled
+class Drawer extends Component<DrawerProps> {
     static displayName = 'Drawer';
 
     static propTypes = {
@@ -66,6 +70,23 @@ export default class Drawer extends Component<DrawerProps> {
     };
 
     private overlay: ComponentRef<typeof Popup> | null = null;
+
+    @APAState([{ name: 'visible', desc: '抽屉是否显示' }])
+    get visible() {
+        return this.props.visible;
+    }
+
+    @APAAction({
+        name: 'close',
+        desc: '关闭抽屉',
+        params: z.tuple([z.string().optional().describe('关闭原因')]),
+    })
+    close(reason: string = 'manual') {
+        const { onClose } = this.props;
+        if (onClose) {
+            onClose(reason, new MouseEvent('click') as any);
+        }
+    }
 
     getAlign = (placement: string | undefined) => {
         let align;
@@ -260,3 +281,5 @@ export default class Drawer extends Component<DrawerProps> {
         );
     }
 }
+
+export default Drawer;

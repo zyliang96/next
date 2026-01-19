@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Drawer } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 class App extends React.Component {
     state = { visible: false, childrenDrawer: false };
@@ -31,59 +32,66 @@ class App extends React.Component {
 
     render() {
         return (
-            <div>
-                <Button type="primary" onClick={this.showDrawer}>
-                    Open drawer
-                </Button>
-                <Drawer
-                    v2
-                    title="Multi-level drawer"
-                    width={520}
-                    onClose={this.onClose}
-                    visible={this.state.visible}
-                >
-                    <Button type="primary" onClick={this.showChildrenDrawer}>
-                        Two-level drawer
+            <APAConfigProvider
+                regionName="双层抽屉"
+                regionId="Drawer-double-demo"
+                regionDesc="双层抽屉，抽屉内打开新的抽屉"
+                isRegiserChildren
+            >
+                <div>
+                    <Button type="primary" onClick={this.showDrawer}>
+                        Open drawer
                     </Button>
-                    <div style={{ height: 800, marginTop: 40 }}>很长的内容</div>
-                    <div style={{ marginBottom: 40 }}>底部的内容</div>
-
                     <Drawer
                         v2
-                        title="Two-level Drawer"
-                        width={320}
-                        onClose={this.onChildrenDrawerClose}
-                        visible={this.state.childrenDrawer}
+                        title="Multi-level drawer"
+                        width={520}
+                        onClose={this.onClose}
+                        visible={this.state.visible}
                     >
-                        This is two-level drawer
-                    </Drawer>
-                    <div
-                        style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            width: '100%',
-                            borderTop: '1px solid #e8e8e8',
-                            padding: '10px 16px',
-                            textAlign: 'right',
-                            left: 0,
-                            background: '#fff',
-                            borderRadius: '0 0 4px 4px',
-                        }}
-                    >
-                        <Button
-                            style={{
-                                marginRight: 8,
-                            }}
-                            onClick={this.onClose}
+                        <Button type="primary" onClick={this.showChildrenDrawer}>
+                            Two-level drawer
+                        </Button>
+                        <div style={{ height: 800, marginTop: 40 }}>很长的内容</div>
+                        <div style={{ marginBottom: 40 }}>底部的内容</div>
+
+                        <Drawer
+                            v2
+                            title="Two-level Drawer"
+                            width={320}
+                            onClose={this.onChildrenDrawerClose}
+                            visible={this.state.childrenDrawer}
                         >
-                            Cancel
-                        </Button>
-                        <Button onClick={this.onClose} type="primary">
-                            Submit
-                        </Button>
-                    </div>
-                </Drawer>
-            </div>
+                            This is two-level drawer
+                        </Drawer>
+                        <div
+                            style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                width: '100%',
+                                borderTop: '1px solid #e8e8e8',
+                                padding: '10px 16px',
+                                textAlign: 'right',
+                                left: 0,
+                                background: '#fff',
+                                borderRadius: '0 0 4px 4px',
+                            }}
+                        >
+                            <Button
+                                style={{
+                                    marginRight: 8,
+                                }}
+                                onClick={this.onClose}
+                            >
+                                Cancel
+                            </Button>
+                            <Button onClick={this.onClose} type="primary">
+                                Submit
+                            </Button>
+                        </div>
+                    </Drawer>
+                </div>
+            </APAConfigProvider>
         );
     }
 }

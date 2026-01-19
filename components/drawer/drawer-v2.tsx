@@ -3,6 +3,8 @@ import React, { useState, useRef, useEffect, useContext } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import Overlay from '@alifd/overlay';
+import { useApaState, useApaAction } from '@alifd/apa-sdk';
+import { z } from 'zod';
 
 import Inner from './inner';
 import Animate from '../animate';
@@ -84,7 +86,11 @@ const Drawer = (props: DrawerV2Props) => {
     } = props;
 
     const [firstVisible, setFirst] = useState(pvisible || false);
-    const [visible, setVisible] = useState(pvisible);
+    // 使用 useApaState 暴露 visible 状态
+    const [visible, setVisible] = useApaState(pvisible ?? false, {
+        name: 'visible',
+        desc: '抽屉是否显示',
+    });
     const getContainer =
         typeof popupContainer === 'string'
             ? () => document.getElementById(popupContainer)
@@ -129,7 +135,7 @@ const Drawer = (props: DrawerV2Props) => {
 
     // visible 受控
     useEffect(() => {
-        if ('visible' in props) {
+        if ('visible' in props && pvisible !== undefined) {
             setVisible(pvisible);
         }
     }, [pvisible]);
@@ -161,6 +167,18 @@ const Drawer = (props: DrawerV2Props) => {
         setVisibleOverlayToParent(uuid, null);
         typeof onClose === 'function' && onClose(targetType, e);
     };
+
+    // APA Action: 暴露关闭抽屉的方法
+    useApaAction(
+        (reason: string = 'manual') => {
+            handleClose(reason, new MouseEvent('click') as any);
+        },
+        {
+            name: 'close',
+            desc: '关闭抽屉',
+            params: z.tuple([z.string().optional().describe('关闭原因')]),
+        }
+    );
 
     const keydownEvent = (e: KeyboardEvent) => {
         if (e.keyCode === 27 && canCloseByEsc && !childIDMap.current.size) {
