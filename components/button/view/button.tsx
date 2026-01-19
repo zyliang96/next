@@ -1,7 +1,12 @@
 import React, { Component, Children, isValidElement } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { APAActionEnabled, APAAction, APAConfigProvider } from '@alifd/apa-sdk';
+import {
+    APAActionEnabled,
+    APAAction,
+    APAConfigProvider,
+    APAComponentConfigPropsItem,
+} from '@alifd/apa-sdk';
 import type { ButtonProps } from '../types';
 import ConfigProvider from '../../config-provider';
 import { obj, log } from '../../util';
@@ -205,14 +210,21 @@ class Button extends Component<ButtonProps> {
     }
 }
 
+export const ApaButtonProps: APAComponentConfigPropsItem[] = [
+    {
+        key: 'disabled',
+        name: '禁用状态',
+        desc: '是否禁用按钮，true 表示禁用，false 表示启用，禁用状态不能触发点击事件',
+    },
+    {
+        key: 'loading',
+        name: '加载状态',
+        desc: '是否处于加载状态，true 表示加载中，不可点击，false 表示正常状态，可点击',
+    },
+];
+
 export default APAConfigProvider.config(Button, {
     isRegiserChildren: false,
     desc: '按钮组件',
-    props: [
-        {
-            key: 'disabled',
-            name: '禁用状态',
-            desc: '是否禁用按钮，true 表示禁用，false 表示启用，禁用状态不能触发点击事件',
-        },
-    ],
+    props: ApaButtonProps,
 });

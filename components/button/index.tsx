@@ -1,12 +1,14 @@
 import ConfigProvider from '../config-provider';
 import { assignSubComponent } from '../util/component';
 import type { ButtonProps, GroupProps } from './types';
-import Button from './view/button';
+import Button, { ApaButtonProps } from './view/button';
 import Group from './view/group';
 
 const WithSubButton = assignSubComponent(Button, { Group });
 
 export type { ButtonProps, GroupProps };
+
+export { ApaButtonProps };
 
 export default ConfigProvider.config(WithSubButton, {
     transform: /* istanbul ignore next */ (props, deprecated) => {

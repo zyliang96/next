@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Icon, Box } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 class LoadingIcon extends React.Component {
     state = {
@@ -36,23 +37,30 @@ class LoadingIcon extends React.Component {
 }
 
 ReactDOM.render(
-    <div>
-        <Box direction="row" spacing={20}>
-            <Button>
-                <Icon type="atm" /> ATM
-            </Button>
-            <Button text>
-                <Icon type="atm" /> ATM
-            </Button>
-            <Button warning>
-                <Icon type="atm" /> ATM
-            </Button>
-            <Button iconSize="xxs">
-                <Icon type="arrow-left" /> ARROW
-            </Button>
-        </Box>
-        <br />
-        <LoadingIcon />
-    </div>,
+    <APAConfigProvider
+        regionName="Button图标Demo"
+        regionId="Button-icon-demo"
+        regionDesc="Button图标Demo"
+        isRegiserChildren
+    >
+        <div>
+            <Box direction="row" spacing={20}>
+                <Button>
+                    <Icon type="atm" /> ATM
+                </Button>
+                <Button text>
+                    <Icon type="atm" /> ATM
+                </Button>
+                <Button warning>
+                    <Icon type="atm" /> ATM
+                </Button>
+                <Button iconSize="xxs">
+                    <Icon type="arrow-left" /> ARROW
+                </Button>
+            </Box>
+            <br />
+            <LoadingIcon />
+        </div>
+    </APAConfigProvider>,
     mountNode
 );
