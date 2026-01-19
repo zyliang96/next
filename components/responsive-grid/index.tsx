@@ -6,6 +6,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import ConfigProvider from '../config-provider';
 import Box from '../box';
 import { obj, env } from '../util';
@@ -145,4 +146,15 @@ ResponsiveGrid.Cell = Cell;
 
 export type { ResponsiveGridProps, CellProps };
 
-export default ConfigProvider.config(ResponsiveGrid);
+export default ConfigProvider.config(
+    APAConfigProvider.config(ResponsiveGrid, {
+        desc: '响应式网格组件',
+        props: [
+            {
+                key: 'device',
+                name: '设备类型',
+                desc: '设备类型，用来做自适应，可选值为 phone、tablet、desktop',
+            },
+        ],
+    })
+);
