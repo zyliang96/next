@@ -3,6 +3,14 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
 import { KEYCODE, obj } from '../util';
+import {
+    APAActionEnabled,
+    APAStateEnabled,
+    APAState,
+    APAAction,
+    type APAComponentConfigContextInfo,
+} from '@alifd/apa-sdk';
+import { z } from 'zod';
 import TabNav from './tabs/nav';
 import TabContent from './tabs/content';
 import { toArray } from './tabs/utils';
@@ -12,9 +20,12 @@ import type { TabProps, ItemProps } from './types';
 const noop = () => {};
 export interface TabState {
     activeKey?: string;
+    [key: string]: unknown; // 添加索引签名以兼容 APA 装饰器
 }
 
 /** Tab */
+@APAActionEnabled
+@APAStateEnabled
 class Tab extends Component<TabProps, TabState> {
     static displayName = 'Tab';
     static propTypes = {
@@ -72,6 +83,9 @@ class Tab extends Component<TabProps, TabState> {
         locale: zhCN.Tab,
         icons: {},
     };
+
+    @APAState([{ name: 'activeKey', desc: '当前激活的标签页' }])
+    state: TabState;
 
     constructor(props: TabProps) {
         super(props);
@@ -173,11 +187,23 @@ class Tab extends Component<TabProps, TabState> {
         return exist;
     }
 
+    @APAAction({
+        name: 'setActiveKey',
+        desc: '设置当前激活的标签页',
+        params: z.tuple([z.string().describe('标签页的 key')]),
+    })
     setActiveKey(key: string) {
         const { activeKey } = this.state;
 
         // 如果 key 没变，或者受控状态下，则跳过
         if (key === activeKey || 'activeKey' in this.props) {
+            // 受控模式：手动同步状态到 APA
+            if ('activeKey' in this.props) {
+                const { apaNode } = (this.context as APAComponentConfigContextInfo) || {};
+                if (apaNode) {
+                    apaNode.updateState({ activeKey: key });
+                }
+            }
             return;
         }
         this.setState({

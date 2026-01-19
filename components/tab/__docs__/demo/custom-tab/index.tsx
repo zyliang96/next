@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Tab } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 interface Pane {
     key: string;
@@ -37,12 +38,19 @@ const panes: Pane[] = [
 ];
 
 ReactDOM.render(
-    <Tab shape="wrapped" tabRender={(key, props) => <CustomTabItem {...props} key={key} />}>
-        {panes.map(({ key, ...pane }) => (
-            <Tab.Item key={key} {...pane}>
-                {pane.desc}
-            </Tab.Item>
-        ))}
-    </Tab>,
+    <APAConfigProvider
+        regionName="自定义选项卡"
+        regionId="Tab-custom-tab-demo"
+        regionDesc="Tab自定义选项卡示例"
+        isRegiserChildren
+    >
+        <Tab shape="wrapped" tabRender={(key, props) => <CustomTabItem {...props} key={key} />}>
+            {panes.map(({ key, ...pane }) => (
+                <Tab.Item key={key} {...pane}>
+                    {pane.desc}
+                </Tab.Item>
+            ))}
+        </Tab>
+    </APAConfigProvider>,
     mountNode
 );

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Tab, Radio } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 type TabPosition = 'top' | 'bottom' | 'left' | 'right';
 
@@ -37,4 +38,14 @@ const Demo = () => {
     );
 };
 
-ReactDOM.render(<Demo />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="位置"
+        regionId="Tab-position-demo"
+        regionDesc="Tab位置示例"
+        isRegiserChildren
+    >
+        <Demo />
+    </APAConfigProvider>,
+    mountNode
+);

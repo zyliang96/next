@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import type { TabItemProps, ItemProps } from '../types';
 
 /** Tab.Item */
@@ -51,4 +52,12 @@ class TabItem extends React.Component<ItemProps> {
     }
 }
 
-export default polyfill(TabItem);
+export default APAConfigProvider.config(polyfill(TabItem), {
+    isRegiserChildren: false,
+    desc: '标签页项组件',
+    props: [
+        { key: 'title', name: 'title', desc: '标签页标题' },
+        { key: 'disabled', name: 'disabled', desc: '是否禁用' },
+        { key: 'closeable', name: 'closeable', desc: '是否可关闭' },
+    ],
+});
