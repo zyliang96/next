@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Loading } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const indicator1 = (
     <div className="load-container load1">
@@ -14,16 +15,23 @@ const indicator7 = (
 );
 
 ReactDOM.render(
-    <div>
-        <Loading tip="default">
-            <div className="demo">test</div>
-        </Loading>
-        <Loading indicator={indicator1}>
-            <div className="demo">test</div>
-        </Loading>
-        <Loading indicator={indicator7}>
-            <div className="demo">test</div>
-        </Loading>
-    </div>,
+    <APAConfigProvider
+        regionName="自定义动画指示符"
+        regionId="Loading-indicator-demo"
+        regionDesc="Loading自定义动画指示符示例"
+        isRegiserChildren
+    >
+        <div>
+            <Loading tip="default">
+                <div className="demo">test</div>
+            </Loading>
+            <Loading indicator={indicator1}>
+                <div className="demo">test</div>
+            </Loading>
+            <Loading indicator={indicator7}>
+                <div className="demo">test</div>
+            </Loading>
+        </div>
+    </APAConfigProvider>,
     mountNode
 );

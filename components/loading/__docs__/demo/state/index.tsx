@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Loading, Form, Input, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const FormItem = Form.Item;
 
@@ -59,4 +60,14 @@ class App extends React.Component {
         );
     }
 }
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="受控关闭加载"
+        regionId="Loading-state-demo"
+        regionDesc="Loading受控关闭加载示例"
+        isRegiserChildren
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);
