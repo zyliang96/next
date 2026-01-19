@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Affix, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 class Demo extends React.Component {
     container: HTMLDivElement;
@@ -21,4 +22,14 @@ class Demo extends React.Component {
     }
 }
 
-ReactDOM.render(<Demo />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="Affix固钉组件的绝对定位实现Demo"
+        regionId="affix-absolute-position-demo"
+        regionDesc="Affix固钉组件的绝对定位实现Demo"
+        isRegiserChildren
+    >
+        <Demo />
+    </APAConfigProvider>,
+    mountNode
+);

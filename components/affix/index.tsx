@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import ResizeObserver from 'resize-observer-polyfill';
 import { polyfill } from 'react-lifecycles-compat';
-
+import { APAAction, APAActionEnabled, APAConfigProvider } from '@alifd/apa-sdk';
 import type { AffixProps, AffixState, AffixMode } from './types';
 import { obj, events, func } from '../util';
 import ConfigProvider from '../config-provider';
 import { getScroll, getRect, getNodeHeight } from './util';
 
 /** Affix */
+@APAActionEnabled
 class Affix extends Component<AffixProps, AffixState> {
     static propTypes = {
         prefix: PropTypes.string,
@@ -200,6 +201,7 @@ class Affix extends Component<AffixProps, AffixState> {
         }
     };
 
+    @APAAction({ name: 'setAffixStyle', desc: '设置固钉样式' })
     _setAffixStyle(affixStyle: AffixState['style'], affixed = false) {
         if (obj.shallowEqual(affixStyle, this.state.style)) {
             return;
@@ -276,4 +278,23 @@ class Affix extends Component<AffixProps, AffixState> {
 
 export { AffixProps };
 
-export default ConfigProvider.config(polyfill(Affix));
+export default APAConfigProvider.config(polyfill(Affix), {
+    desc: '固钉组件',
+    props: [
+        {
+            key: 'container',
+            name: '设置 Affix 需要监听滚动事件的容器元素',
+            desc: '设置 Affix 需要监听滚动事件的容器元素',
+        },
+        {
+            key: 'offsetTop',
+            name: '距离窗口顶部达到指定偏移量后触发',
+            desc: '距离窗口顶部达到指定偏移量后触发',
+        },
+        {
+            key: 'offsetBottom',
+            name: '距离窗口底部达到指定偏移量后触发',
+            desc: '距离窗口底部达到指定偏移量后触发',
+        },
+    ],
+});
