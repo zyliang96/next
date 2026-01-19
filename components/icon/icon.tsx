@@ -100,7 +100,7 @@ export default APAConfigProvider.config(Icon, {
         {
             key: 'size',
             name: '图标大小',
-            desc: '指定图标大小，如 xxs, xs, small, medium, large, xl, xxl, xxxl, inherit',
+            desc: '指定图标的大小',
         },
     ],
 });
