@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import Line from './progress-line';
 import Circle from './progress-circle';
 import type { ProgressProps } from '../types';
@@ -12,7 +13,7 @@ export type ProgressWithDefaultProps = ClassPropsWithDefault<
 /**
  * Progress
  */
-export default class Progress extends Component<ProgressProps> {
+class Progress extends Component<ProgressProps> {
     static propTypes = {
         prefix: PropTypes.string,
         shape: PropTypes.oneOf(['circle', 'line']),
@@ -53,3 +54,29 @@ export default class Progress extends Component<ProgressProps> {
         );
     }
 }
+
+export default APAConfigProvider.config(Progress, {
+    desc: '进度条组件',
+    props: [
+        {
+            key: 'shape',
+            name: '进度条形状',
+            desc: '进度条形状，可选值为 circle 或 line',
+        },
+        {
+            key: 'size',
+            name: '进度条尺寸',
+            desc: '进度条尺寸，可选值为 small, medium, large',
+        },
+        {
+            key: 'percent',
+            name: '进度百分比',
+            desc: '进度百分比，当前进度所占的百分比，取值范围为 0-100',
+        },
+        {
+            key: 'state',
+            name: '进度状态',
+            desc: '进度状态，可选值为 normal, success, error',
+        },
+    ],
+});

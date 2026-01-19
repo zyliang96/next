@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import { type ProgressWithDefaultProps } from './progress';
 
 type ProgressLineProps = Omit<ProgressWithDefaultProps, 'shape'>;
-export default class Line extends React.PureComponent<ProgressLineProps> {
+class Line extends React.PureComponent<ProgressLineProps> {
     static propTypes = {
         size: PropTypes.oneOf(['small', 'medium', 'large']),
         percent: PropTypes.number,
@@ -81,3 +82,24 @@ export default class Line extends React.PureComponent<ProgressLineProps> {
         );
     }
 }
+
+export default APAConfigProvider.config(Line, {
+    desc: '进度条直线组件',
+    props: [
+        {
+            key: 'size',
+            name: '进度条尺寸',
+            desc: '进度条尺寸，可选值为 small, medium, large',
+        },
+        {
+            key: 'percent',
+            name: '进度百分比',
+            desc: '进度百分比，当前进度所占的百分比，取值范围为 0-100',
+        },
+        {
+            key: 'state',
+            name: '进度状态',
+            desc: '进度状态，可选值为 normal, success, error',
+        },
+    ],
+});
