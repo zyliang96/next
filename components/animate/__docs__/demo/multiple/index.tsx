@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Animate } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 class TodoList extends React.Component {
     state = { items: ['hello', 'world', 'click', 'me'] };
@@ -52,4 +53,14 @@ class TodoList extends React.Component {
     }
 }
 
-ReactDOM.render(<TodoList />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="Animate动画组件多子元素的Demo"
+        regionId="animate-multiple-demo"
+        regionDesc="Animate动画组件多子元素的Demo"
+        isRegiserChildren
+    >
+        <TodoList />
+    </APAConfigProvider>,
+    mountNode
+);
