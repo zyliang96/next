@@ -306,6 +306,11 @@ const importNextPlugin = (): VitePlugin => {
                         plugins: ['decorators-legacy'],
                     },
                     plugins: [
+                        // 必须放在最前面，处理 TypeScript 的 declare 关键字
+                        [
+                            '@babel/plugin-transform-typescript',
+                            { isTSX: true, allowDeclareFields: true },
+                        ],
                         ['@babel/plugin-proposal-decorators', { legacy: true }],
                         ['@babel/plugin-proposal-class-properties', { loose: true }],
                     ],

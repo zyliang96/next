@@ -397,7 +397,8 @@ export class Menu extends Component<MenuProps, MenuState> {
         return state;
     }
 
-    readonly props: MenuPropsWithDefaults;
+    declare props: MenuPropsWithDefaults;
+
     popupNodes: HTMLElement[];
     menuNode: HTMLUListElement;
     menuContent: HTMLUListElement | null;
@@ -412,7 +413,7 @@ export class Menu extends Component<MenuProps, MenuState> {
 
         const { newChildren, _k2n, _p2n } = getNewChildren({
             root: this,
-            ...this.props,
+            ...(this.props as MenuPropsWithDefaults),
         });
 
         const tabbableKey = focusable ? getFirstAvaliablelChildKey('0', _p2n) : undefined;
@@ -884,6 +885,7 @@ export class Menu extends Component<MenuProps, MenuState> {
             rtl,
             flatenContent,
         } = this.props;
+
         const { newChildren } = this.state;
         const others = pickOthers(Menu.propTypes, this.props);
 
