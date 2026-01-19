@@ -8,6 +8,13 @@ import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
 import classnames from 'classnames';
 import moment, { type Moment } from 'moment';
+import {
+    APAAction,
+    APAActionEnabled,
+    APAConfigProvider,
+    APAState,
+    APAStateEnabled,
+} from '@alifd/apa-sdk';
 import ConfigProvider from '../config-provider';
 import Input, { type InputProps } from '../input';
 import Icon from '../icon';
@@ -28,7 +35,15 @@ type InnerTimePickerProps = ClassPropsWithDefault<TimePickerProps, typeof TimePi
 /**
  * TimePicker
  */
+@APAActionEnabled
+@APAStateEnabled
 class TimePicker extends Component<TimePickerProps, TimePickerState> {
+    @APAState([
+        { name: 'value', desc: '时间选择器的值，moment 对象' },
+        { name: 'visible', desc: '时间选择器的显示状态，true 表示显示，false 表示隐藏' },
+    ])
+    state: TimePickerState & Record<string, unknown>;
+
     static propTypes = {
         ...ConfigProvider.propTypes,
         prefix: PropTypes.string,
@@ -120,6 +135,7 @@ class TimePicker extends Component<TimePickerProps, TimePickerState> {
         this.props.onChange(ret);
     }
 
+    @APAAction({ name: 'onClearValue', desc: '清空时间选择器的值' })
     onClearValue = () => {
         this.setState({
             value: null,
@@ -129,6 +145,7 @@ class TimePicker extends Component<TimePickerProps, TimePickerState> {
         }
     };
 
+    @APAAction({ name: 'onInputChange', desc: '输入框变化时的回调' })
     onInputChange = (inputValue: string, e?: SyntheticEvent, eventType?: string) => {
         if (!('value' in this.props)) {
             if (eventType === 'clear' || !inputValue) {
@@ -213,6 +230,7 @@ class TimePicker extends Component<TimePickerProps, TimePickerState> {
         }
     };
 
+    @APAAction({ name: 'onVisibleChange', desc: '弹层显示状态变化时的回调' })
     onVisibleChange = (visible: boolean, type: string) => {
         if (!('visible' in this.props)) {
             this.setState({
@@ -385,4 +403,28 @@ class TimePicker extends Component<TimePickerProps, TimePickerState> {
     }
 }
 
-export default polyfill(TimePicker);
+export default APAConfigProvider.config(polyfill(TimePicker), {
+    desc: '时间选择器组件',
+    props: [
+        {
+            key: 'disabled',
+            name: '是否禁用时间选择器',
+            desc: '是否禁用时间选择器，true 表示禁用，false 表示启用',
+        },
+        {
+            key: 'disabledHours',
+            name: '禁用小时的回调函数',
+            desc: '禁用小时的回调函数，返回 true 表示禁用，false 表示启用',
+        },
+        {
+            key: 'disabledMinutes',
+            name: '禁用分钟的回调函数',
+            desc: '禁用分钟的回调函数，返回 true 表示禁用，false 表示启用',
+        },
+        {
+            key: 'disabledSeconds',
+            name: '禁用秒钟的回调函数',
+            desc: '禁用秒钟的回调函数，返回 true 表示禁用，false 表示启用',
+        },
+    ],
+});

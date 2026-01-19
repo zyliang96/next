@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Pagination } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 class Demo extends React.Component {
     state = {
@@ -38,4 +39,14 @@ class Demo extends React.Component {
     }
 }
 
-ReactDOM.render(<Demo />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="Pagination每页显示的Demo"
+        regionId="pagination-page-size-demo"
+        regionDesc="Pagination每页显示的Demo示例"
+        isRegiserChildren
+    >
+        <Demo />
+    </APAConfigProvider>,
+    mountNode
+);

@@ -9,6 +9,13 @@ import React, {
 import { polyfill } from 'react-lifecycles-compat';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import {
+    APAAction,
+    APAActionEnabled,
+    APAConfigProvider,
+    APAState,
+    APAStateEnabled,
+} from '@alifd/apa-sdk';
 import ConfigProvider from '../config-provider';
 import Icon from '../icon';
 import Button, { type ButtonProps } from '../button';
@@ -39,7 +46,16 @@ type PaginationPropsWithDefault = ClassPropsWithDefault<
 /**
  * Pagination
  */
+@APAActionEnabled
+@APAStateEnabled
 class Pagination extends Component<PaginationProps, PaginationState> {
+    @APAState([
+        { name: 'current', desc: '当前页码' },
+        { name: 'currentPageSize', desc: '当前每页条数' },
+        { name: 'inputValue', desc: '输入框的值' },
+    ])
+    state: PaginationState & Record<string, unknown>;
+
     static displayName = 'Pagination';
     static propTypes = {
         ...ConfigProvider.propTypes,
@@ -128,6 +144,7 @@ class Pagination extends Component<PaginationProps, PaginationState> {
         return st;
     }
 
+    @APAAction({ name: 'handleJump', desc: '跳转页码' })
     handleJump = (e: KeyboardEvent<Element> | MouseEvent<Element>) => {
         const { total } = this.props;
         const { current, currentPageSize, inputValue } = this.state;
@@ -150,6 +167,7 @@ class Pagination extends Component<PaginationProps, PaginationState> {
             inputValue: '',
         });
     };
+    @APAAction({ name: 'onPageItemClick', desc: '点击页码' })
     onPageItemClick(page: number, e: KeyboardEvent<Element> | MouseEvent<Element>) {
         if (!('current' in this.props)) {
             this.setState({
@@ -159,12 +177,14 @@ class Pagination extends Component<PaginationProps, PaginationState> {
         this.props.onChange(page, e);
     }
 
+    @APAAction({ name: 'onInputChange', desc: '输入框值变化' })
     onInputChange(value: string) {
         this.setState({
             inputValue: value,
         });
     }
 
+    @APAAction({ name: 'onSelectSize', desc: '选择每页条数' })
     onSelectSize(pageSize: number) {
         const newState: Partial<PaginationState> = {
             currentPageSize: pageSize,
@@ -569,4 +589,20 @@ class Pagination extends Component<PaginationProps, PaginationState> {
     }
 }
 
-export default ConfigProvider.config(polyfill(Pagination));
+export default ConfigProvider.config(
+    APAConfigProvider.config(polyfill(Pagination), {
+        desc: '分页组件',
+        props: [
+            {
+                key: 'type',
+                name: '分页组件类型',
+                desc: '分页组件类型，可选值为 normal、simple、mini',
+            },
+            {
+                key: 'size',
+                name: '分页组件大小',
+                desc: '分页组件大小，可选值为 small、medium、large',
+            },
+        ],
+    })
+);

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import type { TagGroupProps } from './types';
 
 class Group extends Component<TagGroupProps> {
@@ -20,4 +21,6 @@ class Group extends Component<TagGroupProps> {
     }
 }
 
-export default Group;
+export default APAConfigProvider.config(Group, {
+    desc: '标签组组件',
+});

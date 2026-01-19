@@ -1,5 +1,12 @@
 import React, { Component, type KeyboardEvent, type MouseEvent } from 'react';
 import classNames from 'classnames';
+import {
+    APAAction,
+    APAActionEnabled,
+    APAConfigProvider,
+    APAState,
+    APAStateEnabled,
+} from '@alifd/apa-sdk';
 import { polyfill } from 'react-lifecycles-compat';
 import { obj, func } from '../util';
 import Tag from './tag';
@@ -11,10 +18,15 @@ export interface SelectableState {
     checked: boolean | undefined;
 }
 
+@APAActionEnabled
+@APAStateEnabled
 class Selectable extends Component<SelectableProps, SelectableState> {
     static defaultProps: Partial<SelectableProps> = {
         onChange: noop,
     };
+
+    @APAState([{ name: 'checked', desc: '标签是否被选中，受控用法' }])
+    state: SelectableState & Record<string, unknown>;
 
     static getDerivedStateFromProps(props: SelectableProps, state: SelectableState) {
         if (props.checked !== undefined && props.checked !== state.checked) {
@@ -36,6 +48,7 @@ class Selectable extends Component<SelectableProps, SelectableState> {
         bindCtx(this, ['handleClick']);
     }
 
+    @APAAction({ name: 'handleClick', desc: '标签点击事件' })
     handleClick(e: MouseEvent<HTMLDivElement> | KeyboardEvent<HTMLDivElement>) {
         e && e.preventDefault();
         // IE9 不支持 pointer-events，还是可能会触发 click 事件
@@ -81,4 +94,7 @@ class Selectable extends Component<SelectableProps, SelectableState> {
     }
 }
 
-export default polyfill(Selectable);
+export default APAConfigProvider.config(polyfill(Selectable), {
+    desc: '可选择标签组件',
+    props: [{ key: 'disabled', name: '标签是否被禁用', desc: '标签是否被禁用' }],
+});

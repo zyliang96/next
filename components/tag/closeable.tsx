@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import Tag from './tag';
 import type { CloseableProps } from './types';
 
@@ -43,4 +44,14 @@ class Closeable extends Component<CloseableProps> {
     }
 }
 
-export default Closeable;
+export default APAConfigProvider.config(Closeable, {
+    desc: '可关闭标签组件',
+    props: [
+        { key: 'disabled', name: '标签是否被禁用', desc: '标签是否被禁用' },
+        {
+            key: 'closeArea',
+            name: 'closeable 标签的 onClose 响应区域',
+            desc: 'closeable 标签的 onClose 响应区域',
+        },
+    ],
+});

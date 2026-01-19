@@ -1,6 +1,7 @@
 import React, { type ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 import { Tag } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const { Group: TagGroup, Closeable: CloseableTag } = Tag;
 
@@ -50,4 +51,14 @@ class Demo extends React.Component {
     }
 }
 
-ReactDOM.render(<Demo />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="可关闭标签的Demo"
+        regionId="tag-closable-demo"
+        regionDesc="Tag可关闭标签的Demo示例"
+        isRegiserChildren
+    >
+        <Demo />
+    </APAConfigProvider>,
+    mountNode
+);

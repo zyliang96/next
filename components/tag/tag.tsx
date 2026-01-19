@@ -1,6 +1,7 @@
 import React, { Component, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { APAAction, APAActionEnabled, APAConfigProvider } from '@alifd/apa-sdk';
 import Animate from '../animate';
 import Icon from '../icon';
 import { func, KEYCODE, obj, support } from '../util';
@@ -12,6 +13,7 @@ const { noop, bindCtx } = func;
 
 const PRESET_COLOR_REG = /blue|green|orange|red|turquoise|yellow/;
 
+@APAActionEnabled
 class Tag extends Component<TagProps, { visible: boolean }> {
     static propTypes = {
         ...ConfigProvider.propTypes,
@@ -74,6 +76,7 @@ class Tag extends Component<TagProps, { visible: boolean }> {
         this.__destroyed = true;
     }
 
+    @APAAction({ name: 'handleClose', desc: '关闭标签' })
     handleClose(from: CloseArea) {
         const { animation, onClose } = this.props;
         const hasAnimation = support.animation && animation;
@@ -96,6 +99,7 @@ class Tag extends Component<TagProps, { visible: boolean }> {
     }
 
     // 标签体点击
+    @APAAction({ name: 'handleBodyClick', desc: '标签体点击' })
     handleBodyClick(e: MouseEvent<HTMLDivElement>) {
         const { closable, closeArea, onClick } = this.props;
         const node = e.currentTarget;
@@ -263,4 +267,16 @@ class Tag extends Component<TagProps, { visible: boolean }> {
     }
 }
 
-export default ConfigProvider.config(Tag);
+export default ConfigProvider.config(
+    APAConfigProvider.config(Tag, {
+        desc: '标签组件',
+        props: [
+            { key: 'size', name: '标签尺寸', desc: '标签尺寸' },
+            {
+                key: 'disabled',
+                name: '标签是否被禁用',
+                desc: '标签是否被禁用，true 表示禁用，false 表示启用',
+            },
+        ],
+    })
+);
