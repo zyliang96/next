@@ -9,13 +9,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
 import { z } from 'zod';
-import {
-    APAActionEnabled,
-    APAAction,
-    APAStateEnabled,
-    APAState,
-    type APAComponentConfigContextInfo,
-} from '@alifd/apa-sdk';
+import { APAActionEnabled, APAAction, APAStateEnabled } from '@alifd/apa-sdk';
 import ConfigProvider from '../config-provider';
 import { func } from '../util';
 import zhCN from '../locale/zh-cn';
@@ -139,17 +133,6 @@ class Base<
             this.setState({
                 value,
             });
-        } else if (!this.state.composition) {
-            // 受控模式：手动同步状态到 APA
-            const { apaNode } = (this.context as APAComponentConfigContextInfo) || {};
-            if (apaNode) {
-                apaNode.updateState({
-                    value: {
-                        value: value,
-                        desc: '输入框的值',
-                    },
-                });
-            }
         }
 
         if (this.state.composition) {
