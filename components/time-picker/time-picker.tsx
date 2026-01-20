@@ -426,5 +426,10 @@ export default APAConfigProvider.config(polyfill(TimePicker), {
             name: '禁用秒钟的回调函数',
             desc: '禁用秒钟的回调函数，返回 true 表示禁用，false 表示启用',
         },
+        {
+            key: 'format',
+            name: '时间格式',
+            desc: '时间格式',
+        },
     ],
 });

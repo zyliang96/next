@@ -50,6 +50,11 @@ export default ConfigProvider.config(
                 name: '纵向占据几行',
                 desc: '纵向占据几行，可选值为 number',
             },
+            {
+                key: 'component',
+                name: '设置标签类型',
+                desc: '设置标签类型',
+            },
         ],
     })
 );

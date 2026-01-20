@@ -734,6 +734,11 @@ export default function ShellBase(props: { componentName?: string }) {
                 name: '是否固定Header',
                 desc: '是否固定Header，采用sticky布局，不支持 IE11',
             },
+            {
+                key: 'type',
+                name: '样式类型',
+                desc: '样式类型，分浅色主题、深色主题、主题色主题，可选值为 light、dark、brand',
+            },
         ],
     });
 }

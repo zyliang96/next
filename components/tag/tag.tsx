@@ -282,6 +282,11 @@ export default ConfigProvider.config(
                 name: '标签是否被禁用',
                 desc: '标签是否被禁用，true 表示禁用，false 表示启用',
             },
+            {
+                key: 'color',
+                name: '标签颜色',
+                desc: '标签颜色，可选值为 blue、green、orange、red、turquoise、yellow 和 hex 颜色值',
+            },
         ],
     })
 );

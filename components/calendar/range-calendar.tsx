@@ -389,6 +389,16 @@ export default ConfigProvider.config(
                 name: '禁用日期的回调函数',
                 desc: '禁用日期的回调函数，返回 true 表示不可选择，可用于禁用部分日期',
             },
+            {
+                key: 'shape',
+                name: '展现形态',
+                desc: '展现形态，可选值为 card、fullscreen、panel',
+            },
+            {
+                key: 'format',
+                name: '日期值的格式',
+                desc: '日期值的格式（用于日期 title 显示的格式）',
+            },
         ],
     }),
     {

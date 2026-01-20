@@ -681,5 +681,15 @@ export default APAConfigProvider.config(polyfill(DatePicker), {
             name: '禁用日期的回调函数',
             desc: '禁用日期的回调函数，参数为当前日期，返回 true 表示不可选择，可用于禁用部分日期',
         },
+        {
+            key: 'format',
+            name: '日期值的格式',
+            desc: '日期值的格式（用于限定用户输入和展示）',
+        },
+        {
+            key: 'isPreview',
+            name: '是否预览模式',
+            desc: '是否预览模式，true 表示预览模式，false 表示非预览模式',
+        },
     ],
 });

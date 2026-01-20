@@ -445,5 +445,15 @@ export default APAConfigProvider.config(polyfill(MonthPicker), {
             name: '是否禁用',
             desc: '是否禁用，true 表示禁用，false 表示启用',
         },
+        {
+            key: 'format',
+            name: '日期值的格式',
+            desc: '日期值的格式（用于限定用户输入和展示）',
+        },
+        {
+            key: 'isPreview',
+            name: '是否预览模式',
+            desc: '是否预览模式，true 表示预览模式，false 表示非预览模式',
+        },
     ],
 });

@@ -155,6 +155,26 @@ export default ConfigProvider.config(
                 name: '设备类型',
                 desc: '设备类型，用来做自适应，可选值为 phone、tablet、desktop',
             },
+            {
+                key: 'columns',
+                name: '列数',
+                desc: '列数，分为几列， 默认是 12 列',
+            },
+            {
+                key: 'gap',
+                name: '间距',
+                desc: '间距，每个 cell 之间的间距， [bottom&top, right&left]',
+            },
+            {
+                key: 'component',
+                name: '设置标签类型',
+                desc: '设置标签类型',
+            },
+            {
+                key: 'dense',
+                name: '紧密模式',
+                desc: '是否开启紧密模式，开启后尽可能能紧密填满，尽量不出现空格，true 表示开启，false 表示关闭',
+            },
         ],
     })
 );
