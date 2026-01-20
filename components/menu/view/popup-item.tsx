@@ -30,6 +30,7 @@ export type PopupItemInMenuProps = ChildItemPropsInMenu<PopupItemWithDefaultsPro
 class PopupItem extends Component<PopupItemProps> {
     static menuChildType = 'submenu';
 
+    static displayName = 'PopupItem';
     static propTypes = {
         _key: PropTypes.string,
         root: PropTypes.object,

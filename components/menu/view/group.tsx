@@ -8,6 +8,7 @@ import type { ChildPropsInMenu, GroupProps } from '../types';
 class Group extends Component<GroupProps> {
     static menuChildType = 'group';
 
+    static displayName = 'Group';
     static propTypes = {
         root: PropTypes.object,
         className: PropTypes.string,
@@ -64,8 +65,8 @@ class Group extends Component<GroupProps> {
 export default APAConfigProvider.config(Group, {
     desc: '分组项组件',
     props: [
-        { key: 'label', name: '分组标签', desc: '标签内容' },
-        { key: 'children', name: '菜单项', desc: '菜单项' },
+        { key: 'label', name: '分组标签', desc: '分组标签内容' },
+        { key: 'children', name: '菜单项', desc: '菜单项内容' },
     ],
     staticProps: {
         menuChildType: 'group',
