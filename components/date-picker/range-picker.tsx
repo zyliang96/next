@@ -16,6 +16,7 @@ import {
     APAState,
     APAStateEnabled,
 } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import ConfigProvider from '../config-provider';
 import Overlay from '../overlay';
 import Input from '../input';
@@ -459,7 +460,7 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
         }
     };
 
-    @APAAction({ name: 'onSelectStartTime', desc: '选择开始时间' })
+    @APAAction({ name: 'onSelectStartTime', desc: '选择开始时间', params: z.tuple([z.any()]) })
     onSelectStartTime = (value: Moment) => {
         if (!('value' in this.props)) {
             this.setState({
@@ -474,7 +475,7 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
         }
     };
 
-    @APAAction({ name: 'onSelectEndTime', desc: '选择结束时间' })
+    @APAAction({ name: 'onSelectEndTime', desc: '选择结束时间', params: z.tuple([z.any()]) })
     onSelectEndTime = (value: Moment) => {
         if (!('value' in this.props)) {
             this.setState({
@@ -562,7 +563,11 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
         this.onTimeInputChange(timeStr);
     };
 
-    @APAAction({ name: 'handleChange', desc: '日期范围值改变时的回调' })
+    @APAAction({
+        name: 'handleChange',
+        desc: '日期范围值改变时的回调',
+        params: z.tuple([z.enum(['startValue', 'endValue']), z.any().nullable().optional()]),
+    })
     handleChange = (valueName: 'startValue' | 'endValue', newValue?: Moment | null) => {
         const values = (['startValue', 'endValue'] as const).map(name =>
             valueName === name ? newValue : this.state[name]
@@ -582,7 +587,11 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
         this.onValueChange(values);
     };
 
-    @APAAction({ name: 'onVisibleChange', desc: '显示状态变化时的回调' })
+    @APAAction({
+        name: 'onVisibleChange',
+        desc: '显示状态变化时的回调',
+        params: z.tuple([z.boolean(), z.string()]),
+    })
     onVisibleChange = (visible: boolean, type: string) => {
         if (!('visible' in this.props)) {
             this.setState({
@@ -592,7 +601,11 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
         this.props.onVisibleChange(visible, type);
     };
 
-    @APAAction({ name: 'changePanel', desc: '切换面板类型' })
+    @APAAction({
+        name: 'changePanel',
+        desc: '切换面板类型',
+        params: z.tuple([z.enum(['DATE', 'TIME'])]),
+    })
     changePanel = (panel: PanelType) => {
         const { startValue, endValue } = this.state;
         this.setState({
@@ -606,7 +619,11 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
         });
     };
 
-    @APAAction({ name: 'onOk', desc: '点击确认按钮时的回调' })
+    @APAAction({
+        name: 'onOk',
+        desc: '点击确认按钮时的回调',
+        params: z.tuple([z.array(z.any().nullable()).optional()]),
+    })
     onOk = (value?: (Moment | null | undefined)[]) => {
         this.onVisibleChange(false, 'okBtnClick');
         this.onValueChange(value || [this.state.startValue, this.state.endValue], 'onOk');

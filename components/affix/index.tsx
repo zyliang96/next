@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import ResizeObserver from 'resize-observer-polyfill';
 import { polyfill } from 'react-lifecycles-compat';
 import { APAAction, APAActionEnabled, APAConfigProvider } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import type { AffixProps, AffixState, AffixMode } from './types';
 import { obj, events, func } from '../util';
 import ConfigProvider from '../config-provider';
@@ -201,7 +202,11 @@ class Affix extends Component<AffixProps, AffixState> {
         }
     };
 
-    @APAAction({ name: 'setAffixStyle', desc: '设置固钉样式' })
+    @APAAction({
+        name: 'setAffixStyle',
+        desc: '设置固钉样式',
+        params: z.tuple([z.record(z.string(), z.any()).optional(), z.boolean().optional()]),
+    })
     _setAffixStyle(affixStyle: AffixState['style'], affixed = false) {
         if (obj.shallowEqual(affixStyle, this.state.style)) {
             return;

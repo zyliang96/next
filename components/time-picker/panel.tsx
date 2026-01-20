@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { APAAction, APAActionEnabled, APAConfigProvider } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import moment from 'moment';
 import nextLocale from '../locale/zh-cn';
 import { func } from '../util';
@@ -96,7 +97,11 @@ class TimePickerPanel extends Component<TimePickerPanelProps> {
         locale: nextLocale.TimePicker,
     };
 
-    @APAAction({ name: 'onSelectMenuItem', desc: '选择某个时间值时的回调' })
+    @APAAction({
+        name: 'onSelectMenuItem',
+        desc: '选择某个时间值时的回调',
+        params: z.tuple([z.number(), z.enum(['hour', 'minute', 'second'])]),
+    })
     onSelectMenuItem = (index: number, type: 'hour' | 'minute' | 'second') => {
         const { value } = this.props;
         const clonedValue = value ? value.clone() : moment('00:00:00', 'HH:mm:ss', true);

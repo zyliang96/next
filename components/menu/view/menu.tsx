@@ -23,6 +23,7 @@ import {
     APAState,
     APAStateEnabled,
 } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import SubMenu from './sub-menu';
 import ConfigProvider from '../../config-provider';
 import { func, obj, dom, events, KEYCODE, type ClassPropsWithDefault } from '../../util';
@@ -602,6 +603,7 @@ export class Menu extends Component<MenuProps, MenuState> {
     @APAAction({
         name: 'handleOpen',
         desc: '打开或关闭子菜单触发的回调函数',
+        params: z.tuple([z.string(), z.boolean(), z.string().optional(), z.any().optional()]),
     })
     handleOpen(key: string, open: boolean, triggerType?: string, e?: Event) {
         let newOpenKeys: string[] | undefined;
@@ -681,6 +683,7 @@ export class Menu extends Component<MenuProps, MenuState> {
     @APAAction({
         name: 'handleSelect',
         desc: '选中或取消选中菜单项触发的回调函数',
+        params: z.tuple([z.string(), z.boolean(), z.any()]),
     })
     handleSelect(key: string, select: boolean, menuItem: SelectableItem) {
         const { _k2n, _p2n } = this.state;
@@ -724,6 +727,7 @@ export class Menu extends Component<MenuProps, MenuState> {
     @APAAction({
         name: 'handleItemClick',
         desc: '点击菜单项触发的回调函数',
+        params: z.tuple([z.string(), z.any(), z.any()]),
     })
     handleItemClick(key: string, item: MenuItem, e: MouseEvent | KeyboardEvent) {
         const { _k2n } = this.state;
@@ -762,6 +766,7 @@ export class Menu extends Component<MenuProps, MenuState> {
     @APAAction({
         name: 'getAvailableKey',
         desc: '获取可用的子菜单的 key 值',
+        params: z.tuple([z.string(), z.boolean()]),
     })
     getAvailableKey(pos: string, prev: boolean) {
         const { _p2n } = this.state;

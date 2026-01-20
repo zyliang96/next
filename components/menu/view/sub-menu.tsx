@@ -11,6 +11,7 @@ import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { APAAction, APAActionEnabled, APAConfigProvider } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import Animate from '../../animate';
 import Icon, { type IconProps } from '../../icon';
 import { func, obj, type ClassPropsWithDefault } from '../../util';
@@ -114,6 +115,7 @@ class SubMenu extends Component<SubMenuProps> {
     @APAAction({
         name: 'handleClick',
         desc: '处理子菜单的点击',
+        params: z.tuple([z.any()]),
     })
     handleClick(e: MouseEvent | KeyboardEvent) {
         const { root, selectable } = this.props as SubMenuInMenuProps;
@@ -129,6 +131,7 @@ class SubMenu extends Component<SubMenuProps> {
     @APAAction({
         name: 'handleOpen',
         desc: '处理子菜单的打开或关闭',
+        params: z.tuple([z.boolean(), z.string().optional(), z.any().optional()]),
     })
     handleOpen(open: boolean, triggerType?: string, e?: Event) {
         const { _key, root } = this.props as SubMenuInMenuProps;

@@ -10,6 +10,7 @@ import {
     APAState,
     APAStateEnabled,
 } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import ConfigProvider from '../config-provider';
 import nextLocale from '../locale/zh-cn';
 import { obj, func, type ClassPropsWithDefault } from '../util';
@@ -134,7 +135,11 @@ class RangeCalendar extends React.Component<RangeCalendarProps, RangeCalendarSta
         return st;
     }
 
-    @APAAction({ name: 'onSelectCell', desc: '选择日期单元格时的回调' })
+    @APAAction({
+        name: 'onSelectCell',
+        desc: '选择日期单元格时的回调',
+        params: z.tuple([z.any(), z.union([z.enum(['date', 'month', 'year']), z.any()])]),
+    })
     onSelectCell = (date: Moment, nextMode: CalendarMode | MouseEvent<HTMLElement>) => {
         if (this.state.mode === CALENDAR_MODE_DATE) {
             this.props.onSelect(date);
@@ -145,7 +150,11 @@ class RangeCalendar extends React.Component<RangeCalendarProps, RangeCalendarSta
         this.changeMode(nextMode as CalendarMode);
     };
 
-    @APAAction({ name: 'changeMode', desc: '切换面板模式' })
+    @APAAction({
+        name: 'changeMode',
+        desc: '切换面板模式',
+        params: z.tuple([z.enum(['date', 'month', 'year']), z.enum(['start', 'end']).optional()]),
+    })
     changeMode = (mode: CalendarMode, activePanel?: 'start' | 'end') => {
         const { lastMode, lastPanelType } = this.state;
 

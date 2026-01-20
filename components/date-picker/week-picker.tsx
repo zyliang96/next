@@ -14,6 +14,7 @@ import {
     APAState,
     APAStateEnabled,
 } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import { polyfill } from 'react-lifecycles-compat';
 import Overlay from '../overlay';
 import Input from '../input';
@@ -125,7 +126,11 @@ class WeekPicker extends Component<WeekPickerProps, WeekPickerState> {
         return st;
     }
 
-    @APAAction({ name: 'handleChange', desc: '周值改变时的回调' })
+    @APAAction({
+        name: 'handleChange',
+        desc: '周值改变时的回调',
+        params: z.tuple([z.any().nullable(), z.any().nullable()]),
+    })
     handleChange = (newValue: Moment | null, prevValue: Moment | null) => {
         if (!('value' in this.props)) {
             this.setState({
@@ -190,7 +195,11 @@ class WeekPicker extends Component<WeekPickerProps, WeekPickerState> {
         this.handleChange(date, this.state.value);
     };
 
-    @APAAction({ name: 'onVisibleChange', desc: '显示状态变化时的回调' })
+    @APAAction({
+        name: 'onVisibleChange',
+        desc: '显示状态变化时的回调',
+        params: z.tuple([z.boolean(), z.string()]),
+    })
     onVisibleChange = (visible: boolean, type: string) => {
         if (!('visible' in this.props)) {
             this.setState({

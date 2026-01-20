@@ -10,6 +10,7 @@ import {
     APAState,
     APAStateEnabled,
 } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import ConfigProvider from '../config-provider';
 import nextLocale from '../locale/zh-cn';
 import { type ClassPropsWithDefault, func, obj } from '../util';
@@ -138,7 +139,11 @@ class Calendar extends Component<CalendarProps, CalendarState> {
         return st;
     }
 
-    @APAAction({ name: 'onSelectCell', desc: '选择日期单元格时的回调' })
+    @APAAction({
+        name: 'onSelectCell',
+        desc: '选择日期单元格时的回调',
+        params: z.tuple([z.any(), z.union([z.enum(['date', 'month', 'year']), z.any()])]),
+    })
     onSelectCell = (date: Moment, nextMode: CalendarMode | MouseEvent<HTMLElement>) => {
         const { visibleMonth } = this.state;
         const { shape, showOtherMonth } = this.props;
@@ -167,7 +172,11 @@ class Calendar extends Component<CalendarProps, CalendarState> {
         }
     };
 
-    @APAAction({ name: 'changeMode', desc: '切换面板模式' })
+    @APAAction({
+        name: 'changeMode',
+        desc: '切换面板模式',
+        params: z.tuple([z.enum(['date', 'month', 'year'])]),
+    })
     changeMode = (nextMode: CalendarMode) => {
         if (nextMode && this.MODES.indexOf(nextMode) > -1 && nextMode !== this.state.mode) {
             this.setState({ mode: nextMode });
@@ -175,7 +184,11 @@ class Calendar extends Component<CalendarProps, CalendarState> {
         }
     };
 
-    @APAAction({ name: 'changeVisibleMonth', desc: '切换展示的月份' })
+    @APAAction({
+        name: 'changeVisibleMonth',
+        desc: '切换展示的月份',
+        params: z.tuple([z.any(), z.string()]),
+    })
     changeVisibleMonth = (date: Moment, reason: VisibleMonthChangeType) => {
         if (!isSameYearMonth(date, this.state.visibleMonth)) {
             this.setState({ visibleMonth: date });

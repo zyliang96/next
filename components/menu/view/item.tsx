@@ -3,6 +3,7 @@ import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { APAAction, APAActionEnabled, APAConfigProvider } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import { func, obj, KEYCODE, type ClassPropsWithDefault } from '../../util';
 import type { ChildItemPropsInMenu, ItemProps as NormalItemProps } from '../types';
 
@@ -111,6 +112,7 @@ class Item extends Component<ItemProps> {
     @APAAction({
         name: 'handleClick',
         desc: '处理菜单项的点击事件',
+        params: z.tuple([z.any()]),
     })
     handleClick(e: MouseEvent | KeyboardEvent) {
         e.stopPropagation();

@@ -9,6 +9,7 @@ import {
     APAState,
     APAStateEnabled,
 } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import moment, { type Moment } from 'moment';
 import ConfigProvider from '../config-provider';
 import Overlay from '../overlay';
@@ -318,7 +319,15 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
         this.onTimeInputChange(timeStr);
     };
 
-    @APAAction({ name: 'handleChange', desc: '日期值改变时的回调' })
+    @APAAction({
+        name: 'handleChange',
+        desc: '日期值改变时的回调',
+        params: z.tuple([
+            z.any().nullable(),
+            z.any().nullable(),
+            z.record(z.string(), z.any()).optional(),
+        ]),
+    })
     handleChange = (newValue: Moment | null, prevValue: Moment | null, others = {}) => {
         if (!('value' in this.props)) {
             this.setState({
@@ -355,7 +364,11 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
         }
     };
 
-    @APAAction({ name: 'onVisibleChange', desc: '弹层显示状态变化时的回调' })
+    @APAAction({
+        name: 'onVisibleChange',
+        desc: '弹层显示状态变化时的回调',
+        params: z.tuple([z.boolean(), z.string()]),
+    })
     onVisibleChange = (visible: boolean, type: string) => {
         if (!('visible' in this.props)) {
             this.setState({
@@ -371,7 +384,11 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
         });
     };
 
-    @APAAction({ name: 'onOk', desc: '点击确认按钮时的回调' })
+    @APAAction({
+        name: 'onOk',
+        desc: '点击确认按钮时的回调',
+        params: z.tuple([z.any().nullable().optional()]),
+    })
     onOk = (value?: Moment | null) => {
         this.onVisibleChange(false, 'okBtnClick');
         this.onValueChange(value || this.state.value, 'onOk');

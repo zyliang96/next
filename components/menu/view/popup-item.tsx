@@ -9,6 +9,7 @@ import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { APAAction, APAActionEnabled, APAConfigProvider } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import Icon from '../../icon';
 import Overlay, { type PopupProps } from '../../overlay';
 import { func, obj, dom, type ClassPropsWithDefault } from '../../util';
@@ -102,6 +103,7 @@ class PopupItem extends Component<PopupItemProps> {
     @APAAction({
         name: 'handleOpen',
         desc: '处理弹层项的打开或关闭',
+        params: z.tuple([z.boolean(), z.string(), z.any()]),
     })
     handleOpen: NonNullable<PopupProps['onVisibleChange']> = (open, triggerType, e) => {
         const { _key, root } = this.props as PopupItemInMenuProps;

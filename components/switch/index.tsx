@@ -6,6 +6,7 @@ import {
     APAState,
     APAStateEnabled,
 } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
@@ -81,7 +82,7 @@ class Switch extends React.Component<SwitchProps, SwitchState> {
         };
     }
 
-    @APAAction({ name: 'onChange', desc: '开关状态改变事件' })
+    @APAAction({ name: 'onChange', desc: '开关状态改变事件', params: z.tuple([z.any()]) })
     onChange(ev: MouseEvent<HTMLDivElement> | KeyboardEvent<HTMLDivElement>) {
         const checked = !this.state.checked;
 

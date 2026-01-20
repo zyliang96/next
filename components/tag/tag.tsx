@@ -2,6 +2,7 @@ import React, { Component, type KeyboardEvent, type MouseEvent, type ReactNode }
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { APAAction, APAActionEnabled, APAConfigProvider } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import Animate from '../animate';
 import Icon from '../icon';
 import { func, KEYCODE, obj, support } from '../util';
@@ -76,7 +77,11 @@ class Tag extends Component<TagProps, { visible: boolean }> {
         this.__destroyed = true;
     }
 
-    @APAAction({ name: 'handleClose', desc: '关闭标签' })
+    @APAAction({
+        name: 'handleClose',
+        desc: '关闭标签',
+        params: z.tuple([z.enum(['tag', 'tail'])]),
+    })
     handleClose(from: CloseArea) {
         const { animation, onClose } = this.props;
         const hasAnimation = support.animation && animation;
@@ -99,7 +104,7 @@ class Tag extends Component<TagProps, { visible: boolean }> {
     }
 
     // 标签体点击
-    @APAAction({ name: 'handleBodyClick', desc: '标签体点击' })
+    @APAAction({ name: 'handleBodyClick', desc: '标签体点击', params: z.tuple([z.any()]) })
     handleBodyClick(e: MouseEvent<HTMLDivElement>) {
         const { closable, closeArea, onClick } = this.props;
         const node = e.currentTarget;

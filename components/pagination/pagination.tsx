@@ -16,6 +16,7 @@ import {
     APAState,
     APAStateEnabled,
 } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import ConfigProvider from '../config-provider';
 import Icon from '../icon';
 import Button, { type ButtonProps } from '../button';
@@ -144,7 +145,7 @@ class Pagination extends Component<PaginationProps, PaginationState> {
         return st;
     }
 
-    @APAAction({ name: 'handleJump', desc: '跳转页码' })
+    @APAAction({ name: 'handleJump', desc: '跳转页码', params: z.tuple([z.any()]) })
     handleJump = (e: KeyboardEvent<Element> | MouseEvent<Element>) => {
         const { total } = this.props;
         const { current, currentPageSize, inputValue } = this.state;
@@ -167,7 +168,11 @@ class Pagination extends Component<PaginationProps, PaginationState> {
             inputValue: '',
         });
     };
-    @APAAction({ name: 'onPageItemClick', desc: '点击页码' })
+    @APAAction({
+        name: 'onPageItemClick',
+        desc: '点击页码',
+        params: z.tuple([z.number(), z.any()]),
+    })
     onPageItemClick(page: number, e: KeyboardEvent<Element> | MouseEvent<Element>) {
         if (!('current' in this.props)) {
             this.setState({
@@ -177,14 +182,14 @@ class Pagination extends Component<PaginationProps, PaginationState> {
         this.props.onChange(page, e);
     }
 
-    @APAAction({ name: 'onInputChange', desc: '输入框值变化' })
+    @APAAction({ name: 'onInputChange', desc: '输入框值变化', params: z.tuple([z.string()]) })
     onInputChange(value: string) {
         this.setState({
             inputValue: value,
         });
     }
 
-    @APAAction({ name: 'onSelectSize', desc: '选择每页条数' })
+    @APAAction({ name: 'onSelectSize', desc: '选择每页条数', params: z.tuple([z.number()]) })
     onSelectSize(pageSize: number) {
         const newState: Partial<PaginationState> = {
             currentPageSize: pageSize,
