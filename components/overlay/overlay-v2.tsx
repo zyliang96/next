@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, cloneElement, type ReactElement } from 'react';
 import classNames from 'classnames';
-import Overlay from './overlay';
+import Overlay from '@alifd/overlay';
 
 import Animate from '../animate';
 
