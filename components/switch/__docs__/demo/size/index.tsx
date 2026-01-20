@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="Switch开关大小设置的Demo"
         regionId="switch-size-demo"
         regionDesc="Switch开关大小设置的Demo"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Switch autoWidth />

@@ -16,7 +16,7 @@ ReactDOM.render(
         regionName="TimePicker禁用状态Demo"
         regionId="timePicker-disabled-demo"
         regionDesc="TimePicker禁用状态的Demo"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <p>Disable TimePicker</p>

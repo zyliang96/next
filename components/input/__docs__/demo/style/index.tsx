@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="Input自定义样式Demo"
         regionId="Input-style-demo"
         regionDesc="Input自定义样式示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Input placeholder="width:400" style={{ width: 400 }} aria-label="style width 400" />

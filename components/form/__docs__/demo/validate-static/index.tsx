@@ -19,7 +19,7 @@ ReactDOM.render(
         regionName="表单验证静态 Demo"
         regionId="Form-validate-static-demo"
         regionDesc="表单验证静态 Demo"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Form {...formItemLayout}>
             <FormItem

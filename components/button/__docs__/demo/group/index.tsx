@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="Button组Demo"
         regionId="Button-group-demo"
         regionDesc="Button组Demo"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Button.Group style={{ marginRight: 20 }}>

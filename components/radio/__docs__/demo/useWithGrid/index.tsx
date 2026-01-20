@@ -74,7 +74,7 @@ ReactDOM.render(
         regionName="使用 Grid 快速布局"
         regionId="Radio-useWithGrid-demo"
         regionDesc="使用Grid布局RadioGroup中的选项"
-        isRegiserChildren
+        isRegisterChildren
     >
         <ControlApp />
     </APAConfigProvider>,

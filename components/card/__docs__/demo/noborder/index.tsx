@@ -17,7 +17,7 @@ ReactDOM.render(
         regionName="卡片无边框模式用法"
         regionId="card-noborder-demo"
         regionDesc="卡片无边框模式用法"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Card free hasBorder={false} style={{ width: 300 }}>

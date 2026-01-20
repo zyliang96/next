@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="对齐"
         regionId="Overlay-align-demo"
         regionDesc="Overlay对齐示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div id="containerId" className="overlay-container">
             <Overlay v2 target="containerId" visible align="br tl">

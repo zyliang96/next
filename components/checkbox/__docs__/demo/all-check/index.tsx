@@ -42,7 +42,7 @@ ReactDOM.render(
         regionName="全选"
         regionId="Checkbox-all-check-demo"
         regionDesc="Checkbox全选示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <App />
     </APAConfigProvider>,

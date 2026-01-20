@@ -10,7 +10,7 @@ ReactDOM.render(
         regionName="Popup弹层"
         regionId="Overlay-popup-demo"
         regionDesc="Overlay Popup弹层示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Popup v2 trigger={<Button>Open</Button>} triggerType="click">

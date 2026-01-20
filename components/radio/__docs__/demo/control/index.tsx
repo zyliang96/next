@@ -57,7 +57,7 @@ ReactDOM.render(
         regionName="受控组件"
         regionId="Radio-control-demo"
         regionDesc="使用RadioGroup渲染的组，通过设置value属性让组件变成受控组件"
-        isRegiserChildren
+        isRegisterChildren
     >
         <ControlApp />
     </APAConfigProvider>,

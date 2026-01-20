@@ -403,7 +403,7 @@ class Item extends Component<ItemProps> {
 }
 
 export default APAConfigProvider.config(Item, {
-    isRegiserChildren: true,
+    isRegisterChildren: true,
     desc: '表单项组件',
     props: [
         {

@@ -321,7 +321,7 @@ export type { RadioGroup };
 
 export default ConfigProvider.config(
     APAConfigProvider.config(polyfill(RadioGroup), {
-        isRegiserChildren: false,
+        isRegisterChildren: false,
         desc: '单选框组组件',
         props: [
             {

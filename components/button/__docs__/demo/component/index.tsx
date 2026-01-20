@@ -14,7 +14,7 @@ ReactDOM.render(
         regionName="Button标签Demo"
         regionId="Button-label-demo"
         regionDesc="Button标签Demo"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Box direction="row" spacing={20}>
             <Button {...props} type="primary">

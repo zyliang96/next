@@ -34,7 +34,7 @@ class Demo extends React.Component {
                 regionName="自定义弹出方向"
                 regionId="Drawer-placement-demo"
                 regionDesc="自定义弹出方向"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <div>
                     <Radio.Group

@@ -391,7 +391,7 @@ ReactDOM.render(
         regionName="基本使用"
         regionId="Select-motion-space-demo"
         regionDesc="最基本的使用、带清除、搜索功能的展示"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             MenuButton:

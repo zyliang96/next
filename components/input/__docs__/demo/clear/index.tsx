@@ -16,7 +16,7 @@ ReactDOM.render(
         regionName="Input清除按钮Demo"
         regionId="Input-clear-demo"
         regionDesc="Input清除按钮示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Input

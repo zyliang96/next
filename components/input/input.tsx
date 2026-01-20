@@ -363,7 +363,7 @@ export { Input };
 
 // 导出包装后的组件作为默认导出
 export default APAConfigProvider.config(Input, {
-    isRegiserChildren: false,
+    isRegisterChildren: false,
     desc: '输入框组件',
     props: [
         { key: 'value', name: 'value', desc: '输入框当前的值' },

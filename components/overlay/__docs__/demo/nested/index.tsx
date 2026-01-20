@@ -64,7 +64,7 @@ ReactDOM.render(
         regionName="弹层嵌套"
         regionId="Overlay-nested-demo"
         regionDesc="Overlay弹层嵌套示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Demo />
     </APAConfigProvider>,

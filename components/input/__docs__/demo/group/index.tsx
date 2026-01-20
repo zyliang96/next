@@ -16,7 +16,7 @@ ReactDOM.render(
         regionName="Input输入框组合Demo"
         regionId="Input-group-demo"
         regionDesc="Input输入框组合示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Input.Group addonBefore={select} addonAfter={button}>

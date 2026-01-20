@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="动画尺寸"
         regionId="Loading-size-demo"
         regionDesc="Loading动画尺寸示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Loading tip={<span>default = large</span>}>

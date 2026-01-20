@@ -54,7 +54,7 @@ ReactDOM.render(
         regionName="遮罩层"
         regionId="Overlay-backdrop-demo"
         regionDesc="Overlay遮罩层示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Demo />
     </APAConfigProvider>,

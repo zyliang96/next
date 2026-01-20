@@ -371,7 +371,7 @@ class TextArea extends Base<TextAreaProps> {
 }
 
 export default APAConfigProvider.config(TextArea, {
-    isRegiserChildren: false,
+    isRegisterChildren: false,
     desc: '文本域组件',
     props: [
         { key: 'value', name: 'value', desc: '文本域当前的值' },

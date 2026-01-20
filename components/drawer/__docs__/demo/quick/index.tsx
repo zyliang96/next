@@ -23,7 +23,7 @@ ReactDOM.render(
         regionName="快捷调用"
         regionId="Drawer-quick-demo"
         regionDesc="快捷调用"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Button type="primary" onClick={show}>

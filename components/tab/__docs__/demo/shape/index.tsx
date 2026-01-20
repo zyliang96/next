@@ -48,7 +48,7 @@ ReactDOM.render(
         regionName="形态"
         regionId="Tab-shape-demo"
         regionDesc="Tab形态示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Demo />
     </APAConfigProvider>,

@@ -104,7 +104,7 @@ class Demo extends React.Component {
                 regionName="弹层定制"
                 regionId="Select-custom-overlay-demo"
                 regionDesc="通过popupContent定制Select弹层"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <div className="demo-container">
                     <Select

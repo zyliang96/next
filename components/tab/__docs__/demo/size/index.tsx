@@ -14,7 +14,7 @@ ReactDOM.render(
         regionName="小号尺寸"
         regionId="Tab-size-demo"
         regionDesc="Tab小号尺寸示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Tab size="small">

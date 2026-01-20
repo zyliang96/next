@@ -46,7 +46,7 @@ ReactDOM.render(
         regionName="禁用状态"
         regionId="Checkbox-disbled-demo"
         regionDesc="Checkbox禁用状态示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <App />
     </APAConfigProvider>,

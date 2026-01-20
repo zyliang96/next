@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="基本"
         regionId="Loading-basic-demo"
         regionDesc="Loading基本使用示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Loading tip="加载中...">

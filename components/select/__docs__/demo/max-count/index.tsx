@@ -37,7 +37,7 @@ ReactDOM.render(
         regionName="最大数量"
         regionId="Select-max-count-demo"
         regionDesc="多选模式下通过maxTagCount控制选择的个数"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div style={{ display: 'flex', alignItems: 'flex-start' }}>
             <Select

@@ -19,7 +19,7 @@ ReactDOM.render(
         regionName="自定义动画指示符"
         regionId="Loading-indicator-demo"
         regionDesc="Loading自定义动画指示符示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Loading tip="default">

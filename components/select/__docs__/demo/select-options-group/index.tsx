@@ -31,7 +31,7 @@ ReactDOM.render(
         regionName="分组"
         regionId="Select-select-options-group-demo"
         regionDesc="使用OptionGroup针对选项进行分组"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Select placeholder="OptionGroup" style={{ marginRight: 8 }}>

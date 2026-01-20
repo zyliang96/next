@@ -20,7 +20,7 @@ ReactDOM.render(
         regionName="表单嵌套 Demo"
         regionId="Form-nest-demo"
         regionDesc="表单嵌套 Demo"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Form {...formItemLayout}>
             <FormItem id="control-input" label="Input Something：">

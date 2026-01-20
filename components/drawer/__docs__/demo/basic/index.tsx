@@ -28,7 +28,7 @@ class Demo extends React.Component {
                 regionName="基本"
                 regionId="Drawer-basic-demo"
                 regionDesc="第一个抽屉"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <div>
                     <Button type="primary" onClick={this.onOpen}>

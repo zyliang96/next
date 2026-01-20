@@ -15,7 +15,7 @@ ReactDOM.render(
         regionName="Calendar不可选择的日期设置的Demo"
         regionId="calendar-disabled-date-demo"
         regionDesc="Calendar不可选择的日期设置的Demo"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div className="wrapped-calendar">
             <Calendar disabledDate={disabledDate} shape="card" />

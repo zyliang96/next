@@ -80,7 +80,7 @@ class Demo extends React.Component {
                 regionName="表单预览 Demo"
                 regionId="Form-preview-demo"
                 regionDesc="表单预览 Demo"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <div>
                     <Form

@@ -22,7 +22,7 @@ class App extends React.Component {
                 regionName="单选分组"
                 regionId="Radio-group-demo"
                 regionDesc="使用Radio.Group渲染Radio分组，选项互斥"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <div>
                     <span style={{ fontSize: 14 }}>

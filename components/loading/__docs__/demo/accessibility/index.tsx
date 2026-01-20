@@ -43,7 +43,7 @@ ReactDOM.render(
         regionName="无障碍支持"
         regionId="Loading-accessibility-demo"
         regionDesc="Loading无障碍支持示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <App />
     </APAConfigProvider>,

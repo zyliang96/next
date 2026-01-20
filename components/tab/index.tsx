@@ -16,7 +16,7 @@ const TabPane = ConfigProvider.config(Item, {
 
 // 先用 APAConfigProvider 包装 Tab
 const TabWithAPA = APAConfigProvider.config(Tab, {
-    isRegiserChildren: true, // 需要注册子组件 Tab.Item
+    isRegisterChildren: true, // 需要注册子组件 Tab.Item
     desc: '标签页组件',
     props: [
         { key: 'activeKey', name: 'activeKey', desc: '当前激活的标签页' },

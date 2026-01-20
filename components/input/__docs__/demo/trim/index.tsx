@@ -39,7 +39,7 @@ ReactDOM.render(
         regionName="Input去除空格Demo"
         regionId="Input-trim-demo"
         regionDesc="Input去除空格示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <App />
     </APAConfigProvider>,

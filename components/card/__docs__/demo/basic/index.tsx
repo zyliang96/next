@@ -17,7 +17,7 @@ ReactDOM.render(
         regionName="卡片基本用法"
         regionId="card-basic-demo"
         regionDesc="卡片基本用法"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Card free style={{ width: 300 }} showTitleBullet>

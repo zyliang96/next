@@ -92,7 +92,7 @@ ReactDOM.render(
         regionName="大数据"
         regionId="Select-virtual-select-demo"
         regionDesc="select开启无限滚动可支持大数据的dataSource，保证性能"
-        isRegiserChildren
+        isRegisterChildren
     >
         <App />
     </APAConfigProvider>,

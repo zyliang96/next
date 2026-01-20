@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="自定义提示语及其位置"
         regionId="Loading-tipAlign-demo"
         regionDesc="Loading自定义提示语及其位置示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Loading tip={<span>default=bottom</span>}>

@@ -68,7 +68,7 @@ class Demo extends React.Component {
                 regionName="表单禁用状态 Demo"
                 regionId="Form-disabled-demo"
                 regionDesc="表单禁用状态 Demo"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <div>
                     <Form

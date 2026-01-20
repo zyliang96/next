@@ -44,7 +44,7 @@ ReactDOM.render(
         regionName="传入数组配置"
         regionId="Checkbox-dataSource-demo"
         regionDesc="Checkbox传入数组配置示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <App />
     </APAConfigProvider>,

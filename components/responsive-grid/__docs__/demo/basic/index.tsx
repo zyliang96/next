@@ -73,7 +73,7 @@ ReactDOM.render(
         regionName="响应式网格布局组件基本使用示例"
         regionId="responsive-grid-basic-demo"
         regionDesc="响应式网格布局组件基本使用示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Demo />
     </APAConfigProvider>,

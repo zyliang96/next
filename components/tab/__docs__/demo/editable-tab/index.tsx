@@ -71,7 +71,7 @@ ReactDOM.render(
         regionName="可编辑的 Tab"
         regionId="Tab-editable-tab-demo"
         regionDesc="Tab可编辑的 Tab示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Tab defaultActiveKey="1" tabRender={tabRender}>
             <Tab.Item title="Double Click To Edit Me" key="1">

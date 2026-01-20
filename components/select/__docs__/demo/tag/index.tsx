@@ -39,7 +39,7 @@ ReactDOM.render(
         regionName="标签"
         regionId="Select-tag-demo"
         regionDesc="标签模式，输入的内容可以作为选项"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div style={{ display: 'flex', alignItems: 'flex-start' }}>
             <Select

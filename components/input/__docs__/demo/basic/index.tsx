@@ -13,7 +13,7 @@ ReactDOM.render(
         regionName="Input输入框Demo"
         regionId="Input-basic-demo"
         regionDesc="Input输入框基础示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Input size="large" placeholder="Large" onChange={onChange} aria-label="Large" />

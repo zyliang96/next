@@ -11,7 +11,7 @@ ReactDOM.render(
         regionName="日期选择器基本使用示例"
         regionId="date-picker-basic-demo"
         regionDesc="日期选择器基本使用示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <DatePicker onChange={onChange} /> <br />

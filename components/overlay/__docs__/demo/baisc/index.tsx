@@ -52,7 +52,7 @@ ReactDOM.render(
         regionName="基本"
         regionId="Overlay-basic-demo"
         regionDesc="Overlay基本示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Demo />
     </APAConfigProvider>,

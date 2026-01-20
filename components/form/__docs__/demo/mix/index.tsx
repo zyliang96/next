@@ -44,7 +44,7 @@ class Demo extends React.Component {
                 regionName="表单混合 Demo"
                 regionId="Form-mix-demo"
                 regionDesc="表单混合 Demo"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <Form {...formItemLayout} field={this.field}>
                     <FormItem label="I'm the title：">

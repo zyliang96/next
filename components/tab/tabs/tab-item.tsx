@@ -53,7 +53,7 @@ class TabItem extends React.Component<ItemProps> {
 }
 
 export default APAConfigProvider.config(polyfill(TabItem), {
-    isRegiserChildren: false,
+    isRegisterChildren: false,
     desc: '标签页项组件',
     props: [
         { key: 'title', name: 'title', desc: '标签页标题' },

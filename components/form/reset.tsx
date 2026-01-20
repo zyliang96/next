@@ -67,7 +67,7 @@ class Reset extends React.Component<ResetProps> {
 }
 
 export default APAConfigProvider.config(Reset, {
-    isRegiserChildren: false,
+    isRegisterChildren: false,
     desc: '表单重置按钮组件',
     props: [
         {

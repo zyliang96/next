@@ -54,7 +54,7 @@ class Demo extends React.Component<DemoProps, DemoState> {
                     regionName="响应式表单 Demo"
                     regionId="Form-responsive-demo"
                     regionDesc="响应式表单 Demo"
-                    isRegiserChildren
+                    isRegisterChildren
                 >
                     <div>
                         <h3>Label Position</h3>

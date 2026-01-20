@@ -36,7 +36,7 @@ class App extends React.Component {
                 regionName="双层抽屉"
                 regionId="Drawer-double-demo"
                 regionDesc="双层抽屉，抽屉内打开新的抽屉"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <div>
                     <Button type="primary" onClick={this.showDrawer}>

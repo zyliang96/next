@@ -15,7 +15,7 @@ ReactDOM.render(
         regionName="Input无障碍支持Demo"
         regionId="Input-accessibility-demo"
         regionDesc="Input无障碍支持示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Input

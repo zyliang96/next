@@ -21,7 +21,7 @@ ReactDOM.render(
         regionName="无障碍支持"
         regionId="Checkbox-accessibility-demo"
         regionDesc="Checkbox无障碍支持示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <CheckboxGroup />
     </APAConfigProvider>,

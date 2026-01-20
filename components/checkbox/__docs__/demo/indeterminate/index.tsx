@@ -43,7 +43,7 @@ ReactDOM.render(
         regionName="中间状态"
         regionId="Checkbox-indeterminate-demo"
         regionDesc="Checkbox中间状态示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <IndeterminateApp />
     </APAConfigProvider>,

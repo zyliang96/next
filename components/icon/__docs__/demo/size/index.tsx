@@ -10,7 +10,7 @@ ReactDOM.render(
         regionName="Icon图标大小设置的Demo"
         regionId="icon-size-demo"
         regionDesc="Icon图标大小设置的Demo"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <ul className="icon-sizes">

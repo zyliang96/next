@@ -49,7 +49,7 @@ class CardHeader extends Component<CardHeaderProps> {
 }
 
 const APACardHeader = APAConfigProvider.config(CardHeader, {
-    isRegiserChildren: true,
+    isRegisterChildren: true,
     desc: '卡片标题组件',
     props: [
         {

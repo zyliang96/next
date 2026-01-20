@@ -17,7 +17,7 @@ class Demo extends Component {
                 regionName="表单提交 Demo"
                 regionId="Form-onsubmit-demo"
                 regionDesc="表单提交 Demo"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <Form onSubmit={this.onSubmit.bind(this)}>
                     <FormItem>

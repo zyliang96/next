@@ -61,7 +61,7 @@ class Password extends Input<PasswordProps> {
 }
 
 export default APAConfigProvider.config(Password, {
-    isRegiserChildren: false,
+    isRegisterChildren: false,
     desc: '密码输入框组件',
     props: [
         { key: 'value', name: 'value', desc: '密码输入框当前的值' },

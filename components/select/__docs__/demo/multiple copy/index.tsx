@@ -26,7 +26,7 @@ ReactDOM.render(
         regionName="DS"
         regionId="Select-multiple-copy-demo"
         regionDesc="多选模式，通过showSearch可以开启搜索"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Select

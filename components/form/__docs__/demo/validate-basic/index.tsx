@@ -39,7 +39,7 @@ class BasicDemo extends React.Component {
                 regionName="Form验证基础Demo"
                 regionId="Form-validate-basic-demo"
                 regionDesc="Form验证基础Demo"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <Form {...formItemLayout}>
                     <FormItem

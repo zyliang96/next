@@ -89,7 +89,7 @@ ReactDOM.render(
         regionName="Input最大长度Demo"
         regionId="Input-maxlen-demo"
         regionDesc="Input最大长度示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <App />
     </APAConfigProvider>,

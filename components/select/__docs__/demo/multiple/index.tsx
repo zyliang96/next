@@ -26,7 +26,7 @@ ReactDOM.render(
         regionName="多选"
         regionId="Select-multiple-demo"
         regionDesc="多选模式，通过showSearch可以开启搜索，但搜索值不可用作选项"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Select

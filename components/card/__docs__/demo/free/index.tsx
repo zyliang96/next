@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="卡片自由模式用法"
         regionId="card-free-demo"
         regionDesc="卡片自由模式用法"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Card className="free-card custom" free>

@@ -34,7 +34,7 @@ class CardContent extends Component<CardContentProps> {
 }
 
 const APACardContent = APAConfigProvider.config(CardContent, {
-    isRegiserChildren: true,
+    isRegisterChildren: true,
     desc: '卡片内容组件',
     props: [],
 });

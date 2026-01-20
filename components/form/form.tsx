@@ -234,7 +234,7 @@ class Form extends Component<FormProps> {
 // 先应用 APAActionEnabled，再应用 APAConfigProvider.config
 
 export default APAConfigProvider.config(Form, {
-    isRegiserChildren: true,
+    isRegisterChildren: true,
     desc: '表单组件',
     props: [
         {

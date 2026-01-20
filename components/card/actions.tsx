@@ -26,7 +26,7 @@ class CardActions extends Component<CardActionsProps> {
 }
 
 const APACardActions = APAConfigProvider.config(CardActions, {
-    isRegiserChildren: true,
+    isRegisterChildren: true,
     desc: '卡片操作组件',
     props: [],
 });

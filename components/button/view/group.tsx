@@ -57,7 +57,7 @@ export type { ButtonGroup };
 
 export default ConfigProvider.config(
     APAConfigProvider.config(ButtonGroup, {
-        isRegiserChildren: true,
+        isRegisterChildren: true,
         desc: '按钮组组件',
         props: [
             {

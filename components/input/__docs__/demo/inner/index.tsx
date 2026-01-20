@@ -76,7 +76,7 @@ ReactDOM.render(
         regionName="Input水印和前后缀Demo"
         regionId="Input-inner-demo"
         regionDesc="Input水印和前后缀示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <App />
     </APAConfigProvider>,

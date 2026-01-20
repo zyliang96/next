@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="Input禁用状态Demo"
         regionId="Input-disabled-demo"
         regionDesc="Input禁用状态示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Input disabled aria-label="disabled" placeholder="disabled" size="small" />

@@ -43,7 +43,7 @@ ReactDOM.render(
         regionName="位置"
         regionId="Tab-position-demo"
         regionDesc="Tab位置示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Demo />
     </APAConfigProvider>,

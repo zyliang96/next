@@ -65,7 +65,7 @@ ReactDOM.render(
         regionName="受控关闭加载"
         regionId="Loading-state-demo"
         regionDesc="Loading受控关闭加载示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <App />
     </APAConfigProvider>,

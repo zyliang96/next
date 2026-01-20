@@ -27,7 +27,7 @@ ReactDOM.render(
         regionName="Affix固钉组件的绝对定位实现Demo"
         regionId="affix-absolute-position-demo"
         regionDesc="Affix固钉组件的绝对定位实现Demo"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Demo />
     </APAConfigProvider>,

@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="Button按钮Demo"
         regionId="Button-demo"
         regionDesc="Button按钮Demo"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Box direction="row" spacing={20}>

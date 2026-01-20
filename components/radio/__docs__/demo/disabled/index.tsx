@@ -47,7 +47,7 @@ ReactDOM.render(
         regionName="禁用状态"
         regionId="Radio-disabled-demo"
         regionDesc="Radio禁用状态"
-        isRegiserChildren
+        isRegisterChildren
     >
         <App />
     </APAConfigProvider>,

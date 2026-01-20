@@ -30,7 +30,7 @@ ReactDOM.render(
         regionName="Input中文输入法Demo"
         regionId="Input-ime-demo"
         regionDesc="Input中文输入法示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Demo />
     </APAConfigProvider>,

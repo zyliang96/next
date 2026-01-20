@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="Button禁用状态Demo"
         regionId="Button-disabled-demo"
         regionDesc="Button禁用状态Demo"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Box wrap direction="column" spacing={20}>

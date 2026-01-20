@@ -1228,7 +1228,7 @@ class Select extends Base<SelectProps, SelectState> {
 const SelectWithPolyfill = polyfill(Select);
 
 export default APAConfigProvider.config(SelectWithPolyfill, {
-    isRegiserChildren: true,
+    isRegisterChildren: true,
     desc: '选择器组件',
     props: [
         { key: 'value', name: 'value', desc: '当前选中的值' },

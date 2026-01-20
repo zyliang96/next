@@ -60,7 +60,7 @@ class CardBulletHeader extends Component<CardBulletHeaderProps> {
 }
 
 const APACardBulletHeader = APAConfigProvider.config(CardBulletHeader, {
-    isRegiserChildren: true,
+    isRegisterChildren: true,
     desc: '卡片标题组件',
     props: [
         {

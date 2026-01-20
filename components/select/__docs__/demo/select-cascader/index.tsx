@@ -58,7 +58,7 @@ ReactDOM.render(
         regionName="级联选择"
         regionId="Select-select-cascader-demo"
         regionDesc="使用Select构建级联选择框"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Demo />
     </APAConfigProvider>,

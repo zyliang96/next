@@ -46,7 +46,7 @@ class Demo extends React.Component {
                 regionName="表单注册 Demo"
                 regionId="Form-register-demo"
                 regionDesc="表单注册 Demo"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <Form
                     style={{ width: 400 }}

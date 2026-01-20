@@ -33,7 +33,7 @@ class Demo extends React.Component {
                 regionName="移动端表单 Demo"
                 regionId="Form-mobile-demo"
                 regionDesc="移动端表单 Demo"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <div>
                     <Radio.Group

@@ -63,7 +63,7 @@ class BasicDemo extends React.Component {
                 regionName="Field 表单 Demo"
                 regionId="Field-form-demo"
                 regionDesc="Field 表单 Demo"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <Form {...formItemLayout} field={this.field}>
                     <FormItem

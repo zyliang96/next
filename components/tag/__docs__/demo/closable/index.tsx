@@ -56,7 +56,7 @@ ReactDOM.render(
         regionName="可关闭标签的Demo"
         regionId="tag-closable-demo"
         regionDesc="Tag可关闭标签的Demo示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Demo />
     </APAConfigProvider>,

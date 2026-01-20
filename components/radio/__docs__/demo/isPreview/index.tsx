@@ -78,7 +78,7 @@ ReactDOM.render(
         regionName="预览状态"
         regionId="Radio-isPreview-demo"
         regionDesc="Radio预览状态"
-        isRegiserChildren
+        isRegisterChildren
     >
         <App />
     </APAConfigProvider>,

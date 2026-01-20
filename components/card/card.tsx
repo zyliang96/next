@@ -97,7 +97,7 @@ class Card extends Component<CardProps> {
 }
 
 export default APAConfigProvider.config(Card, {
-    isRegiserChildren: true,
+    isRegisterChildren: true,
     desc: '按钮组件',
     props: [],
 });

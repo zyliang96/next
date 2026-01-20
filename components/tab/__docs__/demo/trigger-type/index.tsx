@@ -31,7 +31,7 @@ ReactDOM.render(
         regionName="触发类型"
         regionId="Tab-trigger-type-demo"
         regionDesc="Tab触发类型示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div className="fusion-demo">
             <div className="demo-item-title">Click to change</div>

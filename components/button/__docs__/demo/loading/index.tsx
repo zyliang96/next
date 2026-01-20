@@ -18,7 +18,7 @@ class Demo extends React.Component {
                 regionName="Button加载状态Demo"
                 regionId="Button-loading-demo"
                 regionDesc="Button加载状态Demo"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <Box direction="row" spacing={20}>
                     <Button type="secondary" loading>

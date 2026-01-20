@@ -42,7 +42,7 @@ class Demo extends React.Component {
                 regionName="自定义表单 Demo"
                 regionId="Custom-demo"
                 regionDesc="自定义表单 Demo"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <div>
                     <Form inline>

@@ -30,7 +30,7 @@ class Demo extends React.Component {
                 regionName="辅助输入获取远程数据"
                 regionId="Select-combobox-remote-demo"
                 regionDesc="使用动态数据填充AutoComplete，设置filterLocal为false"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <div className="demo-container">
                     <AutoComplete

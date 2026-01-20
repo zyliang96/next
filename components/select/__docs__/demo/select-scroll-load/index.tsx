@@ -53,7 +53,7 @@ ReactDOM.render(
         regionName="滚动到底部加载"
         regionId="Select-select-scroll-load-demo"
         regionDesc="通过监控menu的onScroll滚动到底部的时候自动加载dataSource"
-        isRegiserChildren
+        isRegisterChildren
     >
         <App />
     </APAConfigProvider>,

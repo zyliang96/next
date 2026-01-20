@@ -58,7 +58,7 @@ ReactDOM.render(
         regionName="垂直展示"
         regionId="Radio-direction-demo"
         regionDesc="垂直展示Radio.Group，配合更多输入框"
-        isRegiserChildren
+        isRegisterChildren
     >
         <App />
     </APAConfigProvider>,

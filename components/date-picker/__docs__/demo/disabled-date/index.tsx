@@ -29,7 +29,7 @@ ReactDOM.render(
         regionName="DatePicker禁用日期的Demo"
         regionId="date-picker-disabled-date-demo"
         regionDesc="DatePicker禁用日期的Demo"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <DatePicker disabledDate={disabledDate} onChange={val => console.log(val)} />

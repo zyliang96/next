@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="禁用"
         regionId="Tab-disabled-demo"
         regionDesc="Tab禁用示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Tab>
             <Tab.Item title="Tab 1" disabled key="1">

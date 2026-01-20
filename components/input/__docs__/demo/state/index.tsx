@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="Input错误状态Demo"
         regionId="Input-state-demo"
         regionDesc="Input错误状态示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Input

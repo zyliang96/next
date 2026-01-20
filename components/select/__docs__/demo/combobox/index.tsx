@@ -37,7 +37,7 @@ ReactDOM.render(
         regionName="输入框辅助完成"
         regionId="Select-combobox-demo"
         regionDesc="AutoComplete继承了Input的能力，并在其基础上增加了autoComplete的功能"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Select.AutoComplete
             autoHighlightFirstItem={false}

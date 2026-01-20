@@ -97,7 +97,7 @@ ReactDOM.render(
         regionName="弹层跟随问题"
         regionId="Overlay-scroll-debug-demo"
         regionDesc="Overlay弹层跟随问题示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <TableDemo />
     </APAConfigProvider>,

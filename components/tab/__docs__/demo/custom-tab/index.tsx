@@ -42,7 +42,7 @@ ReactDOM.render(
         regionName="自定义选项卡"
         regionId="Tab-custom-tab-demo"
         regionDesc="Tab自定义选项卡示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Tab shape="wrapped" tabRender={(key, props) => <CustomTabItem {...props} key={key} />}>
             {panes.map(({ key, ...pane }) => (

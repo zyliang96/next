@@ -7,7 +7,7 @@ import { assignSubComponent } from '../util/component';
 const CheckboxWithGroup = assignSubComponent(Checkbox, {
     Group: ConfigProvider.config(
         APAConfigProvider.config(Group, {
-            isRegiserChildren: true,
+            isRegisterChildren: true,
             desc: '复选框组组件',
             props: [
                 { key: 'value', name: 'value', desc: '当前选中的值列表' },

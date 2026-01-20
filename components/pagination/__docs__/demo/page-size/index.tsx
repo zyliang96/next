@@ -44,7 +44,7 @@ ReactDOM.render(
         regionName="Pagination每页显示的Demo"
         regionId="pagination-page-size-demo"
         regionDesc="Pagination每页显示的Demo示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Demo />
     </APAConfigProvider>,

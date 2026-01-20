@@ -18,7 +18,7 @@ ReactDOM.render(
         regionName="在 Grid 中使用 Tab"
         regionId="Tab-tab-in-grid-demo"
         regionDesc="Tab在 Grid 中使用 Tab示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div className="custom-wrapper">
             <Row className="custom-row">

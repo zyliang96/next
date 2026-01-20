@@ -50,7 +50,7 @@ ReactDOM.render(
         regionName="远程搜索"
         regionId="Select-select-search-demo"
         regionDesc="使用showSearch显示搜索框，如果需要动态更新dataSource，需要关闭filterLocal"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Demo />
     </APAConfigProvider>,

@@ -15,7 +15,7 @@ ReactDOM.render(
         regionName="响应式表单 Demo"
         regionId="Form-responsive-demo"
         regionDesc="响应式表单 Demo"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Form {...formItemLayout}>
             <FormItem label="userName:">

@@ -27,7 +27,7 @@ class Demo extends React.Component {
                 regionName="无障碍表单 Demo"
                 regionId="Accessibility-demo"
                 regionDesc="无障碍表单 Demo"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <div>
                     <Form {...formItemLayout} size={this.state.size} style={{ maxWidth: '800px' }}>

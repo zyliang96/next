@@ -194,7 +194,7 @@ class Loading extends React.Component<LoadingProps> {
 export type { LoadingProps };
 export default ConfigProvider.config(
     APAConfigProvider.config(Loading, {
-        isRegiserChildren: false,
+        isRegisterChildren: false,
         desc: '加载组件',
         props: [
             { key: 'visible', name: 'visible', desc: '加载状态是否可见' },

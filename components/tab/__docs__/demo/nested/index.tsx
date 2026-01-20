@@ -12,7 +12,7 @@ ReactDOM.render(
         regionName="选项卡嵌套"
         regionId="Tab-nested-demo"
         regionDesc="Tab选项卡嵌套示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Tab onChange={callback} shape="wrapped">
             <Tab.Item title="Tab 1" key="1">

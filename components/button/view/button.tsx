@@ -224,7 +224,7 @@ export const ApaButtonProps: APAComponentConfigPropsItem[] = [
 ];
 
 export default APAConfigProvider.config(Button, {
-    isRegiserChildren: false,
+    isRegisterChildren: false,
     desc: '按钮组件',
     props: ApaButtonProps,
 });

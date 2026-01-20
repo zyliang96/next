@@ -43,7 +43,7 @@ ReactDOM.render(
         regionName="全屏"
         regionId="Loading-fullscreen-demo"
         regionDesc="Loading全屏展示示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <App />
     </APAConfigProvider>,

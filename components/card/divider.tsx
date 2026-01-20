@@ -41,7 +41,7 @@ class CardDivider extends Component<CardDividerProps> {
 }
 
 const APACardDivider = APAConfigProvider.config(CardDivider, {
-    isRegiserChildren: true,
+    isRegisterChildren: true,
     desc: '卡片分割线组件',
     props: [],
 });

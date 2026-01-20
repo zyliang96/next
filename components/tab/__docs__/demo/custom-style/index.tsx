@@ -35,7 +35,7 @@ ReactDOM.render(
         regionName="自定义样式"
         regionId="Tab-custom-style-demo"
         regionDesc="Tab自定义样式示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div className="fusion-demo">
             <div className="demo-item-title">Customize with contentStyle or contentClassName</div>

@@ -16,7 +16,7 @@ ReactDOM.render(
         regionName="调整标签尺寸"
         regionId="Select-adjust-tag-size-demo"
         regionDesc="标签尺寸是否和Select尺寸保持一致（仅在多选/标签模式下生效）"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div style={{ display: 'flex', alignItems: 'flex-start' }}>
             <Select

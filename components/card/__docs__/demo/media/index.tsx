@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="卡片媒体用法"
         regionId="card-media-demo"
         regionDesc="卡片媒体用法"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Card className="media-card" free>
             <Card.Media>

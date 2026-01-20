@@ -97,7 +97,7 @@ ReactDOM.render(
         regionName="选择器"
         regionId="Select-select-basic-demo"
         regionDesc="演示了Select的多种形态"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Demo />
     </APAConfigProvider>,

@@ -106,7 +106,7 @@ ReactDOM.render(
         regionName="受控显示隐藏"
         regionId="Overlay-controlled-demo"
         regionDesc="Overlay受控显示隐藏示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Demo />
     </APAConfigProvider>,

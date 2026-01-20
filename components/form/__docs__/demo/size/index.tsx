@@ -29,7 +29,7 @@ class Demo extends React.Component {
                 regionName="表单尺寸 Demo"
                 regionId="Form-size-demo"
                 regionDesc="表单尺寸 Demo"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <div>
                     <Form {...formItemLayout} size={this.state.size} style={{ maxWidth: '500px' }}>

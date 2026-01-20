@@ -92,7 +92,7 @@ ReactDOM.render(
         regionName="弹层自动跟随滚动"
         regionId="Overlay-scroll-demo"
         regionDesc="Overlay弹层自动跟随滚动示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <App />
     </APAConfigProvider>,

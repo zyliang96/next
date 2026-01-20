@@ -62,7 +62,7 @@ ReactDOM.render(
         regionName="传入数组配置"
         regionId="Radio-dataSource-demo"
         regionDesc="通过配置dataSource参数来渲染单选框分组"
-        isRegiserChildren
+        isRegisterChildren
     >
         <App />
     </APAConfigProvider>,

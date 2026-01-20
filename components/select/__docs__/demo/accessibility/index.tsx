@@ -17,7 +17,7 @@ class App extends React.Component {
                 regionName="无障碍支持"
                 regionId="Select-accessibility-demo"
                 regionDesc="展示Select的无障碍支持，通过aria-labelledby对组件进行描述"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <div>
                     <span id="select-a11y">Select: </span>

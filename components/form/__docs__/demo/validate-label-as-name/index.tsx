@@ -22,7 +22,7 @@ class Demo extends React.Component {
                 regionName="表单验证标签作为名称 Demo"
                 regionId="Form-validate-label-as-name-demo"
                 regionDesc="表单验证标签作为名称 Demo"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <Form {...formItemLayout} useLabelForErrorMessage colon>
                     <FormItem label="Account" required name="valUsername">

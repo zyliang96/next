@@ -99,7 +99,7 @@ ReactDOM.render(
         regionName="可关闭/新增选项卡"
         regionId="Tab-closable-demo"
         regionDesc="Tab可关闭/新增选项卡示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <CloseableTab />
     </APAConfigProvider>,

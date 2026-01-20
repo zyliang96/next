@@ -12,7 +12,7 @@ ReactDOM.render(
         regionName="Password密码输入框Demo"
         regionId="Input-password-demo"
         regionDesc="Password密码输入框示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Input.Password placeholder="please input password" onChange={onChange} />

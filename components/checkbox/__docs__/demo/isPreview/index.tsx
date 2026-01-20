@@ -85,7 +85,7 @@ ReactDOM.render(
         regionName="预览状态"
         regionId="Checkbox-isPreview-demo"
         regionDesc="Checkbox预览状态示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <App />
     </APAConfigProvider>,

@@ -59,7 +59,7 @@ class CardMedia extends Component<CardMediaProps> {
 }
 
 const APACardMedia = APAConfigProvider.config(CardMedia, {
-    isRegiserChildren: true,
+    isRegisterChildren: true,
     desc: '卡片媒体组件',
     props: [
         {

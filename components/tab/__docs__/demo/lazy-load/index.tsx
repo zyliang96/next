@@ -14,7 +14,7 @@ ReactDOM.render(
         regionName="按需加载和自动卸载"
         regionId="Tab-lazy-load-demo"
         regionDesc="Tab按需加载和自动卸载示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <div>use lazyLoad=false to render all tab items</div>

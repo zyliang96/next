@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="Button幽灵状态Demo"
         regionId="Button-ghost-demo"
         regionDesc="Button幽灵状态Demo"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div style={{ clear: 'both' }}>
             <div className="ghost-light-background">

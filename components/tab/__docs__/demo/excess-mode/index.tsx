@@ -31,7 +31,7 @@ ReactDOM.render(
         regionName="超出时滑动"
         regionId="Tab-excess-mode-demo"
         regionDesc="Tab超出时滑动示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div className="fusion-demo" style={{ maxWidth: '520px' }}>
             <Tab excessMode="dropdown">

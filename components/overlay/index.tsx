@@ -96,7 +96,7 @@ class Popup extends Component<PopupProps> {
 
 // 先用 APAConfigProvider 包装 Popup
 const PopupWithAPA = APAConfigProvider.config(Popup, {
-    isRegiserChildren: true,
+    isRegisterChildren: true,
     desc: '弹出层组件',
     props: [
         { key: 'visible', name: 'visible', desc: '弹层是否显示' },
@@ -113,7 +113,7 @@ const PopupConfigured = ConfigProvider.config(PopupWithAPA, {
 
 // 先用 APAConfigProvider 包装 Overlay
 const OverlayWithAPA = APAConfigProvider.config(Overlay, {
-    isRegiserChildren: false,
+    isRegisterChildren: false,
     desc: '浮层组件',
     props: [
         { key: 'visible', name: 'visible', desc: '是否显示浮层' },

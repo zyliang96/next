@@ -27,7 +27,7 @@ ReactDOM.render(
         regionName="基本使用"
         regionId="Select-basic-demo"
         regionDesc="展示Select的基本用法，包括默认值、清除、搜索和禁用状态"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Select

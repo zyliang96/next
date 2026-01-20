@@ -11,7 +11,7 @@ ReactDOM.render(
         regionName="触发方式"
         regionId="Overlay-trigger-type-demo"
         regionDesc="Overlay触发方式示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Popup v2 trigger={<button style={style}>click</button>} triggerType="click">

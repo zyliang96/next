@@ -58,7 +58,7 @@ ReactDOM.render(
         regionName="Animate动画组件多子元素的Demo"
         regionId="animate-multiple-demo"
         regionDesc="Animate动画组件多子元素的Demo"
-        isRegiserChildren
+        isRegisterChildren
     >
         <TodoList />
     </APAConfigProvider>,

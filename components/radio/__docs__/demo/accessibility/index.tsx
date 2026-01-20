@@ -9,7 +9,7 @@ ReactDOM.render(
         regionName="无障碍支持"
         regionId="Radio-accessibility-demo"
         regionDesc="通过aria-labelledby给Group设置辅助技术可及的文本"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <span id="radio-a11y">Programming language :</span>

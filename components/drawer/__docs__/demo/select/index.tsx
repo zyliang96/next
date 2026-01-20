@@ -41,7 +41,7 @@ class Demo extends React.Component {
                 regionName="抽屉式选择"
                 regionId="Drawer-select-demo"
                 regionDesc="将 Select 的弹出模式换成 Drawer"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <div>
                     <Radio.Group

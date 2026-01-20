@@ -312,7 +312,7 @@ export default ConfigProvider.config(
     APAConfigProvider.config(
         withCheckboxContext(polyfill(Checkbox) as React.ComponentType<PrivateCheckboxProps>),
         {
-            isRegiserChildren: false,
+            isRegisterChildren: false,
             desc: '复选框组件',
             props: [
                 { key: 'checked', name: 'checked', desc: '是否选中' },

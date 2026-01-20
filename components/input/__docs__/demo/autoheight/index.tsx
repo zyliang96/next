@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="TextArea自动高度Demo"
         regionId="Input-textarea-autoheight-demo"
         regionDesc="TextArea自动高度示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Input.TextArea

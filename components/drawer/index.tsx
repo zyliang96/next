@@ -39,7 +39,7 @@ Drawer.withContext = withContext;
 
 const DrawerWithConfig = ConfigProvider.config(
     APAConfigProvider.config(Drawer, {
-        isRegiserChildren: true,
+        isRegisterChildren: true,
         desc: '抽屉组件',
         props: [
             { key: 'visible', name: 'visible', desc: '抽屉是否显示' },

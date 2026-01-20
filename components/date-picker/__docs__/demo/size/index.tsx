@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="DatePicker日期选择器大小设置的Demo"
         regionId="date-picker-size-demo"
         regionDesc="DatePicker日期选择器大小设置的Demo"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Box direction="row" spacing={20}>
             <DatePicker size="large" />

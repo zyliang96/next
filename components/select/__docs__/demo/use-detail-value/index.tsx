@@ -19,7 +19,7 @@ ReactDOM.render(
         regionName="对象数据"
         regionId="Select-use-detail-value-demo"
         regionDesc="useDetailValue把value onChange第一个参数从字符串变成对象"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Select
             useDetailValue

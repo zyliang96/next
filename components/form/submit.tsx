@@ -71,7 +71,7 @@ class Submit extends React.Component<SubmitProps> {
 }
 
 export default APAConfigProvider.config(Submit, {
-    isRegiserChildren: false,
+    isRegisterChildren: false,
     desc: '表单提交按钮组件',
     props: [
         {

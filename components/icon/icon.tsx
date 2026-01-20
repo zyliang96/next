@@ -89,7 +89,7 @@ class Icon extends Component<IconProps> {
 }
 
 export default APAConfigProvider.config(Icon, {
-    isRegiserChildren: false,
+    isRegisterChildren: false,
     desc: '图标组件',
     props: [
         {

@@ -26,7 +26,7 @@ class Demo extends React.Component {
                 regionName="Form基础Demo"
                 regionId="Form-base-demo"
                 regionDesc="Form基础Demo"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <Form style={{ width: '60%' }} {...formItemLayout} colon>
                     <FormItem

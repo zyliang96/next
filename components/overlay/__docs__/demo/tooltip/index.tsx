@@ -128,7 +128,7 @@ ReactDOM.render(
         regionName="动效"
         regionId="Overlay-tooltip-demo"
         regionDesc="Overlay动效示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Demo />
     </APAConfigProvider>,

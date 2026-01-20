@@ -19,7 +19,7 @@ ReactDOM.render(
         regionName="卡片分割线用法"
         regionId="card-divider-demo"
         regionDesc="卡片分割线用法"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Box direction="row" spacing={20}>
             <Card free style={{ width: 300 }}>

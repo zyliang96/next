@@ -13,7 +13,7 @@ const Demo = () => {
             regionName="宽高"
             regionId="Drawer-size-demo"
             regionDesc="可以通过 width 设置容器宽度，或者设置 width=auto 自适应内容宽度"
-            isRegiserChildren
+            isRegisterChildren
         >
             <div>
                 <Button type="primary" onClick={() => setVisible(true)}>

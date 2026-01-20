@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="Input前后扩展Demo"
         regionId="Input-addon-demo"
         regionDesc="Input前后扩展示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Input

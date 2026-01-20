@@ -45,7 +45,7 @@ ReactDOM.render(
         regionName="非受控组件"
         regionId="Checkbox-uncontrol-demo"
         regionDesc="Checkbox非受控组件示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <UnControlApp />
     </APAConfigProvider>,

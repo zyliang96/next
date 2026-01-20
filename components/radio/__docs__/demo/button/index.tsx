@@ -108,7 +108,7 @@ ReactDOM.render(
         regionName="按钮样式与大小"
         regionId="Radio-button-demo"
         regionDesc="使用RadioGroup渲染的组，通过设置shape和size控制样式和大小"
-        isRegiserChildren
+        isRegisterChildren
     >
         <ControlApp />
     </APAConfigProvider>,

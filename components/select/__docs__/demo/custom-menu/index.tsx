@@ -67,7 +67,7 @@ ReactDOM.render(
         regionName="自定义菜单"
         regionId="Select-custom-menu-demo"
         regionDesc="通过itemRender和valueRender自定义渲染的节点内容"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div className="demo-container">
             <Select

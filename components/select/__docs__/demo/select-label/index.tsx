@@ -20,7 +20,7 @@ ReactDOM.render(
         regionName="前后缀"
         regionId="Select-select-label-demo"
         regionDesc="Select增加前后缀"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Select
             label="size:"

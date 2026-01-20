@@ -48,7 +48,7 @@ ReactDOM.render(
         regionName="Checkbox组"
         regionId="Checkbox-group-demo"
         regionDesc="Checkbox组示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <App />
     </APAConfigProvider>,

@@ -62,7 +62,7 @@ class App extends React.Component {
                 regionName="定制菜单布局"
                 regionId="Select-custom-menu-props-demo"
                 regionDesc="通过MenuProps自定义Select弹窗的头部和底部"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <Select
                     hasSelectAll

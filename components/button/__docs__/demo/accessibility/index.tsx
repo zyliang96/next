@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="Button无障碍Demo"
         regionId="Button-accessibility-demo"
         regionDesc="Button无障碍Demo"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Button.Group>

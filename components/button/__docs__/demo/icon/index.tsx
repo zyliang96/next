@@ -41,7 +41,7 @@ ReactDOM.render(
         regionName="Button图标Demo"
         regionId="Button-icon-demo"
         regionDesc="Button图标Demo"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Box direction="row" spacing={20}>

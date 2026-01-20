@@ -467,7 +467,7 @@ class AutoComplete extends Base<AutoCompleteProps, AutoCompleteState> {
 const AutoCompleteWithPolyfill = polyfill(AutoComplete);
 
 export default APAConfigProvider.config(AutoCompleteWithPolyfill, {
-    isRegiserChildren: true,
+    isRegisterChildren: true,
     desc: '自动完成组件',
     props: [
         { key: 'value', name: 'value', desc: '当前输入的值' },

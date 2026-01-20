@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="简单用法"
         regionId="Tab-basic-demo"
         regionDesc="Tab简单用法示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Tab>
             <Tab.Item title="Home" key="1">

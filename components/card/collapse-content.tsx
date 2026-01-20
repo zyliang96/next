@@ -144,7 +144,7 @@ class CardCollapseContent extends Component<CardCollapseContentProps, CardCollap
 }
 
 const APACardCollapseContent = APAConfigProvider.config(CardCollapseContent, {
-    isRegiserChildren: true,
+    isRegisterChildren: true,
     desc: '卡片内容组件',
     props: [
         {

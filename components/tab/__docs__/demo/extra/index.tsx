@@ -22,7 +22,7 @@ ReactDOM.render(
         regionName="附加额外内容"
         regionId="Tab-extra-demo"
         regionDesc="Tab附加额外内容示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div className="fusion-demo">
             <div className="demo-item-title">Extra in Horizontal</div>

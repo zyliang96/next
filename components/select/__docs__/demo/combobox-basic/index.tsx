@@ -86,7 +86,7 @@ class Demo extends React.Component {
                 regionName="自动完成大小"
                 regionId="Select-combobox-basic-demo"
                 regionDesc="AutoComplete大小、disabled、清除功能演示"
-                isRegiserChildren
+                isRegisterChildren
             >
                 <div style={{ padding: 16, background: '#F8F8F8' }}>
                     <div style={{ padding: 12, marginBottom: 16, border: '2px dashed #ddd' }}>

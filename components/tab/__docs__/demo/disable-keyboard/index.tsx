@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="禁止键盘事件"
         regionId="Tab-disable-keyboard-demo"
         regionDesc="Tab禁止键盘事件示例"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Tab disableKeyboard>
             <Tab.Item title="Home" key="1">

@@ -28,7 +28,7 @@ const App = () => {
             regionName="表单布局 Demo"
             regionId="Form-layout-demo"
             regionDesc="表单布局 Demo"
-            isRegiserChildren
+            isRegisterChildren
         >
             <Form field={field} inline={inline} labelAlign={labelAlign} {...layout}>
                 <Form.Item label="Inline Layout" name="inline">
