@@ -9,7 +9,6 @@ import {
     APAStateEnabled,
     APAState,
     APAConfigProvider,
-    type APAComponentConfigContextInfo,
 } from '@alifd/apa-sdk';
 import ConfigProvider from '../config-provider';
 import { obj, func, focus } from '../util';
@@ -131,17 +130,6 @@ class RadioGroup extends Component<GroupProps, GroupState> {
     onChange(currentValue: RadioValue, e: ChangeEvent<HTMLInputElement>) {
         if (!('value' in this.props)) {
             this.setState({ value: currentValue });
-        } else {
-            // 受控模式：手动同步状态到 APA
-            const { apaNode } = (this.context as APAComponentConfigContextInfo) || {};
-            if (apaNode) {
-                apaNode.updateState({
-                    value: {
-                        value: currentValue,
-                        desc: '当前选中的值',
-                    },
-                });
-            }
         }
         if (currentValue !== this.state.value) {
             this.props.onChange!(currentValue, e);
