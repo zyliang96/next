@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { APAAction, APAActionEnabled, APAConfigProvider, APAActionDiabled } from '@alifd/apa-sdk';
+import { APAAction, APAActionEnabled, APAConfigProvider, APAActionDisabled } from '@alifd/apa-sdk';
 import Button from '../button';
 import { func, obj } from '../util';
 import type { SubmitProps } from './types';
@@ -23,7 +23,7 @@ class Submit extends React.Component<SubmitProps> {
 
     formContext: FormContextValue;
 
-    @APAActionDiabled({ actionName: 'onClick', defaultDisabled: false })
+    @APAActionDisabled({ actionName: 'onClick', defaultDisabled: false })
     get handleClickActionDisabled() {
         return this.props.disabled || this.props.loading;
     }

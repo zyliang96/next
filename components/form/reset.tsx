@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { APAAction, APAActionDiabled, APAConfigProvider, APAActionEnabled } from '@alifd/apa-sdk';
+import { APAAction, APAActionDisabled, APAConfigProvider, APAActionEnabled } from '@alifd/apa-sdk';
 import Button from '../button';
 import { func, obj } from '../util';
 import type { ResetProps } from './types';
@@ -23,7 +23,7 @@ class Reset extends React.Component<ResetProps> {
 
     formContext: FormContextValue;
 
-    @APAActionDiabled({ actionName: 'onClick', defaultDisabled: false })
+    @APAActionDisabled({ actionName: 'onClick', defaultDisabled: false })
     get handleClickActionDisabled() {
         return this.props.disabled || this.props.loading;
     }
