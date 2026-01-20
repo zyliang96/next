@@ -81,21 +81,6 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
         return Object.keys(state).length > 0 ? state : null;
     }
 
-    componentDidUpdate(prevProps: DropdownProps) {
-        // 对于受控组件，当 props.visible 变化时，手动同步状态到 APA SDK
-        if ('visible' in this.props && this.props.visible !== prevProps.visible) {
-            const { apaNode } = (this.context as any) || {};
-            if (apaNode) {
-                apaNode.updateState({
-                    visible: {
-                        value: this.state.visible,
-                        desc: '下拉菜单是否显示',
-                    },
-                });
-            }
-        }
-    }
-
     getVisible(props = this.props) {
         return 'visible' in props ? props.visible : this.state.visible;
     }
