@@ -16,6 +16,7 @@ import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
+import { APAAction, APAConfigProvider, APAState } from '@alifd/apa-sdk';
 import SubMenu from './sub-menu';
 import ConfigProvider from '../../config-provider';
 import { func, obj, dom, events, KEYCODE, type ClassPropsWithDefault } from '../../util';
@@ -406,10 +407,19 @@ export class Menu extends Component<MenuProps, MenuState> {
     menuFooter: HTMLLIElement | null;
     menuItemSizes: number[];
 
+    @APAState([
+        { name: 'root', desc: '菜单的根节点' },
+        { name: 'openKeys', desc: '打开的子菜单的 key 值' },
+        { name: 'selectedKeys', desc: '选中的子菜单的 key 值' },
+        { name: 'focusedKey', desc: '聚焦的子菜单的 key 值' },
+    ])
+    state: MenuState & Record<string, unknown>;
+
     constructor(props: MenuProps) {
         super(props);
 
-        const { selectedKeys, defaultSelectedKeys, focusedKey, focusable, autoFocus } = this.props;
+        const { selectedKeys, defaultSelectedKeys, focusedKey, focusable, autoFocus } =
+            this.props || {};
 
         const { newChildren, _k2n, _p2n } = getNewChildren({
             root: this,
@@ -581,6 +591,10 @@ export class Menu extends Component<MenuProps, MenuState> {
         });
     };
 
+    @APAAction({
+        name: 'handleOpen',
+        desc: '打开或关闭子菜单触发的回调函数',
+    })
     handleOpen(key: string, open: boolean, triggerType?: string, e?: Event) {
         let newOpenKeys: string[] | undefined;
 
@@ -656,6 +670,10 @@ export class Menu extends Component<MenuProps, MenuState> {
         };
     }
 
+    @APAAction({
+        name: 'handleSelect',
+        desc: '选中或取消选中菜单项触发的回调函数',
+    })
     handleSelect(key: string, select: boolean, menuItem: SelectableItem) {
         const { _k2n, _p2n } = this.state;
         const pos = _k2n[key].pos;
@@ -695,6 +713,10 @@ export class Menu extends Component<MenuProps, MenuState> {
         }
     }
 
+    @APAAction({
+        name: 'handleItemClick',
+        desc: '点击菜单项触发的回调函数',
+    })
     handleItemClick(key: string, item: MenuItem, e: MouseEvent | KeyboardEvent) {
         const { _k2n } = this.state;
         if (this.props.focusable) {
@@ -729,6 +751,10 @@ export class Menu extends Component<MenuProps, MenuState> {
         }
     }
 
+    @APAAction({
+        name: 'getAvailableKey',
+        desc: '获取可用的子菜单的 key 值',
+    })
     getAvailableKey(pos: string, prev: boolean) {
         const { _p2n } = this.state;
         const ps = Object.keys(_p2n).filter(p => isAvailablePos(pos, p, _p2n));
@@ -959,4 +985,19 @@ export class Menu extends Component<MenuProps, MenuState> {
     }
 }
 
-export default polyfill(Menu);
+export default APAConfigProvider.config(polyfill(Menu), {
+    desc: '菜单组件',
+    props: [
+        { key: 'mode', name: '子菜单打开的模式', desc: '子菜单打开的模式' },
+        {
+            key: 'triggerType',
+            name: '子菜单打开的触发行为',
+            desc: '子菜单打开的触发行为, click 表示点击触发, hover 表示悬停触发',
+        },
+        {
+            key: 'openMode',
+            name: '展开内连子菜单的模式',
+            desc: '展开内连子菜单的模式, single 表示只能展开一个子菜单, multiple 表示可以展开多个子菜单',
+        },
+    ],
+});

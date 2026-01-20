@@ -8,6 +8,7 @@ import React, {
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { APAAction, APAActionEnabled, APAConfigProvider } from '@alifd/apa-sdk';
 import Icon from '../../icon';
 import Overlay, { type PopupProps } from '../../overlay';
 import { func, obj, dom, type ClassPropsWithDefault } from '../../util';
@@ -25,8 +26,8 @@ export type PopupItemWithDefaultsProps = ClassPropsWithDefault<
     typeof PopupItem.defaultProps
 >;
 export type PopupItemInMenuProps = ChildItemPropsInMenu<PopupItemWithDefaultsProps>;
-
-export default class PopupItem extends Component<PopupItemProps> {
+@APAActionEnabled
+class PopupItem extends Component<PopupItemProps> {
     static menuChildType = 'submenu';
 
     static propTypes = {
@@ -74,6 +75,10 @@ export default class PopupItem extends Component<PopupItemProps> {
         this.popup = ref;
     }
 
+    @APAAction({
+        name: 'getOpen',
+        desc: '获取弹层项是否打开',
+    })
     getOpen() {
         const { _key, root } = this.props as PopupItemInMenuProps;
         const { openKeys } = root.state;
@@ -81,6 +86,10 @@ export default class PopupItem extends Component<PopupItemProps> {
         return openKeys.indexOf(_key) > -1;
     }
 
+    @APAAction({
+        name: 'getPopupProps',
+        desc: '获取弹层项的弹层属性',
+    })
     getPopupProps() {
         let { popupProps } = (this.props as PopupItemInMenuProps).root.props;
         if (typeof popupProps === 'function') {
@@ -89,6 +98,10 @@ export default class PopupItem extends Component<PopupItemProps> {
         return popupProps;
     }
 
+    @APAAction({
+        name: 'handleOpen',
+        desc: '处理弹层项的打开或关闭',
+    })
     handleOpen: NonNullable<PopupProps['onVisibleChange']> = (open, triggerType, e) => {
         const { _key, root } = this.props as PopupItemInMenuProps;
         // @ts-expect-error FIXME: PopupProps 里 triggerType 不正确，待其修复后可删除该行
@@ -304,3 +317,20 @@ export default class PopupItem extends Component<PopupItemProps> {
         return triggerIsIcon ? this.renderItem(selectable, popup, others) : popup;
     }
 }
+
+export default APAConfigProvider.config(PopupItem, {
+    desc: '弹层项组件',
+    props: [
+        { key: 'children', name: '自定义弹层内容', desc: '自定义弹层内容' },
+        {
+            key: 'triggerType',
+            name: '子菜单打开的触发方式',
+            desc: '子菜单打开的触发方式，如果设置会覆盖 Menu 上的同名属性，click表示点击触发，hover表示悬浮触发',
+        },
+        {
+            key: 'selectable',
+            name: '是否可选',
+            desc: '是否可选，该属性仅在设置 Menu 组件 selectMode 属性后生效，true表示可选，false表示不可选',
+        },
+    ],
+});

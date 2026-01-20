@@ -10,6 +10,7 @@ import React, {
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { APAAction, APAConfigProvider } from '@alifd/apa-sdk';
 import Animate from '../../animate';
 import Icon, { type IconProps } from '../../icon';
 import { func, obj, type ClassPropsWithDefault } from '../../util';
@@ -29,7 +30,7 @@ export type SubMenuWithDefaultsProps = ClassPropsWithDefault<
 
 export type SubMenuInMenuProps = ChildPropsInMenu<SubMenuWithDefaultsProps>;
 
-export default class SubMenu extends Component<SubMenuProps> {
+class SubMenu extends Component<SubMenuProps> {
     static menuChildType = 'submenu';
 
     static propTypes = {
@@ -85,6 +86,10 @@ export default class SubMenu extends Component<SubMenuProps> {
         }
     }
 
+    @APAAction({
+        name: 'getOpen',
+        desc: '获取弹层项是否打开',
+    })
     getOpen() {
         const { _key, root } = this.props as SubMenuInMenuProps;
         const { openKeys } = root.state;
@@ -104,6 +109,10 @@ export default class SubMenu extends Component<SubMenuProps> {
         this.props.onMouseLeave && this.props.onMouseLeave(e);
     }
 
+    @APAAction({
+        name: 'handleClick',
+        desc: '处理子菜单的点击',
+    })
     handleClick(e: MouseEvent | KeyboardEvent) {
         const { root, selectable } = this.props as SubMenuInMenuProps;
         const { selectMode } = root.props;
@@ -115,6 +124,10 @@ export default class SubMenu extends Component<SubMenuProps> {
         this.handleOpen(!open);
     }
 
+    @APAAction({
+        name: 'handleOpen',
+        desc: '处理子菜单的打开或关闭',
+    })
     handleOpen(open: boolean, triggerType?: string, e?: Event) {
         const { _key, root } = this.props as SubMenuInMenuProps;
         root.handleOpen(_key, open, triggerType, e);
@@ -304,3 +317,29 @@ export default class SubMenu extends Component<SubMenuProps> {
         return newMode === 'popup' ? this.renderPopup() : this.renderInline();
     }
 }
+
+export default APAConfigProvider.config(SubMenu, {
+    desc: '子菜单组件',
+    props: [
+        {
+            key: 'mode',
+            name: '子菜单模式',
+            desc: '子菜单打开方式，如果设置会覆盖 Menu 上的同名属性',
+        },
+        {
+            key: 'children',
+            name: '菜单项或下一级子菜单',
+            desc: '菜单项或下一级子菜单',
+        },
+        {
+            key: 'level',
+            name: '菜单层级',
+            desc: '菜单层级',
+        },
+        {
+            key: 'selectable',
+            name: '是否可选',
+            desc: '是否可选，该属性仅在设置 Menu 组件 selectMode 属性后生效，true表示可选，false表示不可选',
+        },
+    ],
+});

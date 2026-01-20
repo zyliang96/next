@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import type { DividerProps, ChildItemPropsInMenu } from '../types';
 
-export default class Divider extends Component<DividerProps> {
+class Divider extends Component<DividerProps> {
     static menuChildType = 'divider';
 
     static propTypes = {
@@ -21,3 +22,14 @@ export default class Divider extends Component<DividerProps> {
         return <li role="separator" className={newClassName} {...others} />;
     }
 }
+
+export default APAConfigProvider.config(Divider, {
+    desc: '分割线项组件',
+    props: [
+        {
+            key: 'selectable',
+            name: '是否选中状态',
+            desc: '是否选中状态，true表示选中，false表示未选中',
+        },
+    ],
+});

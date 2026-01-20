@@ -1,10 +1,11 @@
 import React, { Component, cloneElement, type ReactChild } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import Item from './item';
 import type { ChildPropsInMenu, GroupProps } from '../types';
 
-export default class Group extends Component<GroupProps> {
+class Group extends Component<GroupProps> {
     static menuChildType = 'group';
 
     static propTypes = {
@@ -59,3 +60,11 @@ export default class Group extends Component<GroupProps> {
         ];
     }
 }
+
+export default APAConfigProvider.config(Group, {
+    desc: '分组项组件',
+    props: [
+        { key: 'label', name: '分组标签', desc: '标签内容' },
+        { key: 'children', name: '菜单项', desc: '菜单项' },
+    ],
+});
