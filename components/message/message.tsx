@@ -87,22 +87,6 @@ class Message extends Component<MessageProps> {
         return {};
     }
 
-    componentDidUpdate(prevProps: MessageProps) {
-        // 对于受控组件，当 props.visible 变化时，手动同步状态到 APA SDK
-        // 因为 getDerivedStateFromProps 不会触发 setState，所以 APA SDK 的代理不会被调用
-        if ('visible' in this.props && this.props.visible !== prevProps.visible) {
-            const { apaNode } = (this.context as any) || {};
-            if (apaNode) {
-                apaNode.updateState({
-                    visible: {
-                        value: this.state.visible,
-                        desc: '消息是否显示',
-                    },
-                });
-            }
-        }
-    }
-
     @APAAction({
         name: 'onClose',
         desc: '关闭消息',
