@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Dropdown, Menu } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const menu = (
     <Menu>
@@ -12,14 +13,21 @@ const menu = (
 );
 
 ReactDOM.render(
-    <div>
-        <Dropdown
-            trigger={<button>Hello dropdown</button>}
-            triggerType={['click', 'hover']}
-            afterOpen={() => console.log('after open')}
-        >
-            {menu}
-        </Dropdown>
-    </div>,
+    <APAConfigProvider
+        regionName="无障碍支持"
+        regionId="Dropdown-accessibility-demo"
+        regionDesc="展示 Dropdown 的无障碍支持"
+        isRegisterChildren={true}
+    >
+        <div>
+            <Dropdown
+                trigger={<button>Hello dropdown</button>}
+                triggerType={['click', 'hover']}
+                afterOpen={() => console.log('after open')}
+            >
+                {menu}
+            </Dropdown>
+        </div>
+    </APAConfigProvider>,
     mountNode
 );

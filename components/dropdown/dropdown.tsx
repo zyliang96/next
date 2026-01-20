@@ -2,12 +2,22 @@ import React, { Component, Children } from 'react';
 import * as PropTypes from 'prop-types';
 import Overlay from '../overlay';
 import { func } from '../util';
+import {
+    APAActionEnabled,
+    APAStateEnabled,
+    APAState,
+    APAAction,
+    APAConfigProvider,
+} from '@alifd/apa-sdk';
+import { z } from 'zod';
 import type { DropdownProps, DropdownState } from './types';
 
 const { noop, makeChain, bindCtx } = func;
 const Popup = Overlay.Popup;
 
-export default class Dropdown extends Component<DropdownProps, DropdownState> {
+@APAActionEnabled
+@APAStateEnabled
+class Dropdown extends Component<DropdownProps, DropdownState> {
     static propTypes = {
         prefix: PropTypes.string,
         pure: PropTypes.bool,
@@ -46,13 +56,17 @@ export default class Dropdown extends Component<DropdownProps, DropdownState> {
     };
     static displayName = 'Dropdown';
 
+    @APAState([
+        { name: 'visible', desc: '下拉菜单是否显示' },
+        { name: 'autoFocus', desc: '是否自动聚焦' },
+    ])
+    state = {
+        visible: 'visible' in this.props ? this.props.visible : this.props.defaultVisible || false,
+        autoFocus: 'autoFocus' in this.props ? this.props.autoFocus : false,
+    };
+
     constructor(props: DropdownProps) {
         super(props);
-
-        this.state = {
-            visible: 'visible' in props ? props.visible : props.defaultVisible || false,
-            autoFocus: 'autoFocus' in props ? props.autoFocus : false,
-        };
 
         bindCtx(this, ['onTriggerKeyDown', 'onMenuClick', 'onVisibleChange']);
     }
@@ -64,7 +78,22 @@ export default class Dropdown extends Component<DropdownProps, DropdownState> {
             state.visible = nextProps.visible;
         }
 
-        return state;
+        return Object.keys(state).length > 0 ? state : null;
+    }
+
+    componentDidUpdate(prevProps: DropdownProps) {
+        // 对于受控组件，当 props.visible 变化时，手动同步状态到 APA SDK
+        if ('visible' in this.props && this.props.visible !== prevProps.visible) {
+            const { apaNode } = (this.context as any) || {};
+            if (apaNode) {
+                apaNode.updateState({
+                    visible: {
+                        value: this.state.visible,
+                        desc: '下拉菜单是否显示',
+                    },
+                });
+            }
+        }
     }
 
     getVisible(props = this.props) {
@@ -82,10 +111,34 @@ export default class Dropdown extends Component<DropdownProps, DropdownState> {
         this.onVisibleChange(false, 'fromContent');
     }
 
-    onVisibleChange(visible: boolean, from: string) {
+    @APAAction({
+        name: 'setVisible',
+        desc: '设置下拉菜单显示或隐藏',
+        params: z.tuple([z.boolean().describe('是否显示')]),
+    })
+    onVisibleChange(visible: boolean, from: string = 'apa') {
         this.setState({ visible });
 
         this.props.onVisibleChange!(visible, from);
+    }
+
+    @APAAction({
+        name: 'open',
+        desc: '打开下拉菜单',
+        params: z.tuple([]),
+    })
+    openDropdown() {
+        if (this.props.disabled) return;
+        this.onVisibleChange(true, 'apa');
+    }
+
+    @APAAction({
+        name: 'close',
+        desc: '关闭下拉菜单',
+        params: z.tuple([]),
+    })
+    closeDropdown() {
+        this.onVisibleChange(false, 'apa');
     }
 
     onTriggerKeyDown() {
@@ -137,3 +190,15 @@ export default class Dropdown extends Component<DropdownProps, DropdownState> {
         );
     }
 }
+
+export default APAConfigProvider.config(Dropdown, {
+    isRegisterChildren: true,
+    desc: '下拉菜单组件',
+    props: [
+        { key: 'visible', name: 'visible', desc: '下拉菜单是否显示' },
+        { key: 'disabled', name: 'disabled', desc: '是否禁用' },
+        { key: 'triggerType', name: 'triggerType', desc: '触发类型' },
+        { key: 'align', name: 'align', desc: '对齐方式' },
+        { key: 'autoClose', name: 'autoClose', desc: '点击后自动关闭' },
+    ],
+});

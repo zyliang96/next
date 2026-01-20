@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Dropdown, Menu, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const menu = (
     <Menu>
@@ -50,4 +51,14 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="从弹层外关闭"
+        regionId="Dropdown-controlled-demo"
+        regionDesc="展示如何使用 visible 属性控制弹层显示或隐藏"
+        isRegisterChildren={true}
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);

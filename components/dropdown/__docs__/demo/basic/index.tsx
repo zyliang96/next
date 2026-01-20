@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Dropdown, Menu, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const menu = (
     <Menu>
@@ -27,25 +28,32 @@ const pic = (
 );
 
 ReactDOM.render(
-    <div>
-        <Dropdown
-            trigger={<Button>hover me</Button>}
-            onVisibleChange={console.log}
-            triggerType={['hover']}
-            afterOpen={() => console.log('after open')}
-        >
-            {menu}
-        </Dropdown>
-        &nbsp;&nbsp;
-        <Dropdown
-            autoClose
-            trigger={<Button>click me</Button>}
-            onVisibleChange={console.log}
-            triggerType={['click']}
-            afterOpen={() => console.log('after open')}
-        >
-            {pic}
-        </Dropdown>
-    </div>,
+    <APAConfigProvider
+        regionName="基本"
+        regionId="Dropdown-basic-demo"
+        regionDesc="展示 Dropdown 的基本用法"
+        isRegisterChildren
+    >
+        <div>
+            <Dropdown
+                trigger={<Button>hover me</Button>}
+                onVisibleChange={console.log}
+                triggerType={['hover']}
+                afterOpen={() => console.log('after open')}
+            >
+                {menu}
+            </Dropdown>
+            &nbsp;&nbsp;
+            <Dropdown
+                autoClose
+                trigger={<Button>click me</Button>}
+                onVisibleChange={console.log}
+                triggerType={['click']}
+                afterOpen={() => console.log('after open')}
+            >
+                {pic}
+            </Dropdown>
+        </div>
+    </APAConfigProvider>,
     mountNode
 );
