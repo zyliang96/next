@@ -34,6 +34,7 @@ export type SubMenuInMenuProps = ChildPropsInMenu<SubMenuWithDefaultsProps>;
 class SubMenu extends Component<SubMenuProps> {
     static menuChildType = 'submenu';
 
+    static displayName = 'SubMenu';
     static propTypes = {
         _key: PropTypes.string,
         root: PropTypes.object,
