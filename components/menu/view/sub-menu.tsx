@@ -342,4 +342,7 @@ export default APAConfigProvider.config(SubMenu, {
             desc: '是否可选，该属性仅在设置 Menu 组件 selectMode 属性后生效，true表示可选，false表示不可选',
         },
     ],
+    staticProps: {
+        menuChildType: 'submenu',
+    },
 });

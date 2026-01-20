@@ -1000,4 +1000,8 @@ export default APAConfigProvider.config(polyfill(Menu), {
             desc: '展开内连子菜单的模式, single 表示只能展开一个子菜单, multiple 表示可以展开多个子菜单',
         },
     ],
+    staticProps: {
+        isNextMenu: true,
+        displayName: 'Menu',
+    },
 });

@@ -32,4 +32,7 @@ export default APAConfigProvider.config(Divider, {
             desc: '是否选中状态，true表示选中，false表示未选中',
         },
     ],
+    staticProps: {
+        menuChildType: 'divider',
+    },
 });

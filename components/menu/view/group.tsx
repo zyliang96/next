@@ -67,4 +67,7 @@ export default APAConfigProvider.config(Group, {
         { key: 'label', name: '分组标签', desc: '标签内容' },
         { key: 'children', name: '菜单项', desc: '菜单项' },
     ],
+    staticProps: {
+        menuChildType: 'group',
+    },
 });

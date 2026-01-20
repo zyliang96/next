@@ -50,4 +50,7 @@ export default APAConfigProvider.config(CheckboxItem, {
         { key: 'disabled', name: '是否禁用', desc: '是否禁用，true表示禁用，false表示启用' },
         { key: 'children', name: '标签内容', desc: '标签内容' },
     ],
+    staticProps: {
+        menuChildType: 'item',
+    },
 });
