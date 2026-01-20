@@ -7,6 +7,7 @@ import type { DividerProps, ChildItemPropsInMenu } from '../types';
 class Divider extends Component<DividerProps> {
     static menuChildType = 'divider';
 
+    static displayName = 'Divider';
     static propTypes = {
         root: PropTypes.object,
         className: PropTypes.string,
@@ -25,13 +26,6 @@ class Divider extends Component<DividerProps> {
 
 export default APAConfigProvider.config(Divider, {
     desc: '分割线项组件',
-    props: [
-        {
-            key: 'selectable',
-            name: '是否选中状态',
-            desc: '是否选中状态，true表示选中，false表示未选中',
-        },
-    ],
     staticProps: {
         menuChildType: 'divider',
     },

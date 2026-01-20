@@ -7,6 +7,7 @@ import type { RadioItemProps } from '../types';
 class RadioItem extends Component<RadioItemProps> {
     static menuChildType = 'item';
 
+    static displayName = 'RadioItem';
     static propTypes = {
         checked: PropTypes.bool,
         disabled: PropTypes.bool,

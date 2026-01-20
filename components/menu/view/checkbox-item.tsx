@@ -7,6 +7,7 @@ import type { CheckboxItemProps } from '../types';
 class CheckboxItem extends Component<CheckboxItemProps> {
     static menuChildType = 'item';
 
+    static displayName = 'CheckboxItem';
     static propTypes = {
         checked: PropTypes.bool,
         indeterminate: PropTypes.bool,

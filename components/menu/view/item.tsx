@@ -2,6 +2,7 @@ import React, { Component, type MouseEvent, type KeyboardEvent, type ReactNode }
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { APAAction, APAActionEnabled, APAConfigProvider } from '@alifd/apa-sdk';
 import { func, obj, KEYCODE, type ClassPropsWithDefault } from '../../util';
 import type { ChildItemPropsInMenu, ItemProps as NormalItemProps } from '../types';
 
@@ -12,7 +13,9 @@ export type ItemProps = Omit<NormalItemProps, 'onSelect' | 'inlineIndent'>;
 export type ItemWithDefaultsProps = ClassPropsWithDefault<ItemProps, typeof Item.defaultProps>;
 export type ItemInMenuProps = ChildItemPropsInMenu<ItemWithDefaultsProps>;
 
-export default class Item extends Component<ItemProps> {
+@APAActionEnabled
+class Item extends Component<ItemProps> {
+    static displayName = 'Item';
     static propTypes = {
         _key: PropTypes.string,
         level: PropTypes.number,
@@ -105,6 +108,10 @@ export default class Item extends Component<ItemProps> {
         }
     }
 
+    @APAAction({
+        name: 'handleClick',
+        desc: '处理菜单项的点击事件',
+    })
     handleClick(e: MouseEvent | KeyboardEvent) {
         e.stopPropagation();
 
@@ -212,3 +219,20 @@ export default class Item extends Component<ItemProps> {
         );
     }
 }
+
+export default APAConfigProvider.config(Item, {
+    desc: '菜单项组件',
+    props: [
+        {
+            key: 'disabled',
+            name: '是否禁用',
+            desc: '菜单项是否禁用，true表示禁用，false表示未禁用',
+        },
+        { key: 'children', name: '子元素', desc: '菜单项的子元素' },
+        {
+            key: 'selected',
+            name: '是否选中',
+            desc: '菜单项是否选中，true表示选中，false表示未选中',
+        },
+    ],
+});
