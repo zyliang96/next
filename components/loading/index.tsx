@@ -10,7 +10,6 @@ import {
     APAState,
     APAAction,
     APAConfigProvider,
-    type APAComponentConfigContextInfo,
 } from '@alifd/apa-sdk';
 import { z } from 'zod';
 import type { LoadingProps } from './types';
@@ -75,12 +74,6 @@ class Loading extends React.Component<LoadingProps> {
         if (!('visible' in this.props)) {
             // 非受控模式
             this.setState({ visible });
-        } else {
-            // 受控模式：手动同步状态到 APA
-            const { apaNode } = (this.context as APAComponentConfigContextInfo) || {};
-            if (apaNode) {
-                apaNode.updateState({ visible });
-            }
         }
         // 触发回调
         if (this.props.onVisibleChange) {
