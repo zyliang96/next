@@ -2,6 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
 import classNames from 'classnames';
+import {
+    APAActionEnabled,
+    APAStateEnabled,
+    APAState,
+    APAAction,
+    APAConfigProvider,
+} from '@alifd/apa-sdk';
+import { z } from 'zod';
 import nextLocale from '../locale/zh-cn';
 import Icon from '../icon';
 import Animate from '../animate';
@@ -17,6 +25,8 @@ const noop = () => {};
 /**
  * Message
  */
+@APAActionEnabled
+@APAStateEnabled
 class Message extends Component<MessageProps> {
     static propTypes = {
         prefix: PropTypes.string,
@@ -59,6 +69,7 @@ class Message extends Component<MessageProps> {
         locale: nextLocale.Message,
     };
 
+    @APAState([{ name: 'visible', desc: '消息是否显示' }])
     state = {
         visible:
             typeof this.props.visible === 'undefined'
@@ -76,6 +87,27 @@ class Message extends Component<MessageProps> {
         return {};
     }
 
+    componentDidUpdate(prevProps: MessageProps) {
+        // 对于受控组件，当 props.visible 变化时，手动同步状态到 APA SDK
+        // 因为 getDerivedStateFromProps 不会触发 setState，所以 APA SDK 的代理不会被调用
+        if ('visible' in this.props && this.props.visible !== prevProps.visible) {
+            const { apaNode } = (this.context as any) || {};
+            if (apaNode) {
+                apaNode.updateState({
+                    visible: {
+                        value: this.state.visible,
+                        desc: '消息是否显示',
+                    },
+                });
+            }
+        }
+    }
+
+    @APAAction({
+        name: 'onClose',
+        desc: '关闭消息',
+        params: z.tuple([]),
+    })
     onClose = () => {
         if (!('visible' in this.props)) {
             this.setState({
@@ -161,4 +193,17 @@ class Message extends Component<MessageProps> {
     }
 }
 
-export default ConfigProvider.config(polyfill(Message));
+const MessageWithPolyfill = polyfill(Message);
+
+export default APAConfigProvider.config(MessageWithPolyfill, {
+    isRegiserChildren: false,
+    desc: '消息提示组件',
+    props: [
+        { key: 'visible', name: 'visible', desc: '消息是否显示' },
+        { key: 'type', name: 'type', desc: '消息类型 (success/warning/error/notice/help/loading)' },
+        { key: 'title', name: 'title', desc: '消息标题' },
+        { key: 'closeable', name: 'closeable', desc: '是否可关闭' },
+        { key: 'size', name: 'size', desc: '消息尺寸' },
+        { key: 'shape', name: 'shape', desc: '消息形状' },
+    ],
+});

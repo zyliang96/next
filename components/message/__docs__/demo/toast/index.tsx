@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Message, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const show = () => {
     Message.show({
@@ -12,13 +13,20 @@ const show = () => {
 const hide = () => Message.hide();
 
 ReactDOM.render(
-    <div className="message-toast-demo">
-        <Button type="primary" onClick={show}>
-            Show
-        </Button>
-        <Button type="primary" onClick={hide}>
-            Hide
-        </Button>
-    </div>,
+    <APAConfigProvider
+        regionName="Toast消息"
+        regionId="Message-toast-demo"
+        regionDesc="展示Toast形式的消息提示"
+        isRegiserChildren
+    >
+        <div className="message-toast-demo">
+            <Button type="primary" onClick={show}>
+                Show
+            </Button>
+            <Button type="primary" onClick={hide}>
+                Hide
+            </Button>
+        </div>
+    </APAConfigProvider>,
     mountNode
 );

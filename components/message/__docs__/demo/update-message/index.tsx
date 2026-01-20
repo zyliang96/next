@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Message, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const key = 'updatable';
 
@@ -12,8 +13,15 @@ const openMessage = () => {
 };
 
 ReactDOM.render(
-    <Button type="primary" onClick={openMessage}>
-        Open the message box
-    </Button>,
+    <APAConfigProvider
+        regionName="更新消息"
+        regionId="Message-update-message-demo"
+        regionDesc="展示如何动态更新消息内容"
+        isRegiserChildren
+    >
+        <Button type="primary" onClick={openMessage}>
+            Open the message box
+        </Button>
+    </APAConfigProvider>,
     mountNode
 );

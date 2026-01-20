@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Message, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 class App extends React.Component {
     state = {
@@ -41,4 +42,14 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="受控模式"
+        regionId="Message-control-demo"
+        regionDesc="展示Message的受控显示和隐藏"
+        isRegiserChildren
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);

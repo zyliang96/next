@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Message, Radio } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const types = ['success', 'warning', 'error', 'notice', 'help', 'loading'] as const;
 const sizeList = [
@@ -80,4 +81,14 @@ class Demo extends React.Component {
     }
 }
 
-ReactDOM.render(<Demo />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="尺寸和形状"
+        regionId="Message-size-shape-demo"
+        regionDesc="展示Message的不同尺寸和形状"
+        isRegiserChildren
+    >
+        <Demo />
+    </APAConfigProvider>,
+    mountNode
+);
