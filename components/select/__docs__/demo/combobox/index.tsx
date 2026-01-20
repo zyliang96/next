@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Select } from '@alifd/next';
 import { type SelectProps } from '@alifd/next/types/select';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource: SelectProps['dataSource'] = [
     'Lucy King',
@@ -32,11 +33,18 @@ const onChange: SelectProps['onChange'] = v => {
 };
 
 ReactDOM.render(
-    <Select.AutoComplete
-        autoHighlightFirstItem={false}
-        style={{ width: 300 }}
-        onChange={onChange}
-        dataSource={dataSource}
-    />,
+    <APAConfigProvider
+        regionName="输入框辅助完成"
+        regionId="Select-combobox-demo"
+        regionDesc="AutoComplete继承了Input的能力，并在其基础上增加了autoComplete的功能"
+        isRegiserChildren
+    >
+        <Select.AutoComplete
+            autoHighlightFirstItem={false}
+            style={{ width: 300 }}
+            onChange={onChange}
+            dataSource={dataSource}
+        />
+    </APAConfigProvider>,
     mountNode
 );

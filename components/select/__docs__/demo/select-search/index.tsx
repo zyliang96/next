@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Select } from '@alifd/next';
 import jsonp from 'jsonp';
 import { type SelectProps } from '@alifd/next/types/select';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 let timestamp = Date.now();
 
@@ -44,4 +45,14 @@ class Demo extends React.Component {
     }
 }
 
-ReactDOM.render(<Demo />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="远程搜索"
+        regionId="Select-select-search-demo"
+        regionDesc="使用showSearch显示搜索框，如果需要动态更新dataSource，需要关闭filterLocal"
+        isRegiserChildren
+    >
+        <Demo />
+    </APAConfigProvider>,
+    mountNode
+);

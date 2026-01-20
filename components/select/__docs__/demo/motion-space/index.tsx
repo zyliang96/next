@@ -22,6 +22,7 @@ import { type SelectProps } from '@alifd/next/types/select';
 import { type DrawerProps } from '@alifd/next/types/drawer';
 import { type CascaderSelectProps } from '@alifd/next/types/cascader-select';
 import { type TreeSelectProps } from '@alifd/next/types/tree-select';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const Tooltip = Balloon.Tooltip;
 const menubuttonMenu = ['Undo', 'Redo', 'Cut', 'Copy', 'Paste'].map(item => (
@@ -386,82 +387,89 @@ class Demo4 extends React.Component {
 }
 
 ReactDOM.render(
-    <div>
-        MenuButton:
-        <Box direction="row" spacing={20}>
-            <MenuButton label="Document Edit">{menubuttonMenu}</MenuButton>
-            <MenuButton type="primary" label="Document Edit">
-                {menubuttonMenu}
-            </MenuButton>
-            <MenuButton type="secondary" label="Document Edit">
-                {menubuttonMenu}
-            </MenuButton>
-        </Box>
-        <br />
-        SplitButton:
-        <Box direction="row" spacing={20}>
-            <SplitButton label="Edit Document">{splitbuttonMenu}</SplitButton>
-            <SplitButton label="Edit Document" type="secondary">
-                {splitbuttonMenu}
-            </SplitButton>
-            <SplitButton label="Edit Document" type="primary">
-                {splitbuttonMenu}
-            </SplitButton>
-        </Box>
-        <br />
-        Drawer:
-        <br />
-        <Demo />
-        <br />
-        Dialog:
-        <br />
-        <Button onClick={popupCustomIcon}>custom</Button>
-        <br />
-        <br />
-        Toast:
-        <br />
-        <Button type="primary" onClick={notice}>
-            Display Toast Message Notice
-        </Button>
-        <br />
-        <br />
-        Select:
-        <br />
-        <Select
-            id="basic-demo"
-            onChange={onChange}
-            onToggleHighlightItem={onToggleHighlightItem}
-            defaultValue="jack"
-            onFocus={onFocus}
-            onBlur={onBlur}
-            aria-label="name is"
-            style={{ marginRight: 8 }}
-        >
-            <Option value="jack">Jack</Option>
-            <Option value="frank">Frank</Option>
-            <Option value="hugo">Hugo</Option>
-        </Select>
-        <br />
-        <br />
-        <DatePicker />
-        <br />
-        <br />
-        <DatePicker2 />
-        <br />
-        <br />
-        <DatePicker2.RangePicker />
-        <br />
-        <br />
-        <Demo3 />
-        <br />
-        <br />
-        <Demo4 />
-        <br />
-        <br />
-        <AppBalloon />
-        <br />
-        <br />
-        <AppTriggr />
-    </div>,
+    <APAConfigProvider
+        regionName="基本使用"
+        regionId="Select-motion-space-demo"
+        regionDesc="最基本的使用、带清除、搜索功能的展示"
+        isRegiserChildren
+    >
+        <div>
+            MenuButton:
+            <Box direction="row" spacing={20}>
+                <MenuButton label="Document Edit">{menubuttonMenu}</MenuButton>
+                <MenuButton type="primary" label="Document Edit">
+                    {menubuttonMenu}
+                </MenuButton>
+                <MenuButton type="secondary" label="Document Edit">
+                    {menubuttonMenu}
+                </MenuButton>
+            </Box>
+            <br />
+            SplitButton:
+            <Box direction="row" spacing={20}>
+                <SplitButton label="Edit Document">{splitbuttonMenu}</SplitButton>
+                <SplitButton label="Edit Document" type="secondary">
+                    {splitbuttonMenu}
+                </SplitButton>
+                <SplitButton label="Edit Document" type="primary">
+                    {splitbuttonMenu}
+                </SplitButton>
+            </Box>
+            <br />
+            Drawer:
+            <br />
+            <Demo />
+            <br />
+            Dialog:
+            <br />
+            <Button onClick={popupCustomIcon}>custom</Button>
+            <br />
+            <br />
+            Toast:
+            <br />
+            <Button type="primary" onClick={notice}>
+                Display Toast Message Notice
+            </Button>
+            <br />
+            <br />
+            Select:
+            <br />
+            <Select
+                id="basic-demo"
+                onChange={onChange}
+                onToggleHighlightItem={onToggleHighlightItem}
+                defaultValue="jack"
+                onFocus={onFocus}
+                onBlur={onBlur}
+                aria-label="name is"
+                style={{ marginRight: 8 }}
+            >
+                <Option value="jack">Jack</Option>
+                <Option value="frank">Frank</Option>
+                <Option value="hugo">Hugo</Option>
+            </Select>
+            <br />
+            <br />
+            <DatePicker />
+            <br />
+            <br />
+            <DatePicker2 />
+            <br />
+            <br />
+            <DatePicker2.RangePicker />
+            <br />
+            <br />
+            <Demo3 />
+            <br />
+            <br />
+            <Demo4 />
+            <br />
+            <br />
+            <AppBalloon />
+            <br />
+            <br />
+            <AppTriggr />
+        </div>
+    </APAConfigProvider>,
     mountNode
 );

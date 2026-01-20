@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Select } from '@alifd/next';
 import { type SelectProps } from '@alifd/next/types/select';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 function generateItem(start: number, end: number) {
     const arr = [];
@@ -47,4 +48,14 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="滚动到底部加载"
+        regionId="Select-select-scroll-load-demo"
+        regionDesc="通过监控menu的onScroll滚动到底部的时候自动加载dataSource"
+        isRegiserChildren
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Select } from '@alifd/next';
 import { type SelectProps } from '@alifd/next/types/select';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource = [
     { value: '10001', label: 'Lucy King' },
@@ -14,12 +15,19 @@ const handleChange: SelectProps['onChange'] = value => {
 };
 
 ReactDOM.render(
-    <Select
-        useDetailValue
-        defaultValue={{ value: '10001', label: 'Lucy King' }}
-        onChange={handleChange}
-        dataSource={dataSource}
-        style={{ width: 150 }}
-    />,
+    <APAConfigProvider
+        regionName="对象数据"
+        regionId="Select-use-detail-value-demo"
+        regionDesc="useDetailValue把value onChange第一个参数从字符串变成对象"
+        isRegiserChildren
+    >
+        <Select
+            useDetailValue
+            defaultValue={{ value: '10001', label: 'Lucy King' }}
+            onChange={handleChange}
+            dataSource={dataSource}
+            style={{ width: 150 }}
+        />
+    </APAConfigProvider>,
     mountNode
 );

@@ -9,6 +9,14 @@ import React, {
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
+import {
+    APAActionEnabled,
+    APAStateEnabled,
+    APAState,
+    APAAction,
+    APAConfigProvider,
+} from '@alifd/apa-sdk';
+import { z } from 'zod';
 
 import { func, obj, KEYCODE, env, str } from '../util';
 import Tag from '../tag';
@@ -45,6 +53,8 @@ export interface SelectState extends BaseState {
 /**
  * Select
  */
+@APAActionEnabled
+@APAStateEnabled
 class Select extends Base<SelectProps, SelectState> {
     static propTypes = {
         ...Base.propTypes,
@@ -164,6 +174,72 @@ class Select extends Base<SelectProps, SelectState> {
             'handleSelectAll',
             'maxTagPlaceholder',
         ]);
+    }
+
+    @APAState([
+        { name: 'value', desc: '当前选中的值' },
+        { name: 'visible', desc: '下拉菜单是否显示' },
+        { name: 'searchValue', desc: '搜索框的值' },
+        { name: 'disabled', desc: '是否禁用选择器' },
+        { name: 'mode', desc: '选择器模式' },
+    ])
+    get apaState() {
+        return {
+            value: this.state.value,
+            visible: this.state.visible,
+            searchValue: this.state.searchValue,
+            disabled: this.props.disabled,
+            mode: this.props.mode,
+        };
+    }
+
+    @APAAction({
+        name: 'selectValue',
+        desc: '选择指定的值',
+        params: z.tuple([
+            z
+                .union([z.string(), z.number(), z.array(z.union([z.string(), z.number()]))])
+                .describe('要选择的值'),
+        ]),
+    })
+    selectValue(value: DataSourceItem | DataSourceItem[]) {
+        if (this.props.disabled || this.props.readOnly) {
+            return;
+        }
+        this.handleChange(value, 'itemClick' as VisibleChangeType);
+    }
+
+    @APAAction({
+        name: 'clear',
+        desc: '清空选择',
+        params: z.tuple([]),
+    })
+    clearValue() {
+        if (this.props.disabled || this.props.readOnly) {
+            return;
+        }
+        this.handleChange(undefined, 'clear' as VisibleChangeType);
+    }
+
+    @APAAction({
+        name: 'open',
+        desc: '打开下拉菜单',
+        params: z.tuple([]),
+    })
+    openMenu() {
+        if (this.props.disabled || this.props.readOnly) {
+            return;
+        }
+        this.setVisible(true, 'fromTrigger' as VisibleChangeType);
+    }
+
+    @APAAction({
+        name: 'close',
+        desc: '关闭下拉菜单',
+        params: z.tuple([]),
+    })
+    closeMenu() {
+        this.setVisible(false, 'fromTrigger' as VisibleChangeType);
     }
 
     static getDerivedStateFromProps(nextProps: SelectProps, prevState: BaseState) {
@@ -1021,7 +1097,7 @@ class Select extends Base<SelectProps, SelectState> {
                     hasBorder={hasBorder}
                     hasClear={false}
                     htmlSize="1"
-                    inputRender={inputEl => {
+                    inputRender={(inputEl: ReactElement) => {
                         return this.renderSearchInput(valueNodes, _placeholder, inputEl);
                     }}
                     onChange={this.handleSearch}
@@ -1149,4 +1225,18 @@ class Select extends Base<SelectProps, SelectState> {
     }
 }
 
-export default polyfill(Select);
+const SelectWithPolyfill = polyfill(Select);
+
+export default APAConfigProvider.config(SelectWithPolyfill, {
+    isRegiserChildren: true,
+    desc: '选择器组件',
+    props: [
+        { key: 'value', name: 'value', desc: '当前选中的值' },
+        { key: 'mode', name: 'mode', desc: '选择模式 (single/multiple/tag)' },
+        { key: 'disabled', name: 'disabled', desc: '是否禁用选择器' },
+        { key: 'placeholder', name: 'placeholder', desc: '占位符文本' },
+        { key: 'showSearch', name: 'showSearch', desc: '是否显示搜索框' },
+        { key: 'hasClear', name: 'hasClear', desc: '是否显示清除按钮' },
+        { key: 'size', name: 'size', desc: '选择器尺寸' },
+    ],
+});

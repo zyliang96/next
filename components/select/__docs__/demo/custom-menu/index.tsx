@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Select, Icon } from '@alifd/next';
 import { type SelectProps } from '@alifd/next/types/select';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource = [
     { value: '#FF0000', label: 'red', title: 'red' },
@@ -62,20 +63,27 @@ const itemRender2: SelectProps['itemRender'] = (item, searchKey) => {
 };
 
 ReactDOM.render(
-    <div className="demo-container">
-        <Select
-            dataSource={dataSource}
-            itemRender={itemRender}
-            valueRender={valueRender}
-            placeholder="pick your color"
-        />
-        <Select
-            showSearch
-            dataSource={dataSource2}
-            itemRender={itemRender2}
-            placeholder="highlight keywords"
-            style={{ minWidth: 200, marginLeft: 8 }}
-        />
-    </div>,
+    <APAConfigProvider
+        regionName="自定义菜单"
+        regionId="Select-custom-menu-demo"
+        regionDesc="通过itemRender和valueRender自定义渲染的节点内容"
+        isRegiserChildren
+    >
+        <div className="demo-container">
+            <Select
+                dataSource={dataSource}
+                itemRender={itemRender}
+                valueRender={valueRender}
+                placeholder="pick your color"
+            />
+            <Select
+                showSearch
+                dataSource={dataSource2}
+                itemRender={itemRender2}
+                placeholder="highlight keywords"
+                style={{ minWidth: 200, marginLeft: 8 }}
+            />
+        </div>
+    </APAConfigProvider>,
     mountNode
 );

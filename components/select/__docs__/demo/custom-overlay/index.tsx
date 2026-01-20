@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Select } from '@alifd/next';
 import classNames from 'classnames';
 import { type SelectProps } from '@alifd/meet-react/lib/select';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 function preventDefault(e: UIEvent<HTMLElement>) {
     e.preventDefault();
@@ -99,17 +100,24 @@ class Demo extends React.Component {
         };
 
         return (
-            <div className="demo-container">
-                <Select
-                    placeholder="custom popupContent"
-                    visible={this.state.visible}
-                    onVisibleChange={this.onVisibleChange}
-                    value={this.state.value}
-                    popupProps={popupProps}
-                    popupContent={popupContent}
-                    style={{ width: 200 }}
-                />
-            </div>
+            <APAConfigProvider
+                regionName="弹层定制"
+                regionId="Select-custom-overlay-demo"
+                regionDesc="通过popupContent定制Select弹层"
+                isRegiserChildren
+            >
+                <div className="demo-container">
+                    <Select
+                        placeholder="custom popupContent"
+                        visible={this.state.visible}
+                        onVisibleChange={this.onVisibleChange}
+                        value={this.state.value}
+                        popupProps={popupProps}
+                        popupContent={popupContent}
+                        style={{ width: 200 }}
+                    />
+                </div>
+            </APAConfigProvider>
         );
     }
 }

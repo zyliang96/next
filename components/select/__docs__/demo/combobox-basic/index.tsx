@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Select } from '@alifd/next';
 import { type AutoCompleteProps } from '@alifd/next/types/select';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const { AutoComplete } = Select;
 const dataSource = [
@@ -81,17 +82,24 @@ class Demo extends React.Component {
 
     render() {
         return (
-            <div style={{ padding: 16, background: '#F8F8F8' }}>
-                <div style={{ padding: 12, marginBottom: 16, border: '2px dashed #ddd' }}>
-                    {this.renderCtrlNodes(this.state)}
+            <APAConfigProvider
+                regionName="自动完成大小"
+                regionId="Select-combobox-basic-demo"
+                regionDesc="AutoComplete大小、disabled、清除功能演示"
+                isRegiserChildren
+            >
+                <div style={{ padding: 16, background: '#F8F8F8' }}>
+                    <div style={{ padding: 12, marginBottom: 16, border: '2px dashed #ddd' }}>
+                        {this.renderCtrlNodes(this.state)}
+                    </div>
+                    <AutoComplete
+                        {...this.state}
+                        style={{ maxWidth: 300 }}
+                        onChange={this.handleChange}
+                        dataSource={dataSource}
+                    />
                 </div>
-                <AutoComplete
-                    {...this.state}
-                    style={{ maxWidth: 300 }}
-                    onChange={this.handleChange}
-                    dataSource={dataSource}
-                />
-            </div>
+            </APAConfigProvider>
         );
     }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Select, Divider, Button, Input } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource = [
     { value: '10001', label: 'Lucy King' },
@@ -57,14 +58,21 @@ class App extends React.Component {
             ),
         };
         return (
-            <Select
-                hasSelectAll
-                mode="multiple"
-                dataSource={this.state.dataSource}
-                style={{ width: 200 }}
-                menuProps={menuProps}
-                popupAutoFocus
-            />
+            <APAConfigProvider
+                regionName="定制菜单布局"
+                regionId="Select-custom-menu-props-demo"
+                regionDesc="通过MenuProps自定义Select弹窗的头部和底部"
+                isRegiserChildren
+            >
+                <Select
+                    hasSelectAll
+                    mode="multiple"
+                    dataSource={this.state.dataSource}
+                    style={{ width: 200 }}
+                    menuProps={menuProps}
+                    popupAutoFocus
+                />
+            </APAConfigProvider>
         );
     }
 }

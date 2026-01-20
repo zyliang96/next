@@ -96,7 +96,7 @@ class Popup extends Component<PopupProps> {
 
 // 先用 APAConfigProvider 包装 Popup
 const PopupWithAPA = APAConfigProvider.config(Popup, {
-    isRegiserChildren: false,
+    isRegiserChildren: true,
     desc: '弹出层组件',
     props: [
         { key: 'visible', name: 'visible', desc: '弹层是否显示' },

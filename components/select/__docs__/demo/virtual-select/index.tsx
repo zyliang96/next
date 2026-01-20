@@ -2,6 +2,7 @@ import React, { useState, useRef, type ReactElement } from 'react';
 import ReactDOM from 'react-dom';
 import { Select } from '@alifd/next';
 import { type SelectProps } from '@alifd/next/types/select';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const Option = Select.Option;
 
@@ -86,4 +87,14 @@ function App() {
     );
 }
 
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="大数据"
+        regionId="Select-virtual-select-demo"
+        regionDesc="select开启无限滚动可支持大数据的dataSource，保证性能"
+        isRegiserChildren
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);

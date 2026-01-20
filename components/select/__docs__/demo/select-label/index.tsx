@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Select } from '@alifd/next';
 import { type SelectProps } from '@alifd/next/types/select';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource = [
     { label: '1', value: 1 },
@@ -15,11 +16,18 @@ const handleChange: SelectProps['onChange'] = value => {
 };
 
 ReactDOM.render(
-    <Select
-        label="size:"
-        innerAfter={<span style={{ color: '#999', marginRight: 4 }}>GB</span>}
-        dataSource={dataSource}
-        onChange={handleChange}
-    />,
+    <APAConfigProvider
+        regionName="前后缀"
+        regionId="Select-select-label-demo"
+        regionDesc="Select增加前后缀"
+        isRegiserChildren
+    >
+        <Select
+            label="size:"
+            innerAfter={<span style={{ color: '#999', marginRight: 4 }}>GB</span>}
+            dataSource={dataSource}
+            onChange={handleChange}
+        />
+    </APAConfigProvider>,
     mountNode
 );

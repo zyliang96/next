@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Select, Radio } from '@alifd/next';
 import { type GroupProps } from '@alifd/next/types/radio';
 import { type SelectProps } from '@alifd/next/types/select';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 class DemoWithFillProps extends React.Component {
     state = {
@@ -79,9 +80,16 @@ const DemoWithValueRender = () => {
 };
 
 ReactDOM.render(
-    <div>
-        <DemoWithFillProps />
-        <DemoWithValueRender />
-    </div>,
+    <APAConfigProvider
+        regionName="自定义 value 展示"
+        regionId="Select-custom-value-demo"
+        regionDesc="自定义value展示"
+        isRegiserChildren
+    >
+        <div>
+            <DemoWithFillProps />
+            <DemoWithValueRender />
+        </div>
+    </APAConfigProvider>,
     mountNode
 );

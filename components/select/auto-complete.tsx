@@ -2,6 +2,14 @@ import React, { type ChangeEvent, type KeyboardEvent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
+import {
+    APAActionEnabled,
+    APAStateEnabled,
+    APAState,
+    APAAction,
+    APAConfigProvider,
+} from '@alifd/apa-sdk';
+import { z } from 'zod';
 
 import { func, obj, KEYCODE } from '../util';
 import Input from '../input';
@@ -18,6 +26,8 @@ export interface AutoCompleteState extends BaseState {
 /**
  * Select.AutoComplete
  */
+@APAActionEnabled
+@APAStateEnabled
 class AutoComplete extends Base<AutoCompleteProps, AutoCompleteState> {
     static propTypes = {
         ...Base.propTypes,
@@ -61,6 +71,64 @@ class AutoComplete extends Base<AutoCompleteProps, AutoCompleteState> {
         });
 
         bindCtx(this, ['handleTriggerKeyDown', 'handleMenuSelect', 'handleItemClick']);
+    }
+
+    @APAState([
+        { name: 'value', desc: '当前输入的值' },
+        { name: 'visible', desc: '下拉菜单是否显示' },
+        { name: 'disabled', desc: '是否禁用自动完成' },
+    ])
+    get apaState() {
+        return {
+            value: this.state.value,
+            visible: this.state.visible,
+            disabled: this.props.disabled,
+        };
+    }
+
+    @APAAction({
+        name: 'setValue',
+        desc: '设置当前输入的值',
+        params: z.tuple([z.union([z.string(), z.number()]).describe('要设置的值')]),
+    })
+    setValue(value: string | number) {
+        if (this.props.disabled || this.props.readOnly) {
+            return;
+        }
+        this.handleChange(value as string, 'itemClick' as VisibleChangeType);
+    }
+
+    @APAAction({
+        name: 'clear',
+        desc: '清空输入',
+        params: z.tuple([]),
+    })
+    clear() {
+        if (this.props.disabled || this.props.readOnly) {
+            return;
+        }
+        this.handleChange('', 'clear' as VisibleChangeType);
+    }
+
+    @APAAction({
+        name: 'open',
+        desc: '打开下拉菜单',
+        params: z.tuple([]),
+    })
+    open() {
+        if (this.props.disabled || this.props.readOnly) {
+            return;
+        }
+        this.setVisible(true, 'fromTrigger' as VisibleChangeType);
+    }
+
+    @APAAction({
+        name: 'close',
+        desc: '关闭下拉菜单',
+        params: z.tuple([]),
+    })
+    close() {
+        this.setVisible(false, 'fromTrigger' as VisibleChangeType);
     }
 
     static getDerivedStateFromProps(nextProps: AutoCompleteProps, prevState: AutoCompleteState) {
@@ -396,4 +464,16 @@ class AutoComplete extends Base<AutoCompleteProps, AutoCompleteState> {
     }
 }
 
-export default polyfill(AutoComplete);
+const AutoCompleteWithPolyfill = polyfill(AutoComplete);
+
+export default APAConfigProvider.config(AutoCompleteWithPolyfill, {
+    isRegiserChildren: true,
+    desc: '自动完成组件',
+    props: [
+        { key: 'value', name: 'value', desc: '当前输入的值' },
+        { key: 'disabled', name: 'disabled', desc: '是否禁用' },
+        { key: 'placeholder', name: 'placeholder', desc: '占位符文本' },
+        { key: 'hasClear', name: 'hasClear', desc: '是否显示清除按钮' },
+        { key: 'size', name: 'size', desc: '输入框尺寸' },
+    ],
+});

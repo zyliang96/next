@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Select } from '@alifd/next';
 import { type SelectProps } from '@alifd/next/types/select';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource = [
     { value: '10001', label: 'Lucy King' },
@@ -21,15 +22,22 @@ const handleChange: SelectProps['onChange'] = value => {
 };
 
 ReactDOM.render(
-    <div>
-        <Select
-            cacheValue={false}
-            showSearch
-            defaultValue={'sss'}
-            onChange={handleChange}
-            dataSource={dataSource}
-            style={{ width: 300, marginRight: 8 }}
-        />
-    </div>,
+    <APAConfigProvider
+        regionName="DS"
+        regionId="Select-multiple-copy-demo"
+        regionDesc="多选模式，通过showSearch可以开启搜索"
+        isRegiserChildren
+    >
+        <div>
+            <Select
+                cacheValue={false}
+                showSearch
+                defaultValue={'sss'}
+                onChange={handleChange}
+                dataSource={dataSource}
+                style={{ width: 300, marginRight: 8 }}
+            />
+        </div>
+    </APAConfigProvider>,
     mountNode
 );

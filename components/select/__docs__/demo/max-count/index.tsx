@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Select, Balloon } from '@alifd/next';
 import { type SelectProps } from '@alifd/next/types/select';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const { Tooltip } = Balloon;
 
@@ -32,46 +33,53 @@ const maxTagPlaceholder: SelectProps['maxTagPlaceholder'] = (selectedValues, tot
 const style = { width: 200, marginRight: 8 };
 
 ReactDOM.render(
-    <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-        <Select
-            placeholder="select all"
-            hasSelectAll
-            mode="multiple"
-            onChange={handleChange}
-            dataSource={dataSource}
-            style={style}
-        />
+    <APAConfigProvider
+        regionName="最大数量"
+        regionId="Select-max-count-demo"
+        regionDesc="多选模式下通过maxTagCount控制选择的个数"
+        isRegiserChildren
+    >
+        <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+            <Select
+                placeholder="select all"
+                hasSelectAll
+                mode="multiple"
+                onChange={handleChange}
+                dataSource={dataSource}
+                style={style}
+            />
 
-        <Select
-            maxTagCount={2}
-            defaultValue={['10001', '10002', '-1']}
-            mode="multiple"
-            onChange={handleChange}
-            dataSource={dataSource}
-            style={style}
-        />
+            <Select
+                maxTagCount={2}
+                defaultValue={['10001', '10002', '-1']}
+                mode="multiple"
+                onChange={handleChange}
+                dataSource={dataSource}
+                style={style}
+            />
 
-        <Select
-            maxTagCount={2}
-            maxTagPlaceholder={maxTagPlaceholder}
-            defaultValue={['10001', '10002', '-1']}
-            mode="multiple"
-            onChange={handleChange}
-            dataSource={dataSource}
-            style={style}
-        />
+            <Select
+                maxTagCount={2}
+                maxTagPlaceholder={maxTagPlaceholder}
+                defaultValue={['10001', '10002', '-1']}
+                mode="multiple"
+                onChange={handleChange}
+                dataSource={dataSource}
+                style={style}
+            />
 
-        <Select
-            maxTagCount={2}
-            tagInline
-            mode="multiple"
-            defaultValue={['10001', '10002', '-1']}
-            onChange={handleChange}
-            dataSource={dataSource}
-            style={style}
-        />
-        <br />
-        <br />
-    </div>,
+            <Select
+                maxTagCount={2}
+                tagInline
+                mode="multiple"
+                defaultValue={['10001', '10002', '-1']}
+                onChange={handleChange}
+                dataSource={dataSource}
+                style={style}
+            />
+            <br />
+            <br />
+        </div>
+    </APAConfigProvider>,
     mountNode
 );

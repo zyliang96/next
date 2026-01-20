@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Select } from '@alifd/next';
 import jsonp from 'jsonp';
 import { type AutoCompleteProps } from '@alifd/next/types/select';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const { AutoComplete } = Select;
 
@@ -25,14 +26,21 @@ class Demo extends React.Component {
 
     render() {
         return (
-            <div className="demo-container">
-                <AutoComplete
-                    filterLocal={false}
-                    placeholder="search from taobao"
-                    onChange={this.handleChange}
-                    dataSource={this.state.dataSource}
-                />
-            </div>
+            <APAConfigProvider
+                regionName="辅助输入获取远程数据"
+                regionId="Select-combobox-remote-demo"
+                regionDesc="使用动态数据填充AutoComplete，设置filterLocal为false"
+                isRegiserChildren
+            >
+                <div className="demo-container">
+                    <AutoComplete
+                        filterLocal={false}
+                        placeholder="search from taobao"
+                        onChange={this.handleChange}
+                        dataSource={this.state.dataSource}
+                    />
+                </div>
+            </APAConfigProvider>
         );
     }
 }
