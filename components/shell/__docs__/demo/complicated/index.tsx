@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Search, Icon, Nav, Shell, Radio } from '@alifd/next';
 import type { ShellProps } from '@alifd/next/types/shell';
 import type { GroupProps } from '@alifd/next/types/radio';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const { Item } = Nav;
 
@@ -151,4 +152,14 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="Shell组件的复杂示例"
+        regionId="Shell-complicated-demo"
+        regionDesc="Shell组件的复杂示例"
+        isRegisterChildren
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);

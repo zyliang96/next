@@ -2,6 +2,14 @@ import React, { Component, type MouseEvent, type KeyboardEvent, type ReactElemen
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
+import {
+    APAAction,
+    APAActionEnabled,
+    APAConfigProvider,
+    APAState,
+    APAStateEnabled,
+} from '@alifd/apa-sdk';
+import { z } from 'zod';
 import ConfigProvider from '../config-provider';
 import Affix from '../affix';
 import Icon from '../icon';
@@ -20,6 +28,8 @@ import type { CustomCSSStyle } from '../util/dom';
 /** Shell */
 export default function ShellBase(props: { componentName?: string }) {
     const { componentName } = props;
+    @APAActionEnabled
+    @APAStateEnabled
     class Shell extends Component<ShellBaseProps, ShellState> {
         static displayName = componentName;
 
@@ -48,6 +58,16 @@ export default function ShellBase(props: { componentName?: string }) {
         localNavRef: HTMLDivElement;
         submainRef: HTMLDivElement;
         toolDockRef: HTMLDivElement;
+
+        @APAState([
+            { name: 'controll', desc: '是否受控' },
+            { name: 'collapseMap', desc: '折叠状态的映射' },
+            {
+                name: 'device',
+                desc: '预设屏幕宽度，会影响 Navigation、LocalNavigation、Ancillary 等是否占据空间',
+            },
+        ])
+        state: ShellState;
 
         constructor(props: ShellBaseProps) {
             super(props);
@@ -153,6 +173,18 @@ export default function ShellBase(props: { componentName?: string }) {
             return React.cloneElement(child, props);
         };
 
+        @APAAction({
+            name: 'toggleAside',
+            desc: '切换侧边栏',
+            params: z.tuple([
+                z.enum(['Navigation', 'LocalNavigation', 'Ancillary', 'ToolDock']),
+                z.object({
+                    onCollapseChange: z.function().optional(),
+                    collapse: z.boolean().optional(),
+                }),
+                z.any(),
+            ]),
+        })
         toggleAside = (
             mark: keyof CollapseMap,
             props: {
@@ -207,6 +239,11 @@ export default function ShellBase(props: { componentName?: string }) {
             }
         };
 
+        @APAAction({
+            name: 'toggleNavigation',
+            desc: '切换导航栏',
+            params: z.tuple([z.any()]),
+        })
         toggleNavigation = (e: KeyboardEvent | MouseEvent) => {
             const mark = 'Navigation';
             const { props } = this.layout[mark]!;
@@ -218,6 +255,11 @@ export default function ShellBase(props: { componentName?: string }) {
             this.toggleAside(mark, props, e);
         };
 
+        @APAAction({
+            name: 'toggleLocalNavigation',
+            desc: '切换本地导航栏',
+            params: z.tuple([z.any()]),
+        })
         toggleLocalNavigation = (e: KeyboardEvent | MouseEvent) => {
             const mark = 'LocalNavigation';
             const { props } = this.layout[mark]!;
@@ -229,6 +271,11 @@ export default function ShellBase(props: { componentName?: string }) {
             this.toggleAside(mark, props, e);
         };
 
+        @APAAction({
+            name: 'toggleAncillary',
+            desc: '切换辅助栏',
+            params: z.tuple([z.any()]),
+        })
         toggleAncillary = (e: KeyboardEvent | MouseEvent) => {
             const mark = 'Ancillary';
             const { props } = this.layout[mark]!;
@@ -240,6 +287,11 @@ export default function ShellBase(props: { componentName?: string }) {
             this.toggleAside(mark, props, e);
         };
 
+        @APAAction({
+            name: 'toggleToolDock',
+            desc: '切换工具栏',
+            params: z.tuple([z.any()]),
+        })
         toggleToolDock = (e: KeyboardEvent | MouseEvent) => {
             const mark = 'ToolDock';
             const { props } = this.layout[mark]!;
@@ -674,5 +726,14 @@ export default function ShellBase(props: { componentName?: string }) {
         }
     }
 
-    return polyfill(Shell);
+    return APAConfigProvider.config(polyfill(Shell), {
+        desc: 'Shell组件',
+        props: [
+            {
+                key: 'fixedHeader',
+                name: '是否固定Header',
+                desc: '是否固定Header，采用sticky布局，不支持 IE11',
+            },
+        ],
+    });
 }
