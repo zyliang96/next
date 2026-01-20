@@ -14,7 +14,6 @@ import {
     APAStateEnabled,
     APAState,
     APAConfigProvider,
-    type APAComponentConfigContextInfo,
 } from '@alifd/apa-sdk';
 
 const noop = func.noop;
@@ -170,24 +169,12 @@ class Checkbox extends UIState<PrivateCheckboxProps, CheckboxState> {
                 this.setState({
                     checked: checked,
                 });
-            } else {
-                // 受控模式：手动同步状态到 APA
-                const { apaNode } = (this.context as APAComponentConfigContextInfo) || {};
-                if (apaNode) {
-                    apaNode.updateState({ checked });
-                }
             }
 
             if (!('indeterminate' in this.props)) {
                 this.setState({
                     indeterminate: false,
                 });
-            } else {
-                // 受控模式：手动同步状态到 APA
-                const { apaNode } = (this.context as APAComponentConfigContextInfo) || {};
-                if (apaNode) {
-                    apaNode.updateState({ indeterminate: false });
-                }
             }
             this.props.onChange?.(checked, event);
         }

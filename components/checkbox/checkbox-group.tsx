@@ -5,13 +5,7 @@ import { polyfill } from 'react-lifecycles-compat';
 import { obj } from '../util';
 import Checkbox from './checkbox';
 import type { CheckboxData, GroupProps, GroupState, ValueItem } from './types';
-import {
-    APAActionEnabled,
-    APAAction,
-    APAStateEnabled,
-    APAState,
-    type APAComponentConfigContextInfo,
-} from '@alifd/apa-sdk';
+import { APAActionEnabled, APAAction, APAStateEnabled, APAState } from '@alifd/apa-sdk';
 import { z } from 'zod';
 
 const { pickOthers } = obj;
@@ -127,12 +121,6 @@ class CheckboxGroup extends React.Component<GroupProps, GroupState> {
     setValue(newValue: ValueItem[]) {
         if (!('value' in this.props)) {
             this.setState({ value: newValue });
-        } else {
-            // 受控模式：手动同步状态到 APA
-            const { apaNode } = (this.context as APAComponentConfigContextInfo) || {};
-            if (apaNode) {
-                apaNode.updateState({ value: newValue });
-            }
         }
         this.props.onChange?.(newValue, {} as React.ChangeEvent<HTMLInputElement>);
     }
@@ -150,12 +138,6 @@ class CheckboxGroup extends React.Component<GroupProps, GroupState> {
 
         if (!('value' in this.props)) {
             this.setState({ value: valTemp });
-        } else {
-            // 受控模式：手动同步状态到 APA
-            const { apaNode } = (this.context as APAComponentConfigContextInfo) || {};
-            if (apaNode) {
-                apaNode.updateState({ value: valTemp });
-            }
         }
         this.props.onChange?.(valTemp, event);
     }
