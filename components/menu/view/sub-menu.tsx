@@ -10,7 +10,7 @@ import React, {
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { APAAction, APAConfigProvider } from '@alifd/apa-sdk';
+import { APAAction, APAActionEnabled, APAConfigProvider } from '@alifd/apa-sdk';
 import Animate from '../../animate';
 import Icon, { type IconProps } from '../../icon';
 import { func, obj, type ClassPropsWithDefault } from '../../util';
@@ -30,6 +30,7 @@ export type SubMenuWithDefaultsProps = ClassPropsWithDefault<
 
 export type SubMenuInMenuProps = ChildPropsInMenu<SubMenuWithDefaultsProps>;
 
+@APAActionEnabled
 class SubMenu extends Component<SubMenuProps> {
     static menuChildType = 'submenu';
 

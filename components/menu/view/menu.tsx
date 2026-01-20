@@ -16,7 +16,13 @@ import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
-import { APAAction, APAConfigProvider, APAState } from '@alifd/apa-sdk';
+import {
+    APAAction,
+    APAActionEnabled,
+    APAConfigProvider,
+    APAState,
+    APAStateEnabled,
+} from '@alifd/apa-sdk';
 import SubMenu from './sub-menu';
 import ConfigProvider from '../../config-provider';
 import { func, obj, dom, events, KEYCODE, type ClassPropsWithDefault } from '../../util';
@@ -263,6 +269,8 @@ export interface MenuState {
 
 export type MenuPropsWithDefaults = ClassPropsWithDefault<MenuProps, typeof Menu.defaultProps>;
 
+@APAActionEnabled
+@APAStateEnabled
 export class Menu extends Component<MenuProps, MenuState> {
     static isNextMenu = true;
 

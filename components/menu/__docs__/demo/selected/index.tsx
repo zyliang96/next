@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import { Radio, Checkbox, Menu } from '@alifd/next';
 import type { MenuProps } from '../../../types';
 
@@ -74,4 +75,14 @@ class Demo extends React.Component {
     }
 }
 
-ReactDOM.render(<Demo />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="Menu选中状态"
+        regionId="Menu-selected-demo"
+        regionDesc="Menu选中状态示例"
+        isRegisterChildren
+    >
+        <Demo />
+    </APAConfigProvider>,
+    mountNode
+);
