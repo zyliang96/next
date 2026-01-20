@@ -283,7 +283,7 @@ class Affix extends Component<AffixProps, AffixState> {
 
 export { AffixProps };
 
-export default APAConfigProvider.config(polyfill(Affix), {
+const AffixWithAPA = APAConfigProvider.config(polyfill(Affix), {
     desc: '固钉组件',
     props: [
         {
@@ -303,3 +303,5 @@ export default APAConfigProvider.config(polyfill(Affix), {
         },
     ],
 });
+
+export default ConfigProvider.config(AffixWithAPA as unknown as typeof Affix);
