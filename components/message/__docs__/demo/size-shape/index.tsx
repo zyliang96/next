@@ -86,7 +86,7 @@ ReactDOM.render(
         regionName="尺寸和形状"
         regionId="Message-size-shape-demo"
         regionDesc="展示Message的不同尺寸和形状"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Demo />
     </APAConfigProvider>,

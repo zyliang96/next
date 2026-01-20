@@ -7,7 +7,7 @@ ReactDOM.render(
         regionName="上下文"
         regionId="Message-withContext-demo"
         regionDesc="展示在Context中使用Message"
-        isRegiserChildren
+        isRegisterChildren
     >
         <a target="_blank" rel="noopener noreferrer" href="https://codepen.io/acejerry/pen/ZEOQjzr">
             点击查看 Message.withContext Demo

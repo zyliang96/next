@@ -11,7 +11,7 @@ ReactDOM.render(
         regionName="内联关闭"
         regionId="Message-inline-close-demo"
         regionDesc="展示带关闭按钮的内联消息"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Message title="title" closeable onClose={onClose} afterClose={afterClose}>

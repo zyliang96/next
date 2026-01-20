@@ -47,7 +47,7 @@ ReactDOM.render(
         regionName="受控模式"
         regionId="Message-control-demo"
         regionDesc="展示Message的受控显示和隐藏"
-        isRegiserChildren
+        isRegisterChildren
     >
         <App />
     </APAConfigProvider>,

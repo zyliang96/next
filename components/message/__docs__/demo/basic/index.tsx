@@ -12,7 +12,7 @@ ReactDOM.render(
         regionName="基本使用"
         regionId="Message-basic-demo"
         regionDesc="展示Message的基本用法，包括内联消息和Toast消息"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Message type="notice">This is an Inline Message Notice</Message>

@@ -17,7 +17,7 @@ ReactDOM.render(
         regionName="Toast消息"
         regionId="Message-toast-demo"
         regionDesc="展示Toast形式的消息提示"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div className="message-toast-demo">
             <Button type="primary" onClick={show}>

@@ -8,7 +8,7 @@ ReactDOM.render(
         regionName="消息类型"
         regionId="Message-type-demo"
         regionDesc="展示不同类型的消息提示"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div className="message-type-demo">
             <Message title="Success" type="success">

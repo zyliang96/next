@@ -23,7 +23,7 @@ ReactDOM.render(
         regionName="快速Toast V2"
         regionId="Message-toast-quick-v2-demo"
         regionDesc="展示V2版本的快速Toast消息"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Button type="primary" onClick={showSuccess} style={style}>

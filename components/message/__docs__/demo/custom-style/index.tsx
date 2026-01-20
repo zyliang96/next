@@ -18,7 +18,7 @@ ReactDOM.render(
         regionName="自定义样式"
         regionId="Message-custom-style-demo"
         regionDesc="展示如何自定义Message的样式"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div>
             <Message className="custom-message" style={{ backgroundColor: 'rgba(3,193,253,.3)' }}>

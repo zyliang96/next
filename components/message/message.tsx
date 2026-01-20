@@ -196,7 +196,7 @@ class Message extends Component<MessageProps> {
 const MessageWithPolyfill = polyfill(Message);
 
 export default APAConfigProvider.config(MessageWithPolyfill, {
-    isRegiserChildren: false,
+    isRegisterChildren: false,
     desc: '消息提示组件',
     props: [
         { key: 'visible', name: 'visible', desc: '消息是否显示' },

@@ -9,7 +9,7 @@ ReactDOM.render(
         regionName="无障碍支持"
         regionId="Message-accessibility-demo"
         regionDesc="展示Message的无障碍特性"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div className="message-toast-quick-demo">
             <Button type="primary" onClick={showSuccess}>

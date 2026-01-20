@@ -17,7 +17,7 @@ ReactDOM.render(
         regionName="更新消息"
         regionId="Message-update-message-demo"
         regionDesc="展示如何动态更新消息内容"
-        isRegiserChildren
+        isRegisterChildren
     >
         <Button type="primary" onClick={openMessage}>
             Open the message box

@@ -15,7 +15,7 @@ ReactDOM.render(
         regionName="快速Toast"
         regionId="Message-toast-quick-demo"
         regionDesc="展示快速调用Toast消息的方法"
-        isRegiserChildren
+        isRegisterChildren
     >
         <div className="message-toast-quick-demo">
             <Button type="primary" onClick={showSuccess}>
