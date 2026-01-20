@@ -9,13 +9,7 @@ import { findDOMNode } from 'react-dom';
 import { polyfill } from 'react-lifecycles-compat';
 import PropTypes from 'prop-types';
 import { z } from 'zod';
-import {
-    APAActionEnabled,
-    APAAction,
-    APAStateEnabled,
-    APAState,
-    type APAComponentConfigContextInfo,
-} from '@alifd/apa-sdk';
+import { APAActionEnabled, APAAction, APAStateEnabled, APAState } from '@alifd/apa-sdk';
 
 import { func, KEYCODE } from '../util';
 import Overlay from './overlay';
@@ -190,12 +184,6 @@ class Popup extends Component<PopupProps, PopupState> {
             this.setState({
                 visible,
             });
-        } else {
-            // 受控模式：手动同步状态到 APA
-            const { apaNode } = (this.context as APAComponentConfigContextInfo) || {};
-            if (apaNode) {
-                apaNode.updateState({ visible });
-            }
         }
 
         this.props.onVisibleChange!(visible, type, e);
