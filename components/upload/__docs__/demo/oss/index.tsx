@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Upload } from '@alifd/next';
 import { type UploadProps, type UploadFile } from '@alifd/next/types/upload';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 type ModifiedUploadFile = UploadFile & {
     tempUrl?: string;
@@ -65,4 +66,14 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="oss 上传"
+        regionId="Upload-oss-demo"
+        regionDesc="展示 Upload 的oss 上传"
+        isRegisterChildren={true}
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);

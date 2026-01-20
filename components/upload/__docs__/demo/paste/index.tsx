@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Upload, Input } from '@alifd/next';
 import { type UploadProps } from '@alifd/next/types/upload';
 import { type InputProps } from '@alifd/next/types/input';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 class App extends React.Component {
     uploaderRef: ReturnType<InstanceType<typeof Upload>['getInstance']>;
@@ -40,4 +41,14 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="粘贴上传"
+        regionId="Upload-paste-demo"
+        regionDesc="展示 Upload 的粘贴上传"
+        isRegisterChildren={true}
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);

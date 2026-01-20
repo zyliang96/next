@@ -5,6 +5,7 @@ import { Upload, Button, Dialog } from '@alifd/next';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import { type UploadOptions } from '@alifd/next/types/upload';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 // plan 1: [not work in IE/Edge] IE don't support File Constructor
 // function dataURL2File(dataURL, filename) {
@@ -133,4 +134,14 @@ class App extends Component<
     }
 }
 
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="裁剪上传"
+        regionId="Upload-crop-demo"
+        regionDesc="展示 Upload 的裁剪上传"
+        isRegisterChildren={true}
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);

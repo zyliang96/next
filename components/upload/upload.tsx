@@ -10,6 +10,14 @@ import Uploader from './runtime/index';
 import html5Uploader from './runtime/html5-uploader';
 import List from './list';
 import { fileToObject, getFileItem, errorCode } from './util';
+import {
+    APAActionEnabled,
+    APAStateEnabled,
+    APAState,
+    APAAction,
+    APAConfigProvider,
+} from '@alifd/apa-sdk';
+import { z } from 'zod';
 import type {
     ObjectFile,
     UploadError,
@@ -22,6 +30,8 @@ import type {
 
 const noop = func.noop;
 
+@APAActionEnabled
+@APAStateEnabled
 class Upload extends Base<UploadProps, UploadState> {
     static displayName = 'Upload';
 
@@ -102,6 +112,12 @@ class Upload extends Base<UploadProps, UploadState> {
         };
     }
 
+    @APAState([
+        { name: 'value', desc: '文件列表' },
+        { name: 'uploading', desc: '是否正在上传' },
+    ])
+    state!: UploadState;
+
     static getDerivedStateFromProps(nextProps: UploadProps, prevState: UploadState) {
         // 上传中不允许做受控修改
         if ('value' in nextProps && nextProps.value !== prevState.value && !prevState.uploading) {
@@ -142,7 +158,6 @@ class Upload extends Base<UploadProps, UploadState> {
         const value = this.state.value.concat(fileList);
 
         /* eslint-disable-next */
-        // @ts-expect-error 无法为“value”赋值，因为它是只读属性。
         this.state.value = value;
 
         if (autoUpload) {
@@ -176,6 +191,11 @@ class Upload extends Base<UploadProps, UploadState> {
     /**
      * 对外暴露 API, 添加文件
      */
+    @APAAction({
+        name: 'selectFiles',
+        desc: '选择文件',
+        params: z.tuple([z.array(z.any()).describe('文件列表')]),
+    })
     selectFiles(files: File[]) {
         const filesArr = files.length ? Array.prototype.slice.call(files) : [files];
 
@@ -184,7 +204,6 @@ class Upload extends Base<UploadProps, UploadState> {
 
     uploadFiles(files: ObjectFile[]) {
         // NOTE: drag 上传，当鼠标松开的时候回执行 onDrop，但此时 onChange 还没出发所以 value=[], 必须提前标识上传中
-        // @ts-expect-error 无法为“uploading”赋值，因为它是只读属性。
         this.state.uploading = true;
         const fileList = files
             .filter(file => {
@@ -203,6 +222,11 @@ class Upload extends Base<UploadProps, UploadState> {
     /**
      * 对外暴露 api，控制文件上传
      */
+    @APAAction({
+        name: 'startUpload',
+        desc: '开始上传',
+        params: z.tuple([]),
+    })
     startUpload() {
         this.uploadFiles(this.state.value);
     }
@@ -242,7 +266,6 @@ class Upload extends Base<UploadProps, UploadState> {
     }
 
     onProgress = (e: UploadProgressEvent, file: UploadFile) => {
-        //@ts-expect-error 无法为“uploading”赋值，因为它是只读属性。
         this.state.uploading = true;
 
         const value = this.state.value;
@@ -333,6 +356,11 @@ class Upload extends Base<UploadProps, UploadState> {
     /**
      * 删除文件
      */
+    @APAAction({
+        name: 'removeFile',
+        desc: '删除文件',
+        params: z.tuple([z.any().describe('要删除的文件')]),
+    })
     removeFile = (file: UploadFile) => {
         file.state = 'removed';
         this.uploaderRef.abort(file); // 删除组件时调用组件的 `abort` 方法中断上传
@@ -349,7 +377,6 @@ class Upload extends Base<UploadProps, UploadState> {
     updateUploadingState = () => {
         const inProgress = this.state.value.some(i => i.state === 'uploading');
         if (!inProgress) {
-            // @ts-expect-error 无法为“uploading”赋值，因为它是只读属性。
             this.state.uploading = false;
         }
     };
@@ -357,6 +384,11 @@ class Upload extends Base<UploadProps, UploadState> {
     /**
      * 取消上传
      */
+    @APAAction({
+        name: 'abort',
+        desc: '取消上传',
+        params: z.tuple([z.any().describe('要取消的文件')]),
+    })
     abort = (file: File) => {
         const fileList = this.state.value;
         const targetItem = getFileItem(file, fileList);
@@ -510,4 +542,17 @@ class Upload extends Base<UploadProps, UploadState> {
     }
 }
 
-export default polyfill(Upload);
+const UploadWithPolyfill = polyfill(Upload);
+
+export default APAConfigProvider.config(UploadWithPolyfill, {
+    isRegisterChildren: true,
+    desc: '文件上传组件',
+    props: [
+        { key: 'value', name: 'value', desc: '文件列表' },
+        { key: 'disabled', name: 'disabled', desc: '是否禁用' },
+        { key: 'autoUpload', name: 'autoUpload', desc: '是否自动上传' },
+        { key: 'limit', name: 'limit', desc: '最大文件上传个数' },
+        { key: 'listType', name: 'listType', desc: '上传列表的样式' },
+        { key: 'multiple', name: 'multiple', desc: '是否支持多选文件' },
+    ],
+});

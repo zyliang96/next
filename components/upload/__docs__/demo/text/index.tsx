@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Upload, Button } from '@alifd/next';
 import { type UploadProps } from '@alifd/next/types/upload';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const defaultValue = [
     {
@@ -54,17 +55,24 @@ const onSuccess: UploadProps['onSuccess'] = info => {
 };
 
 ReactDOM.render(
-    <Upload
-        action="https://www.easy-mock.com/mock/5b713974309d0d7d107a74a3/alifd/upload"
-        beforeUpload={beforeUpload}
-        onChange={onChange}
-        onSuccess={onSuccess}
-        listType="text"
-        defaultValue={defaultValue}
+    <APAConfigProvider
+        regionName="文字列表"
+        regionId="Upload-text-demo"
+        regionDesc="展示 Upload 的文字列表"
+        isRegisterChildren={true}
     >
-        <Button type="primary" style={{ margin: '0 0 10px' }}>
-            Upload File
-        </Button>
-    </Upload>,
+        <Upload
+            action="https://www.easy-mock.com/mock/5b713974309d0d7d107a74a3/alifd/upload"
+            beforeUpload={beforeUpload}
+            onChange={onChange}
+            onSuccess={onSuccess}
+            listType="text"
+            defaultValue={defaultValue}
+        >
+            <Button type="primary" style={{ margin: '0 0 10px' }}>
+                Upload File
+            </Button>
+        </Upload>
+    </APAConfigProvider>,
     mountNode
 );

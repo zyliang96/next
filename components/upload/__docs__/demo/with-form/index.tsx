@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Upload, Button, Field, Form, Box } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const FormItem = Form.Item;
 
@@ -70,4 +71,14 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="内容回填"
+        regionId="Upload-with-form-demo"
+        regionDesc="展示 Upload 的内容回填"
+        isRegisterChildren={true}
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);

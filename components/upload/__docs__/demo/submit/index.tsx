@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Upload, Button, Icon } from '@alifd/next';
 import { type UploadProps } from '@alifd/next/types/upload';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 class App extends React.Component {
     uploaderRef: ReturnType<InstanceType<typeof Upload>['getInstance']>;
@@ -45,4 +46,14 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="不自动上传"
+        regionId="Upload-submit-demo"
+        regionDesc="展示 Upload 的不自动上传"
+        isRegisterChildren={true}
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);

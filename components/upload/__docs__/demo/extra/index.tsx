@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Upload, Button, Icon, Dialog } from '@alifd/next';
 import { type UploadProps, type CardProps } from '@alifd/next/types/upload';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const showImg = (url: string) => {
     Dialog.show({
@@ -86,38 +87,45 @@ const onChange: UploadProps['onChange'] = info => {
 };
 
 ReactDOM.render(
-    <div>
-        <Upload
-            listType="text"
-            action="https://www.easy-mock.com/mock/5b713974309d0d7d107a74a3/alifd/upload"
-            accept="image/png, image/jpg, image/jpeg, image/gif, image/bmp"
-            beforeUpload={beforeUpload}
-            onChange={onChange}
-            fileNameRender={(file: File) => (
-                <span>
-                    <Icon type="attachment" size="xs" style={{ marginRight: 8 }} />
-                    {file.name}
-                </span>
-            )}
-            defaultValue={data}
-        />
-        <Upload
-            listType="image"
-            action="https://www.easy-mock.com/mock/5b713974309d0d7d107a74a3/alifd/upload"
-            accept="image/png, image/jpg, image/jpeg, image/gif, image/bmp"
-            beforeUpload={beforeUpload}
-            onChange={onChange}
-            actionRender={actionRender}
-            defaultValue={data}
-        />
-        <br />
-        <Upload.Card
-            listType="card"
-            accept="image/png, image/jpg, image/jpeg, image/gif, image/bmp"
-            defaultValue={data}
-            itemRender={itemRender}
-        />
-        ,
-    </div>,
+    <APAConfigProvider
+        regionName="额外内容"
+        regionId="Upload-extra-demo"
+        regionDesc="展示 Upload 的额外内容"
+        isRegisterChildren={true}
+    >
+        <div>
+            <Upload
+                listType="text"
+                action="https://www.easy-mock.com/mock/5b713974309d0d7d107a74a3/alifd/upload"
+                accept="image/png, image/jpg, image/jpeg, image/gif, image/bmp"
+                beforeUpload={beforeUpload}
+                onChange={onChange}
+                fileNameRender={(file: File) => (
+                    <span>
+                        <Icon type="attachment" size="xs" style={{ marginRight: 8 }} />
+                        {file.name}
+                    </span>
+                )}
+                defaultValue={data}
+            />
+            <Upload
+                listType="image"
+                action="https://www.easy-mock.com/mock/5b713974309d0d7d107a74a3/alifd/upload"
+                accept="image/png, image/jpg, image/jpeg, image/gif, image/bmp"
+                beforeUpload={beforeUpload}
+                onChange={onChange}
+                actionRender={actionRender}
+                defaultValue={data}
+            />
+            <br />
+            <Upload.Card
+                listType="card"
+                accept="image/png, image/jpg, image/jpeg, image/gif, image/bmp"
+                defaultValue={data}
+                itemRender={itemRender}
+            />
+            ,
+        </div>
+    </APAConfigProvider>,
     mountNode
 );
