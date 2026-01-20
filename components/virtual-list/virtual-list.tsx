@@ -10,6 +10,8 @@ import React, {
 import cx from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
 import { findDOMNode } from 'react-dom';
+import { APAAction, APAActionEnabled, APAConfigProvider } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import { events } from '../util';
 import { type VirtualListProps, type VirtualListState } from './types';
 
@@ -46,6 +48,7 @@ const constrain = (from: number, size: number, { children, minSize }: VirtualLis
     return { from, size };
 };
 /** VirtualList */
+@APAActionEnabled
 class VirtualList extends Component<VirtualListProps, VirtualListState> {
     static displayName = 'VirtualList';
 
@@ -363,6 +366,7 @@ class VirtualList extends Component<VirtualListProps, VirtualListState> {
         }
     }
 
+    @APAAction({ name: 'getSizeOf', desc: '获取 item 高度', params: z.tuple([z.number()]) })
     getSizeOf(index: number) {
         const { cache } = this;
         const { itemSizeGetter, jumpIndex } = this.props;
@@ -387,6 +391,7 @@ class VirtualList extends Component<VirtualListProps, VirtualListState> {
         }
     }
 
+    @APAAction({ name: 'scrollTo', desc: '滚动到指定位置', params: z.tuple([z.number()]) })
     scrollTo(index: number) {
         this.setScroll(this.getSpaceBefore(index, this.cacheAdd));
     }
@@ -453,4 +458,18 @@ class VirtualList extends Component<VirtualListProps, VirtualListState> {
     }
 }
 
-export default polyfill(VirtualList);
+export default APAConfigProvider.config(polyfill(VirtualList), {
+    desc: '虚拟列表组件',
+    props: [
+        {
+            key: 'children',
+            name: '渲染的子节点',
+            desc: '渲染的子节点',
+        },
+        {
+            key: 'jumpIndex',
+            name: '跳转位置',
+            desc: '	设置跳转位置，需要设置 itemSizeGetter 才能生效，不设置认为元素等高并取第一个元素高度作为默认高',
+        },
+    ],
+});

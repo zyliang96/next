@@ -1,6 +1,7 @@
 import React, { type ReactElement, createRef } from 'react';
 import ReactDOM from 'react-dom';
 import { VirtualList } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource: Array<ReactElement> = [];
 
@@ -74,4 +75,14 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="VirtualList获取item高度设置的Demo"
+        regionId="virtual-list-item-size-getter-demo"
+        regionDesc="VirtualList获取item高度设置的Demo"
+        isRegisterChildren
+    >
+        <App />
+    </APAConfigProvider>,
+    mountNode
+);
