@@ -3,13 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
 import { KEYCODE, obj } from '../util';
-import {
-    APAActionEnabled,
-    APAStateEnabled,
-    APAState,
-    APAAction,
-    type APAComponentConfigContextInfo,
-} from '@alifd/apa-sdk';
+import { APAActionEnabled, APAStateEnabled, APAState, APAAction } from '@alifd/apa-sdk';
 import { z } from 'zod';
 import TabNav from './tabs/nav';
 import TabContent from './tabs/content';
@@ -197,13 +191,6 @@ class Tab extends Component<TabProps, TabState> {
 
         // 如果 key 没变，或者受控状态下，则跳过
         if (key === activeKey || 'activeKey' in this.props) {
-            // 受控模式：手动同步状态到 APA
-            if ('activeKey' in this.props) {
-                const { apaNode } = (this.context as APAComponentConfigContextInfo) || {};
-                if (apaNode) {
-                    apaNode.updateState({ activeKey: key });
-                }
-            }
             return;
         }
         this.setState({
