@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const onChange = function (...args) {
         console.log(...args);
@@ -50,16 +51,28 @@ class App extends React.Component {
         const name = widths[`title.name`];
 
         return (
-            <Table
-                dataSource={dataSource()}
-                rowSelection={rowSelection}
-                onResizeChange={this.onResizeChange}
+            <APAConfigProvider
+                regionName="Resize示例"
+                regionId="Table-resize-demo"
+                regionDesc="Resize示例"
+                isRegisterChildren
             >
-                <Table.Column lock title="Id" dataIndex="id" width={100} />
-                <Table.Column title="Title" dataIndex={'title.name'} asyncResizable width={name} />
-                <Table.Column title="Time" dataIndex="time" asyncResizable width={time} />
-                <Table.Column cell={render} width={200} />
-            </Table>
+                <Table
+                    dataSource={dataSource()}
+                    rowSelection={rowSelection}
+                    onResizeChange={this.onResizeChange}
+                >
+                    <Table.Column lock title="Id" dataIndex="id" width={100} />
+                    <Table.Column
+                        title="Title"
+                        dataIndex={'title.name'}
+                        asyncResizable
+                        width={name}
+                    />
+                    <Table.Column title="Time" dataIndex="time" asyncResizable width={time} />
+                    <Table.Column cell={render} width={200} />
+                </Table>
+            </APAConfigProvider>
         );
     }
 }

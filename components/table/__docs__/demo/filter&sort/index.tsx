@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Button, Icon } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource = () => {
         const result = [];
@@ -104,66 +105,73 @@ class App extends React.Component {
             },
         ];
         return (
-            <div>
-                <p>
-                    <Button onClick={this.changeMode.bind(this)}>
-                        Change filter menu to single select
-                    </Button>
-                </p>
-                <Table
-                    dataSource={this.state.dataSource}
-                    onSort={this.onSort.bind(this)}
-                    sort={this.state.sort}
-                    onFilter={this.onFilter.bind(this)}
-                >
-                    <Table.Column title="Id" dataIndex="id" sortable />
-                    <Table.Column
-                        title="Title"
-                        dataIndex="title"
-                        filters={filters}
-                        filterMode={this.state.filterMode}
-                    />
-                    <Table.Column title="Time" dataIndex="time" />
-                    <Table.Column cell={render} width={200} />
-                </Table>
-                <br />
-                Customize sortIcons:
-                <br />
-                <Table
-                    dataSource={[]}
-                    onSort={console.log}
-                    sortIcons={{
-                        desc: (
-                            <Icon
-                                style={{ top: '6px', left: '4px' }}
-                                type={'arrow-down'}
-                                size="xs"
-                            />
-                        ),
-                        asc: (
-                            <Icon
-                                style={{ top: '-6px', left: '4px' }}
-                                type={'arrow-up'}
-                                size="xs"
-                            />
-                        ),
-                    }}
-                >
-                    <Table.Column
-                        title="Id"
-                        dataIndex="id"
-                        sortable
-                        sortDirections={['desc', 'asc', 'default']}
-                    />
-                    <Table.Column
-                        title="Title"
-                        dataIndex="title"
-                        filters={filters}
-                        filterMode={this.state.filterMode}
-                    />
-                    <Table.Column title="Time" dataIndex="time" />
-                </Table>
-            </div>
+            <APAConfigProvider
+                regionName="Filter & Sort示例"
+                regionId="Table-filter-sort-demo"
+                regionDesc="Filter & Sort示例"
+                isRegisterChildren
+            >
+                <div>
+                    <p>
+                        <Button onClick={this.changeMode.bind(this)}>
+                            Change filter menu to single select
+                        </Button>
+                    </p>
+                    <Table
+                        dataSource={this.state.dataSource}
+                        onSort={this.onSort.bind(this)}
+                        sort={this.state.sort}
+                        onFilter={this.onFilter.bind(this)}
+                    >
+                        <Table.Column title="Id" dataIndex="id" sortable />
+                        <Table.Column
+                            title="Title"
+                            dataIndex="title"
+                            filters={filters}
+                            filterMode={this.state.filterMode}
+                        />
+                        <Table.Column title="Time" dataIndex="time" />
+                        <Table.Column cell={render} width={200} />
+                    </Table>
+                    <br />
+                    Customize sortIcons:
+                    <br />
+                    <Table
+                        dataSource={[]}
+                        onSort={console.log}
+                        sortIcons={{
+                            desc: (
+                                <Icon
+                                    style={{ top: '6px', left: '4px' }}
+                                    type={'arrow-down'}
+                                    size="xs"
+                                />
+                            ),
+                            asc: (
+                                <Icon
+                                    style={{ top: '-6px', left: '4px' }}
+                                    type={'arrow-up'}
+                                    size="xs"
+                                />
+                            ),
+                        }}
+                    >
+                        <Table.Column
+                            title="Id"
+                            dataIndex="id"
+                            sortable
+                            sortDirections={['desc', 'asc', 'default']}
+                        />
+                        <Table.Column
+                            title="Title"
+                            dataIndex="title"
+                            filters={filters}
+                            filterMode={this.state.filterMode}
+                        />
+                        <Table.Column title="Time" dataIndex="time" />
+                    </Table>
+                </div>
+            </APAConfigProvider>
         );
     }
 }

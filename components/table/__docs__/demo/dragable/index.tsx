@@ -5,6 +5,7 @@ import { Table } from '@alifd/next';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import classnames from 'classnames';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const { SelectionRow } = Table;
 
@@ -178,14 +179,26 @@ class Demo extends React.Component {
     };
     render() {
         return (
-            <MyDndProvider>
-                <InnerTable dataSource={this.state.dataSource} onSort={console.log}>
-                    <Table.Column title="Id" dataIndex="id" width={100} lock />
-                    <Table.Column title="Title" dataIndex="title.name" width={400} />
-                    <Table.Column title="Time" dataIndex="time" width={300} />
-                    <Table.Column title="operate" cell={this.renderOper} width={300} lock="right" />
-                </InnerTable>
-            </MyDndProvider>
+            <APAConfigProvider
+                regionName="拖拽示例"
+                regionId="Table-dragable-demo"
+                regionDesc="拖拽示例"
+                isRegisterChildren
+            >
+                <MyDndProvider>
+                    <InnerTable dataSource={this.state.dataSource} onSort={console.log}>
+                        <Table.Column title="Id" dataIndex="id" width={100} lock />
+                        <Table.Column title="Title" dataIndex="title.name" width={400} />
+                        <Table.Column title="Time" dataIndex="time" width={300} />
+                        <Table.Column
+                            title="operate"
+                            cell={this.renderOper}
+                            width={300}
+                            lock="right"
+                        />
+                    </InnerTable>
+                </MyDndProvider>
+            </APAConfigProvider>
         );
     }
 }

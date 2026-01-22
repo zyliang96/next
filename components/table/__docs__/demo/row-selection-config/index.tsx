@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const onChange = function (...args) {
         console.log(...args);
@@ -31,11 +32,18 @@ const onChange = function (...args) {
     };
 
 ReactDOM.render(
-    <Table dataSource={dataSource()} rowSelection={rowSelection}>
-        <Table.Column title="Id" dataIndex="id" />
-        <Table.Column title="Title" dataIndex="title.name" />
-        <Table.Column title="Time" dataIndex="time" />
-        <Table.Column cell={render} width={200} />
-    </Table>,
+    <APAConfigProvider
+        regionName="Row Selection Config示例"
+        regionId="Table-row-selection-config-demo"
+        regionDesc="Row Selection Config示例"
+        isRegisterChildren
+    >
+        <Table dataSource={dataSource()} rowSelection={rowSelection}>
+            <Table.Column title="Id" dataIndex="id" />
+            <Table.Column title="Title" dataIndex="title.name" />
+            <Table.Column title="Time" dataIndex="time" />
+            <Table.Column cell={render} width={200} />
+        </Table>
+    </APAConfigProvider>,
     mountNode
 );

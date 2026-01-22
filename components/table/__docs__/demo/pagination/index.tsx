@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Pagination } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource = j => {
         const result = [];
@@ -38,14 +39,21 @@ class App extends React.Component {
     };
     render() {
         return (
-            <div>
-                <Table dataSource={this.state.dataSource} loading={this.state.loading}>
-                    <Table.Column title="Id1" dataIndex="id" width={140} />
-                    <Table.Column title="Time" dataIndex="time" width={500} />
-                    <Table.Column cell={render} width={200} />
-                </Table>
-                <Pagination onChange={this.onChange} className="page-demo" />
-            </div>
+            <APAConfigProvider
+                regionName="Pagination示例"
+                regionId="Table-pagination-demo"
+                regionDesc="Pagination示例"
+                isRegisterChildren
+            >
+                <div>
+                    <Table dataSource={this.state.dataSource} loading={this.state.loading}>
+                        <Table.Column title="Id1" dataIndex="id" width={140} />
+                        <Table.Column title="Time" dataIndex="time" width={500} />
+                        <Table.Column cell={render} width={200} />
+                    </Table>
+                    <Pagination onChange={this.onChange} className="page-demo" />
+                </div>
+            </APAConfigProvider>
         );
     }
 }

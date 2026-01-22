@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource = () => {
         const result = [];
@@ -51,27 +52,34 @@ class App extends React.Component {
 
     render() {
         return (
-            <div>
-                <Button onClick={this.toggleLoading}>Toggle Loading</Button>
-                <br />
-                <br />
-                <Table.StickyLock
-                    loading={this.state.loading}
-                    expandedIndexSimulate
-                    dataSource={this.state.dataSource}
-                    hasBorder={false}
-                    // expandedRowIndent 仅在IE下才会生效，非IE模式下为[0,0]且不可修改
-                    expandedRowIndent={[2, 0]}
-                    expandedRowRender={expandedRowRender}
-                    rowExpandable={record => record.expandable}
-                    onRowClick={() => console.log('rowClick')}
-                >
-                    <Table.Column title="Id" dataIndex="id" lock width={100} />
-                    <Table.Column title="Title" dataIndex="title" width={200} />
-                    <Table.Column title="Time" dataIndex="time" width={200} />
-                    <Table.Column cell={render} width={300} />
-                </Table.StickyLock>
-            </div>
+            <APAConfigProvider
+                regionName="展开锁列示例"
+                regionId="Table-expanded-lock-demo"
+                regionDesc="展开锁列示例"
+                isRegisterChildren
+            >
+                <div>
+                    <Button onClick={this.toggleLoading}>Toggle Loading</Button>
+                    <br />
+                    <br />
+                    <Table.StickyLock
+                        loading={this.state.loading}
+                        expandedIndexSimulate
+                        dataSource={this.state.dataSource}
+                        hasBorder={false}
+                        // expandedRowIndent 仅在IE下才会生效，非IE模式下为[0,0]且不可修改
+                        expandedRowIndent={[2, 0]}
+                        expandedRowRender={expandedRowRender}
+                        rowExpandable={record => record.expandable}
+                        onRowClick={() => console.log('rowClick')}
+                    >
+                        <Table.Column title="Id" dataIndex="id" lock width={100} />
+                        <Table.Column title="Title" dataIndex="title" width={200} />
+                        <Table.Column title="Time" dataIndex="time" width={200} />
+                        <Table.Column cell={render} width={300} />
+                    </Table.StickyLock>
+                </div>
+            </APAConfigProvider>
         );
     }
 }

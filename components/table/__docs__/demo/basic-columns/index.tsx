@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource = () => {
     const result = [];
@@ -84,4 +85,14 @@ const columns = [
         ],
     },
 ];
-ReactDOM.render(<Table columns={columns} dataSource={dataSource()} />, mountNode);
+ReactDOM.render(
+    <APAConfigProvider
+        regionName="基本列配置"
+        regionId="Table-basic-columns-demo"
+        regionDesc="展示Table的基本列配置"
+        isRegisterChildren
+    >
+        <Table columns={columns} dataSource={dataSource()} />
+    </APAConfigProvider>,
+    mountNode
+);

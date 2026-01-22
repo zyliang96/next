@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const onRowClick = function (record, index, e) {
         console.log(record, index, e);
@@ -31,35 +32,50 @@ class App extends React.Component {
     };
     render() {
         return (
-            <div>
-                <p>
-                    <Button onClick={this.onClick}>Reduce count</Button>
-                </p>
-                <Table
-                    dataSource={this.state.dataSource}
-                    onRowClick={onRowClick}
-                    fixedHeader
-                    maxBodyHeight={400}
-                >
-                    <Table.Column title="Title1" dataIndex="id" width={140} />
-                    <Table.ColumnGroup title="Group2-7">
-                        <Table.Column title="Title2" dataIndex="id" lock width={140} />
-                        <Table.Column title="Title3" dataIndex="title.name" width={200} />
-                        <Table.ColumnGroup title="Group4-7">
-                            <Table.Column title="Title4" dataIndex="title.name" width={400} />
-                            <Table.Column title="Title5" dataIndex="title.name" width={200} />
-                            <Table.ColumnGroup title="Group6-7">
-                                <Table.Column title="Title6" dataIndex="title.name" width={400} />
-                                <Table.Column title="Title7" dataIndex="title.name" width={200} />
+            <APAConfigProvider
+                regionName="Multiple Header示例"
+                regionId="Table-multiple-header-demo"
+                regionDesc="Multiple Header示例"
+                isRegisterChildren
+            >
+                <div>
+                    <p>
+                        <Button onClick={this.onClick}>Reduce count</Button>
+                    </p>
+                    <Table
+                        dataSource={this.state.dataSource}
+                        onRowClick={onRowClick}
+                        fixedHeader
+                        maxBodyHeight={400}
+                    >
+                        <Table.Column title="Title1" dataIndex="id" width={140} />
+                        <Table.ColumnGroup title="Group2-7">
+                            <Table.Column title="Title2" dataIndex="id" lock width={140} />
+                            <Table.Column title="Title3" dataIndex="title.name" width={200} />
+                            <Table.ColumnGroup title="Group4-7">
+                                <Table.Column title="Title4" dataIndex="title.name" width={400} />
+                                <Table.Column title="Title5" dataIndex="title.name" width={200} />
+                                <Table.ColumnGroup title="Group6-7">
+                                    <Table.Column
+                                        title="Title6"
+                                        dataIndex="title.name"
+                                        width={400}
+                                    />
+                                    <Table.Column
+                                        title="Title7"
+                                        dataIndex="title.name"
+                                        width={200}
+                                    />
+                                </Table.ColumnGroup>
                             </Table.ColumnGroup>
                         </Table.ColumnGroup>
-                    </Table.ColumnGroup>
-                    <Table.ColumnGroup>
-                        <Table.Column title="Time" dataIndex="time" width={500} />
-                        <Table.Column cell={render} width={200} lock="right" />
-                    </Table.ColumnGroup>
-                </Table>
-            </div>
+                        <Table.ColumnGroup>
+                            <Table.Column title="Time" dataIndex="time" width={500} />
+                            <Table.Column cell={render} width={200} lock="right" />
+                        </Table.ColumnGroup>
+                    </Table>
+                </div>
+            </APAConfigProvider>
         );
     }
 }

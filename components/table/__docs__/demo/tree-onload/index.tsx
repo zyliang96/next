@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const generateRandomKey = () => Math.ceil(Math.random() * 10000);
 
@@ -33,65 +34,72 @@ class App extends React.Component {
     state = { dataSource: data, loading: false, openRowKeys: [] };
     render() {
         return (
-            <span>
-                <Table
-                    dataSource={this.state.dataSource}
-                    openRowKeys={this.state.openRowKeys}
-                    onRowOpen={(openRowKeys, currentRowKey, expanded, currentRecord) => {
-                        if (currentRecord.isLeaf) {
-                            currentRecord.children = [];
-                        } else if (expanded) {
-                            this.setState({ loading: true });
-                            // Get data async
-                            setTimeout(() => {
-                                const success = true;
-                                let keys = openRowKeys;
-                                if (!success) {
-                                    currentRecord.children = [{ key: generateRandomKey() }];
-                                    keys = keys.filter(cu => cu !== currentRowKey);
-                                } else {
-                                    currentRecord.children = [
-                                        {
-                                            key: `${currentRowKey}-a`,
-                                            name: `${currentRecord.name}-son`,
-                                            age: 10,
-                                            address: 'Earth',
-                                            // 非叶子结点需要带着children，并且设置一条空数据先
-                                            children: [{ key: generateRandomKey() }],
-                                        },
-                                        {
-                                            key: `${currentRowKey}-b`,
-                                            name: `${currentRecord.name}-daughter`,
-                                            age: 10,
-                                            address: 'Earth',
-                                            isLeaf: true,
-                                        },
-                                    ];
-                                }
+            <APAConfigProvider
+                regionName="Tree Onload示例"
+                regionId="Table-tree-onload-demo"
+                regionDesc="Tree Onload示例"
+                isRegisterChildren
+            >
+                <span>
+                    <Table
+                        dataSource={this.state.dataSource}
+                        openRowKeys={this.state.openRowKeys}
+                        onRowOpen={(openRowKeys, currentRowKey, expanded, currentRecord) => {
+                            if (currentRecord.isLeaf) {
+                                currentRecord.children = [];
+                            } else if (expanded) {
+                                this.setState({ loading: true });
+                                // Get data async
+                                setTimeout(() => {
+                                    const success = true;
+                                    let keys = openRowKeys;
+                                    if (!success) {
+                                        currentRecord.children = [{ key: generateRandomKey() }];
+                                        keys = keys.filter(cu => cu !== currentRowKey);
+                                    } else {
+                                        currentRecord.children = [
+                                            {
+                                                key: `${currentRowKey}-a`,
+                                                name: `${currentRecord.name}-son`,
+                                                age: 10,
+                                                address: 'Earth',
+                                                // 非叶子结点需要带着children，并且设置一条空数据先
+                                                children: [{ key: generateRandomKey() }],
+                                            },
+                                            {
+                                                key: `${currentRowKey}-b`,
+                                                name: `${currentRecord.name}-daughter`,
+                                                age: 10,
+                                                address: 'Earth',
+                                                isLeaf: true,
+                                            },
+                                        ];
+                                    }
 
+                                    this.setState({
+                                        openRowKeys: keys,
+                                        loading: false,
+                                    });
+                                }, 300);
+                            } else {
                                 this.setState({
-                                    openRowKeys: keys,
-                                    loading: false,
+                                    openRowKeys: openRowKeys,
                                 });
-                            }, 300);
-                        } else {
-                            this.setState({
-                                openRowKeys: openRowKeys,
-                            });
-                        }
-                        console.log(openRowKeys, currentRowKey, expanded, currentRecord);
-                    }}
-                    primaryKey="key"
-                    isTree
-                    loading={this.state.loading}
-                    rowSelection={{ onChange: () => {} }}
-                >
-                    <Table.Column title="Key" dataIndex="key" />
-                    <Table.Column title="Name" dataIndex="name" />
-                    <Table.Column title="Age" dataIndex="age" />
-                    <Table.Column title="Address" dataIndex="address" />
-                </Table>
-            </span>
+                            }
+                            console.log(openRowKeys, currentRowKey, expanded, currentRecord);
+                        }}
+                        primaryKey="key"
+                        isTree
+                        loading={this.state.loading}
+                        rowSelection={{ onChange: () => {} }}
+                    >
+                        <Table.Column title="Key" dataIndex="key" />
+                        <Table.Column title="Name" dataIndex="name" />
+                        <Table.Column title="Age" dataIndex="age" />
+                        <Table.Column title="Address" dataIndex="address" />
+                    </Table>
+                </span>
+            </APAConfigProvider>
         );
     }
 }

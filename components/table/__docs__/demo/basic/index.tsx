@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource = () => {
     const result = [];
@@ -17,11 +18,18 @@ const render = (value, index, record) => {
     return <a href="javascript:;">Remove({record.id})</a>;
 };
 ReactDOM.render(
-    <Table dataSource={dataSource()}>
-        <Table.Column title="Id" htmlTitle="Unique Id" dataIndex="id" />
-        <Table.Column title="Title" dataIndex="title.name" />
-        <Table.Column title="Time" dataIndex="time" />
-        <Table.Column cell={render} />
-    </Table>,
+    <APAConfigProvider
+        regionName="Table Basic Demo"
+        regionId="Table-basic-demo"
+        regionDesc="Table Basic示例"
+        isRegisterChildren
+    >
+        <Table dataSource={dataSource()}>
+            <Table.Column title="Id" htmlTitle="Unique Id" dataIndex="id" />
+            <Table.Column title="Title" dataIndex="title.name" />
+            <Table.Column title="Time" dataIndex="time" />
+            <Table.Column cell={render} />
+        </Table>
+    </APAConfigProvider>,
     mountNode
 );

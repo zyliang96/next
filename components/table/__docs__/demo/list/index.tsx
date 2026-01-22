@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource = [
         {
@@ -225,38 +226,50 @@ class App extends React.Component {
     };
     render() {
         return (
-            <div>
-                <p>
-                    <Button onClick={this.toggleGroupSelection}>
-                        Toggle GroupHeader Selection
-                    </Button>
-                </p>
-                <Table
-                    tableLayout="fixed"
-                    dataSource={dataSource}
-                    rowSelection={rowSelection}
-                    cellProps={cellProps}
-                >
-                    <Table.GroupHeader
-                        cell={groupHeaderRender}
-                        hasChildrenSelection={this.state.hasSelection}
-                    />
-                    <Table.GroupFooter cell={groupHeaderRender} />
-                    <Table.Column
-                        cell={productRender}
-                        title="Product Details"
-                        dataIndex="product"
-                    />
-                    <Table.Column cell={priceRender} title="Price" dataIndex="price" width={120} />
-                    <Table.Column
-                        cell={statusRender}
-                        title="Status"
-                        dataIndex="status"
-                        width={100}
-                    />
-                    <Table.Column cell={operRender} title="Operation" width={100} />
-                </Table>
-            </div>
+            <APAConfigProvider
+                regionName="List示例"
+                regionId="Table-list-demo"
+                regionDesc="List示例"
+                isRegisterChildren
+            >
+                <div>
+                    <p>
+                        <Button onClick={this.toggleGroupSelection}>
+                            Toggle GroupHeader Selection
+                        </Button>
+                    </p>
+                    <Table
+                        tableLayout="fixed"
+                        dataSource={dataSource}
+                        rowSelection={rowSelection}
+                        cellProps={cellProps}
+                    >
+                        <Table.GroupHeader
+                            cell={groupHeaderRender}
+                            hasChildrenSelection={this.state.hasSelection}
+                        />
+                        <Table.GroupFooter cell={groupHeaderRender} />
+                        <Table.Column
+                            cell={productRender}
+                            title="Product Details"
+                            dataIndex="product"
+                        />
+                        <Table.Column
+                            cell={priceRender}
+                            title="Price"
+                            dataIndex="price"
+                            width={120}
+                        />
+                        <Table.Column
+                            cell={statusRender}
+                            title="Status"
+                            dataIndex="status"
+                            width={100}
+                        />
+                        <Table.Column cell={operRender} title="Operation" width={100} />
+                    </Table>
+                </div>
+            </APAConfigProvider>
         );
     }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Loading, Icon } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource = () => {
     const result = [];
@@ -27,11 +28,18 @@ const indicator = (
 const CustomLoading = props => <Loading indicator={indicator} {...props} />;
 
 ReactDOM.render(
-    <Table dataSource={dataSource()} loading loadingComponent={CustomLoading}>
-        <Table.Column title="Id" dataIndex="id" />
-        <Table.Column title="Title" dataIndex="title.name" />
-        <Table.Column title="Time" dataIndex="time" />
-        <Table.Column cell={render} />
-    </Table>,
+    <APAConfigProvider
+        regionName="自定义加载"
+        regionId="Table-custom-loading-demo"
+        regionDesc="自定义加载示例"
+        isRegisterChildren
+    >
+        <Table dataSource={dataSource()} loading loadingComponent={CustomLoading}>
+            <Table.Column title="Id" dataIndex="id" />
+            <Table.Column title="Title" dataIndex="title.name" />
+            <Table.Column title="Time" dataIndex="time" />
+            <Table.Column cell={render} />
+        </Table>
+    </APAConfigProvider>,
     mountNode
 );

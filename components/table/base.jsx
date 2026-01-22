@@ -17,6 +17,14 @@ import FilterComponent from './base/filter';
 import SortComponent from './base/sort';
 import Column from './column';
 import ColumnGroup from './column-group';
+import {
+    APAActionEnabled,
+    APAStateEnabled,
+    APAState,
+    getNodeProps,
+    APAComponentConfigContext,
+} from '@alifd/apa-sdk';
+import { BaseContext, LockContext, FixedContext, VirtualContext, ExpandedContext } from './context';
 
 const Children = React.Children,
     noop = () => {};
@@ -29,7 +37,21 @@ const Children = React.Children,
 //    </Table.ColumnGroup>
 //</Table>
 
+export const staticProps = {
+    Column: Column,
+    ColumnGroup: ColumnGroup,
+    Header: HeaderComponent,
+    Body: BodyComponent,
+    Wrapper: WrapperComponent,
+    Row: RowComponent,
+    Cell: CellComponent,
+    Filter: FilterComponent,
+    Sort: SortComponent,
+};
+
 /** Table */
+@APAActionEnabled
+@APAStateEnabled
 class Table extends React.Component {
     static Column = Column;
     static ColumnGroup = ColumnGroup;
@@ -336,43 +358,55 @@ class Table extends React.Component {
         crossline: false,
     };
 
-    static childContextTypes = {
-        notRenderCellIndex: PropTypes.array,
-        lockType: PropTypes.oneOf(['left', 'right']),
-    };
+    lockCtx = null;
+    fixedCtx = null;
+    virtualCtx = null;
+    expandedCtx = null;
+    _apaComponentConfigContext = null;
 
-    static contextTypes = {
-        getTableInstance: PropTypes.func,
-        getTableInstanceForFixed: PropTypes.func,
-        getTableInstanceForVirtual: PropTypes.func,
-        getTableInstanceForExpand: PropTypes.func,
-    };
-
-    constructor(props, context) {
-        super(props, context);
-        const {
-            getTableInstance,
-            getTableInstanceForVirtual,
-            getTableInstanceForFixed,
-            getTableInstanceForExpand,
-        } = this.context;
-        getTableInstance && getTableInstance(props.lockType, this);
-        getTableInstanceForFixed && getTableInstanceForFixed(props.lockType, this);
-        getTableInstanceForVirtual && getTableInstanceForVirtual(props.lockType, this);
-        getTableInstanceForExpand && getTableInstanceForExpand(this);
+    constructor(props) {
+        super(props);
         this.notRenderCellIndex = [];
+        // 缓存 context value
+        this._baseContextValue = null;
+        this._lastNotRenderCellIndex = null;
+        this._lastLockType = null;
     }
 
+    getTargetContext() {
+        // TODO 这些怎么
+        return {
+            getTableInstance: this.lockCtx.getTableInstance,
+            getTableInstanceForVirtual: this.virtualCtx.getTableInstanceForVirtual,
+            getTableInstanceForFixed: this.fixedCtx.getTableInstanceForFixed,
+            getTableInstanceForExpand: this.expandedCtx.getTableInstanceForExpand,
+        };
+    }
+
+    @APAState([{ name: 'dataSource', desc: '数据源' }])
     state = {
         sort: this.props.sort || {},
     };
 
-    getChildContext() {
-        return {
-            notRenderCellIndex: this.notRenderCellIndex || [],
-            lockType: this.props.lockType,
-        };
-    }
+    // 缓存 BaseContext value，避免每次 render 创建新对象
+    getBaseContextValue = () => {
+        const { lockType } = this.props;
+        const notRenderCellIndex = this.notRenderCellIndex || [];
+
+        if (
+            this._baseContextValue === null ||
+            this._lastNotRenderCellIndex !== notRenderCellIndex ||
+            this._lastLockType !== lockType
+        ) {
+            this._lastNotRenderCellIndex = notRenderCellIndex;
+            this._lastLockType = lockType;
+            this._baseContextValue = {
+                notRenderCellIndex,
+                lockType,
+            };
+        }
+        return this._baseContextValue;
+    };
 
     static getDerivedStateFromProps(nextProps) {
         const state = {};
@@ -393,7 +427,7 @@ class Table extends React.Component {
             const isEqual =
                 shallowElementEquals(nextProps, this.props) &&
                 obj.shallowEqual(nextState, this.state) &&
-                obj.shallowEqual(nextContext, this.context);
+                obj.shallowEqual(nextContext, this.getTargetContext());
             return !isEqual;
         }
 
@@ -409,7 +443,24 @@ class Table extends React.Component {
         if (props.children) {
             columns = this.normalizeChildren(props);
         }
-        return this.fetchInfoFromBinaryChildren(columns);
+        const result = this.fetchInfoFromBinaryChildren(columns);
+        // TODO 暂时先手动实现，后续看如何自动挂载
+        if (this._apaComponentConfigContext && this._apaComponentConfigContext.apaNode) {
+            const nodeProps = getNodeProps(
+                [
+                    {
+                        key: 'columns',
+                        name: '列配置',
+                        desc: '列配置',
+                    },
+                ],
+                {
+                    columns: result.groupChildren,
+                }
+            );
+            this._apaComponentConfigContext.apaNode.updateProps(nodeProps);
+        }
+        return result;
     }
 
     // 将React结构化数据提取props转换成数组
@@ -429,7 +480,8 @@ class Table extends React.Component {
                         !(
                             child &&
                             ['function', 'object'].indexOf(typeof child.type) > -1 &&
-                            (child.type._typeMark === 'column' || child.type._typeMark === 'columnGroup')
+                            (child.type._typeMark === 'column' ||
+                                child.type._typeMark === 'columnGroup')
                         )
                     ) {
                         log.warning('Use <Table.Column/>, <Table.ColumnGroup/> as child.');
@@ -569,7 +621,11 @@ class Table extends React.Component {
                 tableWidth,
             } = this.props;
             const { sort } = this.state;
-            const { Header = HeaderComponent, Wrapper = WrapperComponent, Body = BodyComponent } = components;
+            const {
+                Header = HeaderComponent,
+                Wrapper = WrapperComponent,
+                Body = BodyComponent,
+            } = components;
             const colGroup = this.renderColGroup(flatChildren);
 
             return [
@@ -776,80 +832,146 @@ class Table extends React.Component {
         this.tableEl = ref;
     };
 
-    render() {
-        const ret = this.normalizeChildrenState(this.props);
-        this.groupChildren = ret.groupChildren;
-        this.flatChildren = ret.flatChildren;
-        /* eslint-disable no-unused-vars, prefer-const */
-        let table = this.renderTable(ret.groupChildren, ret.flatChildren),
-            {
-                className,
-                style,
-                hasBorder,
-                isZebra,
-                loading,
-                size,
-                hasHeader,
-                prefix,
-                dataSource,
-                entireDataSource,
-                onSort,
-                onResizeChange,
-                onRowClick,
-                onRowMouseEnter,
-                onRowMouseLeave,
-                onFilter,
-                rowProps,
-                cellProps,
-                scrollToRow,
-                primaryKey,
-                components,
-                wrapperContent,
-                lockType,
-                locale,
-                expandedIndexSimulate,
-                refs,
-                pure,
-                rtl,
-                emptyContent,
-                filterParams,
-                columns,
-                sortIcons,
-                loadingComponent: LoadingComponent = Loading,
-                tableLayout,
-                tableWidth,
-                ref,
-                ...others
-            } = this.props,
-            cls = classnames({
-                [`${prefix}table`]: true,
-                [`${prefix}table-${size}`]: size,
-                [`${prefix}table-layout-${tableLayout}`]: tableLayout,
-                [`${prefix}table-loading`]: loading,
-                'only-bottom-border': !hasBorder,
-                'no-header': !hasHeader,
-                zebra: isZebra,
-                [className]: className,
-            });
-
-        if (rtl) {
-            others.dir = 'rtl';
+    // 注册实例到 HOC context
+    registerToHOCContext = (lockCtx, fixedCtx, virtualCtx, expandedCtx) => {
+        const { lockType } = this.props;
+        if (!this._registered) {
+            lockCtx && lockCtx.getTableInstance(lockType, this);
+            fixedCtx && fixedCtx.getTableInstanceForFixed(lockType, this);
+            virtualCtx && virtualCtx.getTableInstanceForVirtual(lockType, this);
+            expandedCtx && expandedCtx.getTableInstanceForExpand(this);
+            this._registered = true;
         }
+    };
 
-        const loadingcls = classnames({
-            [`${prefix}table-loading-content`]: true,
-        });
-
+    render() {
         return (
-            <div
-                className={cls}
-                style={style}
-                ref={ref || this.getTableEl}
-                {...obj.pickOthers(Object.keys(Table.propTypes), others)}
-            >
-                {table}
-                {loading ? <LoadingComponent className={loadingcls} /> : null}
-            </div>
+            <APAComponentConfigContext.Consumer>
+                {apaComponentConfigContext => {
+                    this._apaComponentConfigContext = apaComponentConfigContext;
+                    return (
+                        <LockContext.Consumer>
+                            {lockCtx => (
+                                <FixedContext.Consumer>
+                                    {fixedCtx => (
+                                        <VirtualContext.Consumer>
+                                            {virtualCtx => (
+                                                <ExpandedContext.Consumer>
+                                                    {expandedCtx => {
+                                                        this.lockCtx = lockCtx;
+                                                        this.fixedCtx = fixedCtx;
+                                                        this.virtualCtx = virtualCtx;
+                                                        this.expandedCtx = expandedCtx;
+                                                        this.registerToHOCContext(
+                                                            lockCtx,
+                                                            fixedCtx,
+                                                            virtualCtx,
+                                                            expandedCtx
+                                                        );
+                                                        const ret = this.normalizeChildrenState(
+                                                            this.props
+                                                        );
+                                                        this.groupChildren = ret.groupChildren;
+                                                        this.flatChildren = ret.flatChildren;
+                                                        /* eslint-disable no-unused-vars, prefer-const */
+                                                        let table = this.renderTable(
+                                                                ret.groupChildren,
+                                                                ret.flatChildren
+                                                            ),
+                                                            {
+                                                                className,
+                                                                style,
+                                                                hasBorder,
+                                                                isZebra,
+                                                                loading,
+                                                                size,
+                                                                hasHeader,
+                                                                prefix,
+                                                                dataSource,
+                                                                entireDataSource,
+                                                                onSort,
+                                                                onResizeChange,
+                                                                onRowClick,
+                                                                onRowMouseEnter,
+                                                                onRowMouseLeave,
+                                                                onFilter,
+                                                                rowProps,
+                                                                cellProps,
+                                                                scrollToRow,
+                                                                primaryKey,
+                                                                components,
+                                                                wrapperContent,
+                                                                lockType,
+                                                                locale,
+                                                                expandedIndexSimulate,
+                                                                refs,
+                                                                pure,
+                                                                rtl,
+                                                                emptyContent,
+                                                                filterParams,
+                                                                columns,
+                                                                sortIcons,
+                                                                loadingComponent:
+                                                                    LoadingComponent = Loading,
+                                                                tableLayout,
+                                                                tableWidth,
+                                                                ref,
+                                                                ...others
+                                                            } = this.props,
+                                                            cls = classnames({
+                                                                [`${prefix}table`]: true,
+                                                                [`${prefix}table-${size}`]: size,
+                                                                [`${prefix}table-layout-${tableLayout}`]:
+                                                                    tableLayout,
+                                                                [`${prefix}table-loading`]: loading,
+                                                                'only-bottom-border': !hasBorder,
+                                                                'no-header': !hasHeader,
+                                                                zebra: isZebra,
+                                                                [className]: className,
+                                                            });
+
+                                                        if (rtl) {
+                                                            others.dir = 'rtl';
+                                                        }
+
+                                                        const loadingcls = classnames({
+                                                            [`${prefix}table-loading-content`]: true,
+                                                        });
+                                                        return (
+                                                            <BaseContext.Provider
+                                                                value={this.getBaseContextValue()}
+                                                            >
+                                                                <div
+                                                                    className={cls}
+                                                                    style={style}
+                                                                    ref={ref || this.getTableEl}
+                                                                    {...obj.pickOthers(
+                                                                        Object.keys(
+                                                                            Table.propTypes
+                                                                        ),
+                                                                        others
+                                                                    )}
+                                                                >
+                                                                    {table}
+                                                                    {loading ? (
+                                                                        <LoadingComponent
+                                                                            className={loadingcls}
+                                                                        />
+                                                                    ) : null}
+                                                                </div>
+                                                            </BaseContext.Provider>
+                                                        );
+                                                    }}
+                                                </ExpandedContext.Consumer>
+                                            )}
+                                        </VirtualContext.Consumer>
+                                    )}
+                                </FixedContext.Consumer>
+                            )}
+                        </LockContext.Consumer>
+                    );
+                }}
+            </APAComponentConfigContext.Consumer>
         );
     }
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import FixedBody from '../fixed/body';
+import { LockContext, BaseContext } from '../context';
 
 /* eslint-disable react/prefer-stateless-function */
 export default class LockBody extends React.Component {
@@ -9,25 +10,32 @@ export default class LockBody extends React.Component {
         ...FixedBody.propTypes,
     };
 
-    static contextTypes = {
-        ...FixedBody.contextTypes,
-        getLockNode: PropTypes.func,
-        onLockBodyScroll: PropTypes.func,
-        lockType: PropTypes.oneOf(['left', 'right']),
-    };
-
     componentDidMount() {
-        this.context.getLockNode('body', findDOMNode(this), this.context.lockType);
+        this._lockContext && this._lockContext.getLockNode('body', findDOMNode(this), this._baseContext && this._baseContext.lockType);
     }
 
     onBodyScroll = event => {
-        this.context.onLockBodyScroll(event);
+        this._lockContext && this._lockContext.onLockBodyScroll(event);
     };
 
     render() {
         const event = {
             onLockScroll: this.onBodyScroll,
         };
-        return <FixedBody {...this.props} {...event} />;
+        return (
+            <LockContext.Consumer>
+                {lockContext => {
+                    this._lockContext = lockContext;
+                    return (
+                        <BaseContext.Consumer>
+                            {baseContext => {
+                                this._baseContext = baseContext;
+                                return <FixedBody {...this.props} {...event} />;
+                            }}
+                        </BaseContext.Consumer>
+                    );
+                }}
+            </LockContext.Consumer>
+        );
     }
 }

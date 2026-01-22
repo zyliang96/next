@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Icon, MenuButton } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const { Item } = MenuButton;
 
@@ -26,54 +27,61 @@ const selectItem = id => {
 };
 
 ReactDOM.render(
-    <Table
-        dataSource={dataSource()}
-        rowSelection={{
-            onChange: onChange,
-            getProps: (record, index) => {
-                console.log(record, index);
-
-                return index === 2
-                    ? {
-                          disabled: true,
-                          children: index,
-                      }
-                    : {
-                          children: index,
-                      };
-            },
-            columnProps: () => {
-                return {
-                    lock: 'left',
-                    width: 90,
-                    align: 'center',
-                };
-            },
-            titleProps: () => {
-                return {
-                    // remove the select all button
-                    // style: {display: 'none'},
-                    disabled: true,
-                    children: (
-                        <MenuButton
-                            text
-                            onItemClick={selectItem}
-                            menuProps={{
-                                isSelectIconRight: true,
-                            }}
-                        >
-                            <Item key="odd">odd</Item>
-                            <Item key="even">even</Item>
-                        </MenuButton>
-                    ),
-                };
-            },
-        }}
+    <APAConfigProvider
+        regionName="Selection示例"
+        regionId="Table-selection-demo"
+        regionDesc="Selection示例"
+        isRegisterChildren
     >
-        <Table.Column title="Id" dataIndex="id" width={200} />
-        <Table.Column title="Title" dataIndex="title.name" width={200} />
-        <Table.Column title="Time" dataIndex="time" width={200} />
-        <Table.Column cell={render} width={200} />
-    </Table>,
+        <Table
+            dataSource={dataSource()}
+            rowSelection={{
+                onChange: onChange,
+                getProps: (record, index) => {
+                    console.log(record, index);
+
+                    return index === 2
+                        ? {
+                              disabled: true,
+                              children: index,
+                          }
+                        : {
+                              children: index,
+                          };
+                },
+                columnProps: () => {
+                    return {
+                        lock: 'left',
+                        width: 90,
+                        align: 'center',
+                    };
+                },
+                titleProps: () => {
+                    return {
+                        // remove the select all button
+                        // style: {display: 'none'},
+                        disabled: true,
+                        children: (
+                            <MenuButton
+                                text
+                                onItemClick={selectItem}
+                                menuProps={{
+                                    isSelectIconRight: true,
+                                }}
+                            >
+                                <Item key="odd">odd</Item>
+                                <Item key="even">even</Item>
+                            </MenuButton>
+                        ),
+                    };
+                },
+            }}
+        >
+            <Table.Column title="Id" dataIndex="id" width={200} />
+            <Table.Column title="Title" dataIndex="title.name" width={200} />
+            <Table.Column title="Time" dataIndex="time" width={200} />
+            <Table.Column cell={render} width={200} />
+        </Table>
+    </APAConfigProvider>,
     mountNode
 );

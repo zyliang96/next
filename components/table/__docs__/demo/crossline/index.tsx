@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource = () => {
     const result = [];
@@ -18,11 +19,18 @@ const render = current => {
 };
 
 ReactDOM.render(
-    <Table dataSource={dataSource()} crossline>
-        <Table.Column title="Id" dataIndex="id" />
-        <Table.Column title="Title" dataIndex="title.name" />
-        <Table.Column title="Time" dataIndex="time" />
-        <Table.Column title="Operation" dataIndex="id" cell={render} />
-    </Table>,
+    <APAConfigProvider
+        regionName="十字参考轴"
+        regionId="Table-crossline-demo"
+        regionDesc="十字参考轴示例"
+        isRegisterChildren
+    >
+        <Table dataSource={dataSource()} crossline>
+            <Table.Column title="Id" dataIndex="id" />
+            <Table.Column title="Title" dataIndex="title.name" />
+            <Table.Column title="Time" dataIndex="time" />
+            <Table.Column title="Operation" dataIndex="id" cell={render} />
+        </Table>
+    </APAConfigProvider>,
     mountNode
 );

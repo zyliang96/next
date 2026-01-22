@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource = j => {
     const result = [];
@@ -62,30 +63,37 @@ class App extends React.Component {
     }
     render() {
         return (
-            <Table.StickyLock
-                dataSource={dataSource(200)}
-                maxBodyHeight={400}
-                useVirtual
-                // scrollToRow={this.state.scrollToRow}
-                onBodyScroll={this.onBodyScroll}
-                expandedRowRender={() => (
-                    <div>
-                        <button>1</button>
-                    </div>
-                )}
-                hasExpandedRowCtrl={false}
-                expandedRowIndent={[0, 0]}
-                rowSelection={this.state.rowSelection}
-                onRowMouseEnter={this.onRowMouseEnter}
-                openRowKeys={this.state.openRowKeys}
-                primaryKey="index"
+            <APAConfigProvider
+                regionName="StickyLock Complex示例"
+                regionId="Table-stickylock-complex-demo"
+                regionDesc="StickyLock Complex示例"
+                isRegisterChildren
             >
-                <Table.Column title="Id1" dataIndex="id" width={100} lock />
-                <Table.Column title="Index" dataIndex="index" width={200} />
-                <Table.Column title="Time" dataIndex="time" width={200} />
-                <Table.Column title="Time2" dataIndex="time2" width={200} />
-                <Table.Column cell={render} width={200} lock="left" />
-            </Table.StickyLock>
+                <Table.StickyLock
+                    dataSource={dataSource(200)}
+                    maxBodyHeight={400}
+                    useVirtual
+                    // scrollToRow={this.state.scrollToRow}
+                    onBodyScroll={this.onBodyScroll}
+                    expandedRowRender={() => (
+                        <div>
+                            <button>1</button>
+                        </div>
+                    )}
+                    hasExpandedRowCtrl={false}
+                    expandedRowIndent={[0, 0]}
+                    rowSelection={this.state.rowSelection}
+                    onRowMouseEnter={this.onRowMouseEnter}
+                    openRowKeys={this.state.openRowKeys}
+                    primaryKey="index"
+                >
+                    <Table.Column title="Id1" dataIndex="id" width={100} lock />
+                    <Table.Column title="Index" dataIndex="index" width={200} />
+                    <Table.Column title="Time" dataIndex="time" width={200} />
+                    <Table.Column title="Time2" dataIndex="time2" width={200} />
+                    <Table.Column cell={render} width={200} lock="left" />
+                </Table.StickyLock>
+            </APAConfigProvider>
         );
     }
 }

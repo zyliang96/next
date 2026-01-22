@@ -8,6 +8,14 @@ import BodyComponent from './list/body';
 import HeaderComponent from './fixed/header';
 import WrapperComponent from './fixed/wrapper';
 import { statics } from './util';
+import { ListContext } from './context';
+
+export const listStaticProps = {
+    ListHeader: ListHeader,
+    ListFooter: ListFooter,
+    ListRow: RowComponent,
+    ListBody: BodyComponent,
+};
 
 export default function list(BaseComponent) {
     class ListTable extends React.Component {
@@ -22,21 +30,33 @@ export default function list(BaseComponent) {
             ...BaseComponent.defaultProps,
         };
 
-        static childContextTypes = {
-            listHeader: PropTypes.any,
-            listFooter: PropTypes.any,
-            rowSelection: PropTypes.object,
-        };
-
         state = {};
 
-        getChildContext() {
-            return {
-                listHeader: this.listHeader,
-                listFooter: this.listFooter,
-                rowSelection: this.rowSelection,
-            };
+        constructor(props) {
+            super(props);
+            // 缓存 context value
+            this._listContextValue = null;
+            this._lastListHeader = null;
+            this._lastListFooter = null;
         }
+
+        // 缓存 ListContext value
+        getListContextValue = () => {
+            // listHeader 和 listFooter 在 render 中设置
+            if (
+                this._listContextValue === null ||
+                this._lastListHeader !== this.listHeader ||
+                this._lastListFooter !== this.listFooter
+            ) {
+                this._lastListHeader = this.listHeader;
+                this._lastListFooter = this.listFooter;
+                this._listContextValue = {
+                    listHeader: this.listHeader,
+                    listFooter: this.listFooter,
+                };
+            }
+            return this._listContextValue;
+        };
 
         normalizeDataSource(dataSource) {
             const ret = [];
@@ -89,13 +109,15 @@ export default function list(BaseComponent) {
                 });
             }
             return (
-                <BaseComponent
-                    {...others}
-                    components={components}
-                    children={ret.length > 0 ? ret : undefined}
-                    className={className}
-                    prefix={prefix}
-                />
+                <ListContext.Provider value={this.getListContextValue()}>
+                    <BaseComponent
+                        {...others}
+                        components={components}
+                        children={ret.length > 0 ? ret : undefined}
+                        className={className}
+                        prefix={prefix}
+                    />
+                </ListContext.Provider>
             );
         }
     }

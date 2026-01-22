@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table } from '@alifd/next';
 import PropTypes from 'prop-types';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 /* eslint-disable react/no-multi-comp,react/prop-types */
 const { Header, Cell } = Table;
 const dataSource = () => {
@@ -68,22 +69,29 @@ class App extends React.Component {
     };
     render() {
         return (
-            <span>
-                <Table
-                    dataSource={this.dataSource}
-                    components={{
-                        Header: AppHeader,
-                    }}
-                    rowSelection={{
-                        selectedRowKeys: this.state.selectedKeys,
-                        onChange: this.onRowChange,
-                    }}
-                >
-                    <Table.Column title="Id" dataIndex="id" />
-                    <Table.Column title="Title" dataIndex="title" />
-                    <Table.Column title="Time" dataIndex="time" />
-                </Table>
-            </span>
+            <APAConfigProvider
+                regionName="无障碍支持"
+                regionId="Table-accessibility-demo"
+                regionDesc="展示Table的无障碍支持"
+                isRegisterChildren
+            >
+                <span>
+                    <Table
+                        dataSource={this.dataSource}
+                        components={{
+                            Header: AppHeader,
+                        }}
+                        rowSelection={{
+                            selectedRowKeys: this.state.selectedKeys,
+                            onChange: this.onRowChange,
+                        }}
+                    >
+                        <Table.Column title="Id" dataIndex="id" />
+                        <Table.Column title="Title" dataIndex="title" />
+                        <Table.Column title="Time" dataIndex="time" />
+                    </Table>
+                </span>
+            </APAConfigProvider>
         );
     }
 }

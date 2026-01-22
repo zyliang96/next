@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Button, Box } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource = () => {
         const result = [];
@@ -56,42 +57,49 @@ class App extends React.Component {
 
     render() {
         return (
-            <span>
-                <div className="style-table-action">
-                    <Button onClick={this.toggleZebra.bind(this)}> Toggle zebra </Button>
-                    <Button onClick={this.toggleBorder.bind(this)}> Toggle border</Button>
-                    <Button onClick={this.makeBeauty.bind(this)}>
-                        {' '}
-                        Make second column beauty{' '}
-                    </Button>
-                    <Button onClick={this.makeAlign.bind(this)}>
-                        {' '}
-                        Make second column align right{' '}
-                    </Button>
-                    <Button onClick={this.toggleWordBreak.bind(this)}>
-                        {' '}
-                        Toggle second column's wordBreak{' '}
-                    </Button>
-                </div>
-                <br />
-                <Table
-                    dataSource={this.state.dataSource}
-                    isZebra={this.state.isZebra}
-                    hasBorder={this.state.hasBorder}
-                >
-                    <Table.Column title="Id" dataIndex="id" alignHeader="center" width={100} />
-                    <Table.Column
-                        title="Title"
-                        dataIndex="title"
-                        align={this.state.align}
-                        className={this.state.className}
-                        wordBreak={this.state.wordBreak}
-                        width={340}
-                    />
-                    <Table.Column title="Time" dataIndex="time" width={200} />
-                    <Table.Column cell={render} width={200} />
-                </Table>
-            </span>
+            <APAConfigProvider
+                regionName="Style示例"
+                regionId="Table-style-demo"
+                regionDesc="Style示例"
+                isRegisterChildren
+            >
+                <span>
+                    <div className="style-table-action">
+                        <Button onClick={this.toggleZebra.bind(this)}> Toggle zebra </Button>
+                        <Button onClick={this.toggleBorder.bind(this)}> Toggle border</Button>
+                        <Button onClick={this.makeBeauty.bind(this)}>
+                            {' '}
+                            Make second column beauty{' '}
+                        </Button>
+                        <Button onClick={this.makeAlign.bind(this)}>
+                            {' '}
+                            Make second column align right{' '}
+                        </Button>
+                        <Button onClick={this.toggleWordBreak.bind(this)}>
+                            {' '}
+                            Toggle second column's wordBreak{' '}
+                        </Button>
+                    </div>
+                    <br />
+                    <Table
+                        dataSource={this.state.dataSource}
+                        isZebra={this.state.isZebra}
+                        hasBorder={this.state.hasBorder}
+                    >
+                        <Table.Column title="Id" dataIndex="id" alignHeader="center" width={100} />
+                        <Table.Column
+                            title="Title"
+                            dataIndex="title"
+                            align={this.state.align}
+                            className={this.state.className}
+                            wordBreak={this.state.wordBreak}
+                            width={340}
+                        />
+                        <Table.Column title="Time" dataIndex="time" width={200} />
+                        <Table.Column cell={render} width={200} />
+                    </Table>
+                </span>
+            </APAConfigProvider>
         );
     }
 }

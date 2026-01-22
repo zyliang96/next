@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Button, Dialog, Checkbox } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const { Group } = Checkbox;
 const dataSource = () => {
@@ -76,12 +77,19 @@ class App extends React.Component {
 
     render() {
         return (
-            <div>
-                <p>
-                    <Button onClick={this.openDialog}> Select columns </Button>
-                </p>
-                <Table dataSource={this.state.dataSource}>{this.renderCols()}</Table>
-            </div>
+            <APAConfigProvider
+                regionName="列配置"
+                regionId="Table-column-demo"
+                regionDesc="列配置示例"
+                isRegisterChildren
+            >
+                <div>
+                    <p>
+                        <Button onClick={this.openDialog}> Select columns </Button>
+                    </p>
+                    <Table dataSource={this.state.dataSource}>{this.renderCols()}</Table>
+                </div>
+            </APAConfigProvider>
         );
     }
 }

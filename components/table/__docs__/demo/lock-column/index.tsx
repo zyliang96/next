@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const onRowClick = function (record, index, e) {
         console.log(record, index, e);
@@ -51,26 +52,33 @@ class App extends React.Component {
     };
     render() {
         return (
-            <div>
-                <p>
-                    <Button onClick={this.reduceCol}>Reduce Cols</Button>
-                </p>
-                <Table.StickyLock
-                    dataSource={this.state.dataSource}
-                    onRowClick={onRowClick}
-                    fixedHeader
-                    loading={this.state.loading}
-                >
-                    <Table.Column
-                        title="Id-Id-Id-Id-Id-Id-Id-Id-Id-Id-Id-Id"
-                        dataIndex="id"
-                        lock
-                        width={140}
-                    />
-                    {this.state.cols}
-                    <Table.Column cell={render} width={200} />
-                </Table.StickyLock>
-            </div>
+            <APAConfigProvider
+                regionName="Lock Column示例"
+                regionId="Table-lock-column-demo"
+                regionDesc="Lock Column示例"
+                isRegisterChildren
+            >
+                <div>
+                    <p>
+                        <Button onClick={this.reduceCol}>Reduce Cols</Button>
+                    </p>
+                    <Table.StickyLock
+                        dataSource={this.state.dataSource}
+                        onRowClick={onRowClick}
+                        fixedHeader
+                        loading={this.state.loading}
+                    >
+                        <Table.Column
+                            title="Id-Id-Id-Id-Id-Id-Id-Id-Id-Id-Id-Id"
+                            dataIndex="id"
+                            lock
+                            width={140}
+                        />
+                        {this.state.cols}
+                        <Table.Column cell={render} width={200} />
+                    </Table.StickyLock>
+                </div>
+            </APAConfigProvider>
         );
     }
 }

@@ -1,6 +1,8 @@
 import React, { Children } from 'react';
 import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
+import { APAActionEnabled, APAActionDisabled, APAAction } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import Checkbox from '../checkbox';
 import Radio from '../radio';
 import { func, log } from '../util';
@@ -8,6 +10,7 @@ import zhCN from '../locale/zh-cn';
 import SelectionRow from './selection/row';
 import Col from './column';
 import { statics } from './util';
+import { SelectionContext, ListContext } from './context';
 
 const { makeChain } = func;
 
@@ -29,8 +32,13 @@ const unique = (arr, key = 'this') => {
     return ret;
 };
 
+export const selectionStaticProps = {
+    SelectionRow: SelectionRow,
+};
+
 export default function selection(BaseComponent) {
     /** Table */
+    @APAActionEnabled
     class SelectionTable extends React.Component {
         static SelectionRow = SelectionRow;
         static propTypes = {
@@ -59,31 +67,39 @@ export default function selection(BaseComponent) {
             prefix: 'next-',
         };
 
-        static contextTypes = {
-            listHeader: PropTypes.any,
-        };
-
-        static childContextTypes = {
-            rowSelection: PropTypes.object,
-            selectedRowKeys: PropTypes.array,
-        };
-
-        constructor(props, context) {
-            super(props, context);
+        constructor(props) {
+            super(props);
             this.state = {
                 selectedRowKeys:
                     props.rowSelection && 'selectedRowKeys' in props.rowSelection
                         ? props.rowSelection.selectedRowKeys || []
                         : [],
             };
+            // 缓存 context value
+            this._selectionContextValue = null;
+            this._lastRowSelection = null;
+            this._lastSelectedRowKeys = null;
         }
 
-        getChildContext() {
-            return {
-                rowSelection: this.props.rowSelection,
-                selectedRowKeys: this.state.selectedRowKeys,
-            };
-        }
+        // 缓存 SelectionContext value
+        getSelectionContextValue = () => {
+            const { rowSelection } = this.props;
+            const { selectedRowKeys } = this.state;
+
+            if (
+                this._selectionContextValue === null ||
+                this._lastRowSelection !== rowSelection ||
+                this._lastSelectedRowKeys !== selectedRowKeys
+            ) {
+                this._lastRowSelection = rowSelection;
+                this._lastSelectedRowKeys = selectedRowKeys;
+                this._selectionContextValue = {
+                    rowSelection,
+                    selectedRowKeys,
+                };
+            }
+            return this._selectionContextValue;
+        };
 
         static getDerivedStateFromProps(nextProps) {
             if (nextProps.rowSelection && 'selectedRowKeys' in nextProps.rowSelection) {
@@ -211,6 +227,16 @@ export default function selection(BaseComponent) {
             );
         };
 
+        @APAActionDisabled({ actionName: ['selectAllRow', 'selectOneRow'], defaultDisabled: false })
+        get apaSelectAllRowDisabled() {
+            return this.props.rowSelection;
+        }
+
+        @APAAction({
+            name: 'selectAllRow',
+            desc: '全选',
+            params: z.tuple([z.boolean().describe('是否选中')]),
+        })
         selectAllRow = (checked, e) => {
             const ret = [...this.state.selectedRowKeys],
                 { rowSelection, primaryKey, dataSource, entireDataSource } = this.props,
@@ -244,8 +270,40 @@ export default function selection(BaseComponent) {
                 rowSelection.onSelectAll(checked, records);
             }
             this.triggerSelection(rowSelection, unique(ret), records);
-            e.stopPropagation();
+            e && e.stopPropagation();
         };
+
+        @APAAction({
+            name: 'selectOneRow',
+            desc: '选择一行',
+            params: z.tuple([z.number().describe('行索引'), z.boolean().describe('是否选中')]),
+        })
+        apaSelectOneRow(index, checked) {
+            const { rowSelection, dataSource, entireDataSource, primaryKey } = this.props;
+            const { selectedRowKeys } = this.state;
+            const getProps = rowSelection.getProps;
+
+            const source = entireDataSource ? entireDataSource : dataSource;
+            const flatDataSourceList = this.flatDataSource(source);
+            const targetRecord = flatDataSourceList[index];
+            const attrs = getProps ? getProps(record, index) || {} : {};
+            const id = targetRecord[primaryKey];
+            // 如果不可勾选，则不论是否选中都保持原状
+            if (attrs.disabled) {
+                return;
+            }
+            // 如果可以勾选，要选中，且已经在选中列表里，则保持原状
+            if (checked && selectedRowKeys.indexOf(id) > -1) {
+                return;
+            }
+            // 如果可以勾选，不要选中，且未在选中列表里，则保持原状
+            if (!checked && !selectedRowKeys.indexOf(id) > -1) {
+                return;
+            }
+            // 如果可以勾选，不要选中，且在选中列表里，则触发 selectOneRow
+            // 如果可以勾选，要选中，且不在选中列表里，则触发 selectOneRow
+            return this.selectOneRow(index, record, checked);
+        }
 
         selectOneRow(index, record, checked, e) {
             let selectedRowKeys = [...this.state.selectedRowKeys],
@@ -270,14 +328,17 @@ export default function selection(BaseComponent) {
             if (Array.isArray(entireDataSource) && entireDataSource.length > dataSource.length) {
                 totalDS = entireDataSource;
             }
-            const records = unique(totalDS.filter(item => selectedRowKeys.indexOf(item[primaryKey]) > -1), primaryKey);
+            const records = unique(
+                totalDS.filter(item => selectedRowKeys.indexOf(item[primaryKey]) > -1),
+                primaryKey
+            );
             if (typeof rowSelection.onSelect === 'function') {
                 rowSelection.onSelect(checked, record, records);
             }
 
             this.triggerSelection(rowSelection, selectedRowKeys, records);
 
-            e.stopPropagation();
+            e && e.stopPropagation();
         }
         triggerSelection(rowSelection, selectedRowKeys, records) {
             if (!('selectedRowKeys' in rowSelection)) {
@@ -292,7 +353,7 @@ export default function selection(BaseComponent) {
 
         flatDataSource(dataSource) {
             let ret = dataSource;
-            const { listHeader } = this.context;
+            const listHeader = this._listContext && this._listContext.listHeader;
 
             if (listHeader) {
                 ret = [];
@@ -313,20 +374,37 @@ export default function selection(BaseComponent) {
         }
 
         render() {
-            /* eslint-disable prefer-const */
-            let { rowSelection, components, children, columns, ...others } = this.props;
-            let useColumns = columns && !children;
+            return (
+                <ListContext.Consumer>
+                    {listContext => {
+                        // 保存 listContext 供方法使用
+                        this._listContext = listContext;
+                        /* eslint-disable prefer-const */
+                        let { rowSelection, components, children, columns, ...others } = this.props;
+                        let useColumns = columns && !children;
 
-            if (rowSelection) {
-                if (useColumns) {
-                    this.addSelection(columns);
-                } else {
-                    children = this.normalizeChildren(children || []);
-                }
-                components = { ...components };
-                components.Row = components.Row || SelectionRow;
-            }
-            return <BaseComponent {...others} columns={columns} components={components} children={children} />;
+                        if (rowSelection) {
+                            if (useColumns) {
+                                this.addSelection(columns);
+                            } else {
+                                children = this.normalizeChildren(children || []);
+                            }
+                            components = { ...components };
+                            components.Row = components.Row || SelectionRow;
+                        }
+                        return (
+                            <SelectionContext.Provider value={this.getSelectionContextValue()}>
+                                <BaseComponent
+                                    {...others}
+                                    columns={columns}
+                                    components={components}
+                                    children={children}
+                                />
+                            </SelectionContext.Provider>
+                        );
+                    }}
+                </ListContext.Consumer>
+            );
         }
     }
     statics(SelectionTable, BaseComponent);

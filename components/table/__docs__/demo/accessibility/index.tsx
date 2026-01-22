@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const result = [
     {
@@ -49,14 +50,21 @@ class Demo extends React.Component {
     };
     render() {
         return (
-            <div>
-                <Table dataSource={this.state.dataSource}>
-                    <Table.Column title="Id" dataIndex="id" />
-                    <Table.Column title="Title" dataIndex="title.name" />
-                    <Table.Column title="Time" dataIndex="time" />
-                    <Table.Column title="operate" cell={this.renderOper} />
-                </Table>
-            </div>
+            <APAConfigProvider
+                regionName="无障碍支持"
+                regionId="Table-accessibility-demo"
+                regionDesc="展示Table的无障碍支持"
+                isRegisterChildren
+            >
+                <div>
+                    <Table dataSource={this.state.dataSource}>
+                        <Table.Column title="Id" dataIndex="id" />
+                        <Table.Column title="Title" dataIndex="title.name" />
+                        <Table.Column title="Time" dataIndex="time" />
+                        <Table.Column title="operate" cell={this.renderOper} />
+                    </Table>
+                </div>
+            </APAConfigProvider>
         );
     }
 }

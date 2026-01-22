@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Button, Loading } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const onChange = function (...args) {
         console.log(...args);
@@ -51,34 +52,41 @@ class App extends React.Component {
         const name = widths[`title.name`];
 
         return (
-            <React.Fragment>
-                <Button
-                    onClick={() => {
-                        this.setState({ loading: true });
-                        setTimeout(() => {
-                            this.setState({ loading: false });
-                        }, 1000);
-                    }}
-                >
-                    reset
-                </Button>
-                <Table
-                    loading={loading}
-                    dataSource={dataSource()}
-                    rowSelection={rowSelection}
-                    onResizeChange={this.onResizeChange}
-                >
-                    <Table.Column lock title="Id" dataIndex="id" width={100} />
-                    <Table.Column
-                        title="Title"
-                        dataIndex={'title.name'}
-                        asyncResizable
-                        width={name}
-                    />
-                    <Table.Column title="Time" dataIndex="time" asyncResizable width={time} />
-                    <Table.Column cell={render} width={200} />
-                </Table>
-            </React.Fragment>
+            <APAConfigProvider
+                regionName="Resize Complex示例"
+                regionId="Table-resize-complex-demo"
+                regionDesc="Resize Complex示例"
+                isRegisterChildren
+            >
+                <React.Fragment>
+                    <Button
+                        onClick={() => {
+                            this.setState({ loading: true });
+                            setTimeout(() => {
+                                this.setState({ loading: false });
+                            }, 1000);
+                        }}
+                    >
+                        reset
+                    </Button>
+                    <Table
+                        loading={loading}
+                        dataSource={dataSource()}
+                        rowSelection={rowSelection}
+                        onResizeChange={this.onResizeChange}
+                    >
+                        <Table.Column lock title="Id" dataIndex="id" width={100} />
+                        <Table.Column
+                            title="Title"
+                            dataIndex={'title.name'}
+                            asyncResizable
+                            width={name}
+                        />
+                        <Table.Column title="Time" dataIndex="time" asyncResizable width={time} />
+                        <Table.Column cell={render} width={200} />
+                    </Table>
+                </React.Fragment>
+            </APAConfigProvider>
         );
     }
 }

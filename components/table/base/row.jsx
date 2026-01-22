@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { obj, dom } from '../../util';
 import { fetchDataByPath } from '../util';
+import { BaseContext } from '../context';
 
 const noop = () => {};
 
@@ -40,11 +41,6 @@ export default class Row extends React.Component {
         cellRef: noop,
         colGroup: {},
         wrapper: row => row,
-    };
-
-    static contextTypes = {
-        notRenderCellIndex: PropTypes.array,
-        lockType: PropTypes.oneOf(['left', 'right']),
     };
 
     shouldComponentUpdate(nextProps) {
@@ -103,7 +99,7 @@ export default class Row extends React.Component {
         // use params first, it's for list
         rowIndex = rowIndex !== undefined ? rowIndex : this.props.rowIndex;
 
-        const { lockType } = this.context;
+        const { lockType } = this._baseContext || {};
         return columns.map((child, index) => {
             /* eslint-disable no-unused-vars, prefer-const */
             const { dataIndex, align, alignHeader, width, colSpan, style, cellStyle, __colIndex, ...others } = child;
@@ -114,12 +110,12 @@ export default class Row extends React.Component {
             const value = fetchDataByPath(record, dataIndex);
             const attrs = getCellProps(rowIndex, colIndex, dataIndex, record) || {};
 
-            if (this.context.notRenderCellIndex) {
-                const matchCellIndex = this.context.notRenderCellIndex
+            if (this._baseContext && this._baseContext.notRenderCellIndex) {
+                const matchCellIndex = this._baseContext.notRenderCellIndex
                     .map(cellIndex => cellIndex.toString())
                     .indexOf([rowIndex, colIndex].toString());
                 if (matchCellIndex > -1) {
-                    this.context.notRenderCellIndex.splice(matchCellIndex, 1);
+                    this._baseContext.notRenderCellIndex.splice(matchCellIndex, 1);
                     return null;
                 }
             }
@@ -174,54 +170,63 @@ export default class Row extends React.Component {
                 notRenderCellIndex.push([rowIndex + j, colIndex + i]);
             }
         }
-        [].push.apply(this.context.notRenderCellIndex, notRenderCellIndex);
+        if (this._baseContext && this._baseContext.notRenderCellIndex) {
+            [].push.apply(this._baseContext.notRenderCellIndex, notRenderCellIndex);
+        }
     }
 
     render() {
-        /* eslint-disable no-unused-vars*/
-        const {
-            prefix,
-            className,
-            onClick,
-            onMouseEnter,
-            onMouseLeave,
-            columns,
-            Cell,
-            getCellProps,
-            rowIndex,
-            record,
-            __rowIndex,
-            children,
-            primaryKey,
-            cellRef,
-            colGroup,
-            pure,
-            locale,
-            expandedIndexSimulate,
-            tableEl,
-            rtl,
-            wrapper,
-            ...others
-        } = this.props;
-        const cls = classnames({
-            [`${prefix}table-row`]: true,
-            [className]: className,
-        });
+        return (
+            <BaseContext.Consumer>
+                {baseContext => {
+                    this._baseContext = baseContext;
+                    /* eslint-disable no-unused-vars*/
+                    const {
+                        prefix,
+                        className,
+                        onClick,
+                        onMouseEnter,
+                        onMouseLeave,
+                        columns,
+                        Cell,
+                        getCellProps,
+                        rowIndex,
+                        record,
+                        __rowIndex,
+                        children,
+                        primaryKey,
+                        cellRef,
+                        colGroup,
+                        pure,
+                        locale,
+                        expandedIndexSimulate,
+                        tableEl,
+                        rtl,
+                        wrapper,
+                        ...others
+                    } = this.props;
+                    const cls = classnames({
+                        [`${prefix}table-row`]: true,
+                        [className]: className,
+                    });
 
-        const tr = (
-            <tr
-                className={cls}
-                role="row"
-                {...others}
-                onClick={this.onClick}
-                onMouseEnter={this.onMouseEnter}
-                onMouseLeave={this.onMouseLeave}
-            >
-                {this.renderCells(record)}
-                {children}
-            </tr>
+                    const tr = (
+                        <tr
+                            className={cls}
+                            role="row"
+                            {...others}
+                            onClick={this.onClick}
+                            onMouseEnter={this.onMouseEnter}
+                            onMouseLeave={this.onMouseLeave}
+                        >
+                            {this.renderCells(record)}
+                            {children}
+                        </tr>
+                    );
+
+                    return wrapper(tr);
+                }}
+            </BaseContext.Consumer>
         );
-
-        return wrapper(tr);
     }
 }

@@ -9,8 +9,17 @@ import LockBody from './lock/body';
 import LockHeader from './lock/header';
 import LockWrapper from './fixed/wrapper';
 import { statics } from './util';
+import { LockContext } from './context';
 
 const { ieVersion } = env;
+
+export const lockStaticProps = {
+    LockRow: LockRow,
+    LockBody: LockBody,
+    LockHeader: LockHeader,
+    LockWrapper: LockWrapper,
+};
+
 export default function lock(BaseComponent) {
     /** Table */
     class LockTable extends React.Component {
@@ -30,31 +39,29 @@ export default function lock(BaseComponent) {
             ...BaseComponent.defaultProps,
         };
 
-        static childContextTypes = {
-            getTableInstance: PropTypes.func,
-            getLockNode: PropTypes.func,
-            onLockBodyScroll: PropTypes.func,
-            onRowMouseEnter: PropTypes.func,
-            onRowMouseLeave: PropTypes.func,
-        };
-
-        constructor(props, context) {
-            super(props, context);
+        constructor(props) {
+            super(props);
             this.lockLeftChildren = [];
             this.lockRightChildren = [];
+            // 缓存 context value
+            this._lockContextValue = null;
         }
 
         state = {};
 
-        getChildContext() {
-            return {
-                getTableInstance: this.getTableInstance,
-                getLockNode: this.getNode,
-                onLockBodyScroll: this.onLockBodyScroll,
-                onRowMouseEnter: this.onRowMouseEnter,
-                onRowMouseLeave: this.onRowMouseLeave,
-            };
-        }
+        // 缓存 LockContext value，方法引用稳定无需比较
+        getLockContextValue = () => {
+            if (this._lockContextValue === null) {
+                this._lockContextValue = {
+                    getTableInstance: this.getTableInstance,
+                    getLockNode: this.getNode,
+                    onLockBodyScroll: this.onLockBodyScroll,
+                    onRowMouseEnter: this.onRowMouseEnter,
+                    onRowMouseLeave: this.onRowMouseLeave,
+                };
+            }
+            return this._lockContextValue;
+        };
 
         componentDidMount() {
             events.on(window, 'resize', this.adjustSize);
@@ -700,20 +707,26 @@ export default function lock(BaseComponent) {
                     />,
                 ];
                 return (
-                    <BaseComponent
-                        {...others}
-                        tableWidth={tableWidth}
-                        dataSource={dataSource}
-                        columns={normalizedChildren}
-                        prefix={prefix}
-                        lengths={lengths}
-                        wrapperContent={content}
-                        components={components}
-                        className={className}
-                    />
+                    <LockContext.Provider value={this.getLockContextValue()}>
+                        <BaseComponent
+                            {...others}
+                            tableWidth={tableWidth}
+                            dataSource={dataSource}
+                            columns={normalizedChildren}
+                            prefix={prefix}
+                            lengths={lengths}
+                            wrapperContent={content}
+                            components={components}
+                            className={className}
+                        />
+                    </LockContext.Provider>
                 );
             }
-            return <BaseComponent {...this.props} />;
+            return (
+                <LockContext.Provider value={this.getLockContextValue()}>
+                    <BaseComponent {...this.props} />
+                </LockContext.Provider>
+            );
         }
     }
     statics(LockTable, BaseComponent);

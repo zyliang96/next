@@ -1,13 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { z } from 'zod';
+import { APAActionEnabled, APAStateEnabled, APAConfigProvider, APAAction } from '@alifd/apa-sdk';
 import FilterComponent from './filter';
 import SortComponent from './sort';
 import CellComponent from './cell';
 import ResizeComponent from './resize';
 
 const noop = () => {};
-export default class Header extends React.Component {
+
+@APAActionEnabled
+@APAStateEnabled
+class Header extends React.Component {
     static propTypes = {
         children: PropTypes.any,
         prefix: PropTypes.string,
@@ -267,3 +272,5 @@ export default class Header extends React.Component {
         );
     }
 }
+
+export default Header;

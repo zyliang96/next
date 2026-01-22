@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource = j => {
     const result = [];
@@ -29,20 +30,27 @@ class App extends React.Component {
     };
     render() {
         return (
-            <Table
-                dataSource={dataSource(200)}
-                maxBodyHeight={400}
-                useVirtual
-                scrollToRow={this.state.scrollToRow}
-                onBodyScroll={this.onBodyScroll}
+            <APAConfigProvider
+                regionName="Virtual示例"
+                regionId="Table-virtual-demo"
+                regionDesc="Virtual示例"
+                isRegisterChildren
             >
-                <Table.Column title="Id1" dataIndex="id" width={100} />
-                <Table.Column title="Index" dataIndex="index" width={200} />
-                <Table.Column title="Time" dataIndex="time" width={200} />
-                <Table.Column title="Time" dataIndex="time" width={200} />
-                <Table.Column title="Time" dataIndex="time" width={200} lock="right" />
-                <Table.Column cell={render} width={200} lock />
-            </Table>
+                <Table
+                    dataSource={dataSource(200)}
+                    maxBodyHeight={400}
+                    useVirtual
+                    scrollToRow={this.state.scrollToRow}
+                    onBodyScroll={this.onBodyScroll}
+                >
+                    <Table.Column title="Id1" dataIndex="id" width={100} />
+                    <Table.Column title="Index" dataIndex="index" width={200} />
+                    <Table.Column title="Time" dataIndex="time" width={200} />
+                    <Table.Column title="Time" dataIndex="time" width={200} />
+                    <Table.Column title="Time" dataIndex="time" width={200} lock="right" />
+                    <Table.Column cell={render} width={200} lock />
+                </Table>
+            </APAConfigProvider>
         );
     }
 }

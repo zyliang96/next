@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const onRowClick = function (record, index, e) {
         console.log(record, index, e);
@@ -37,11 +38,18 @@ const onRowClick = function (record, index, e) {
     };
 
 ReactDOM.render(
-    <Table dataSource={dataSource()} onRowClick={onRowClick} cellProps={cellProps}>
-        <Table.Column title="Id" dataIndex="id" />
-        <Table.Column title="Title" dataIndex="title.name" />
-        <Table.Column title="Time" colSpan={2} dataIndex="year" />
-        <Table.Column colSpan={0} dataIndex="month" />
-    </Table>,
+    <APAConfigProvider
+        regionName="Colspan Demo"
+        regionId="Table-colspan-demo"
+        regionDesc="展示Table的colspan"
+        isRegisterChildren
+    >
+        <Table dataSource={dataSource()} onRowClick={onRowClick} cellProps={cellProps}>
+            <Table.Column title="Id" dataIndex="id" />
+            <Table.Column title="Title" dataIndex="title.name" />
+            <Table.Column title="Time" colSpan={2} dataIndex="year" />
+            <Table.Column colSpan={0} dataIndex="month" />
+        </Table>
+    </APAConfigProvider>,
     mountNode
 );

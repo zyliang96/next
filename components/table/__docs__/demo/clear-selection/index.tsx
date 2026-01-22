@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Button, Box } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource = (i, j) => {
         const result = [];
@@ -68,25 +69,34 @@ class App extends React.Component {
     }
     render() {
         return (
-            <div>
-                <Box direction="row" spacing={20}>
-                    <Button onClick={this.clear.bind(this)}>Clear Selection</Button>
-                    <Button onClick={this.changeMode.bind(this)}>Change mode</Button>
-                    <Button onClick={this.toggleLoading.bind(this)}>Toggle loading</Button>
-                    <Button onClick={this.modifyDataSource.bind(this)}>Modify dataSource</Button>
-                </Box>
-                <br />
-                <Table
-                    dataSource={this.state.dataSource}
-                    loading={this.state.loading}
-                    rowSelection={this.state.rowSelection}
-                >
-                    <Table.Column title="Id" dataIndex="id" />
-                    <Table.Column title="Title" dataIndex="title.name" />
-                    <Table.Column title="Time" dataIndex="time" />
-                    <Table.Column cell={render} width={200} />
-                </Table>
-            </div>
+            <APAConfigProvider
+                regionName="清除选择示例"
+                regionId="Table-clear-selection-demo"
+                regionDesc="清除选择示例"
+                isRegisterChildren
+            >
+                <div>
+                    <Box direction="row" spacing={20}>
+                        <Button onClick={this.clear.bind(this)}>Clear Selection</Button>
+                        <Button onClick={this.changeMode.bind(this)}>Change mode</Button>
+                        <Button onClick={this.toggleLoading.bind(this)}>Toggle loading</Button>
+                        <Button onClick={this.modifyDataSource.bind(this)}>
+                            Modify dataSource
+                        </Button>
+                    </Box>
+                    <br />
+                    <Table
+                        dataSource={this.state.dataSource}
+                        loading={this.state.loading}
+                        rowSelection={this.state.rowSelection}
+                    >
+                        <Table.Column title="Id" dataIndex="id" />
+                        <Table.Column title="Title" dataIndex="title.name" />
+                        <Table.Column title="Time" dataIndex="time" />
+                        <Table.Column cell={render} width={200} />
+                    </Table>
+                </div>
+            </APAConfigProvider>
         );
     }
 }

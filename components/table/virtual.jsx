@@ -2,12 +2,21 @@ import React from 'react';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
+import { APAActionEnabled, APAActionDisabled, APAAction } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import { dom } from '../util';
 import VirtualBody from './virtual/body';
 import { statics } from './util';
+import { VirtualContext } from './context';
 
 const noop = () => {};
+
+export const virtualStaticProps = {
+    VirtualBody: VirtualBody,
+};
+
 export default function virtual(BaseComponent) {
+    @APAActionEnabled
     class VirtualTable extends React.Component {
         static VirtualBody = VirtualBody;
         static propTypes = {
@@ -41,17 +50,8 @@ export default function virtual(BaseComponent) {
             keepForwardRenderRows: 10,
         };
 
-        static childContextTypes = {
-            onVirtualScroll: PropTypes.func,
-            bodyHeight: PropTypes.number,
-            innerTop: PropTypes.number,
-            getBodyNode: PropTypes.func,
-            getTableInstanceForVirtual: PropTypes.func,
-            rowSelection: PropTypes.object,
-        };
-
-        constructor(props, context) {
-            super(props, context);
+        constructor(props) {
+            super(props);
             const { useVirtual, dataSource } = props;
 
             const hasVirtualData = useVirtual && dataSource && dataSource.length > 0;
@@ -62,18 +62,36 @@ export default function virtual(BaseComponent) {
                 height: this.props.maxBodyHeight,
                 hasVirtualData,
             };
+            
+            // 缓存 context value
+            this._virtualContextValue = null;
+            this._lastBodyHeight = null;
+            this._lastInnerTop = null;
         }
 
-        getChildContext() {
-            return {
-                onVirtualScroll: this.onScroll,
-                bodyHeight: this.computeBodyHeight(),
-                innerTop: this.computeInnerTop(),
-                getBodyNode: this.getBodyNode,
-                getTableInstanceForVirtual: this.getTableInstance,
-                rowSelection: this.rowSelection,
-            };
-        }
+        // 缓存 VirtualContext value（注意：bodyHeight 和 innerTop 是高频变化的）
+        getVirtualContextValue = () => {
+            const bodyHeight = this.computeBodyHeight();
+            const innerTop = this.computeInnerTop();
+            
+            if (
+                this._virtualContextValue === null ||
+                this._lastBodyHeight !== bodyHeight ||
+                this._lastInnerTop !== innerTop
+            ) {
+                this._lastBodyHeight = bodyHeight;
+                this._lastInnerTop = innerTop;
+                this._virtualContextValue = {
+                    onVirtualScroll: this.onScroll,
+                    bodyHeight,
+                    innerTop,
+                    getBodyNode: this.getBodyNode,
+                    getTableInstanceForVirtual: this.getTableInstance,
+                    rowSelection: this.rowSelection,
+                };
+            }
+            return this._virtualContextValue;
+        };
 
         static getDerivedStateFromProps(nextProps, prevState) {
             const state = {};
@@ -88,8 +106,12 @@ export default function virtual(BaseComponent) {
                 state.scrollToRow = nextProps.scrollToRow;
             }
 
-            if (prevState.useVirtual !== nextProps.useVirtual || prevState.dataSource !== nextProps.dataSource) {
-                state.hasVirtualData = nextProps.useVirtual && nextProps.dataSource && nextProps.dataSource.length > 0;
+            if (
+                prevState.useVirtual !== nextProps.useVirtual ||
+                prevState.dataSource !== nextProps.dataSource
+            ) {
+                state.hasVirtualData =
+                    nextProps.useVirtual && nextProps.dataSource && nextProps.dataSource.length > 0;
             }
 
             return state;
@@ -188,7 +210,8 @@ export default function virtual(BaseComponent) {
                 if (oldScrollToRow !== scrollToRow) {
                     this.bodyNode.scrollTop = rowHeight * scrollToRow;
                 } else {
-                    this.bodyNode.scrollTop = (this.lastScrollTop % rowHeight) + rowHeight * scrollToRow;
+                    this.bodyNode.scrollTop =
+                        (this.lastScrollTop % rowHeight) + rowHeight * scrollToRow;
                 }
             }
         }
@@ -215,6 +238,26 @@ export default function virtual(BaseComponent) {
                     dom.setStyle(virtualScrollNode, 'min-width', 'auto');
                 }
             }
+        }
+
+        @APAActionDisabled({ actionName: 'scrollToRow', defaultDisabled: true })
+        get apaScrollToRowDisabled() {
+            return !this.state.hasVirtualData;
+        }
+
+        @APAAction({
+            name: 'scrollToRow',
+            desc: '滚动到指定行',
+            params: z.number().describe('行索引'),
+        })
+        apaScrollToRow(rowIndex) {
+            // 避免横向滚动带来的性能问题
+            const { dataSource } = this.props;
+            const len = dataSource.length;
+            const newScrollToRow = Math.min(len, Math.max(0, rowIndex));
+            this.setState({
+                scrollToRow: newScrollToRow,
+            });
         }
 
         onScroll = () => {
@@ -301,14 +344,16 @@ export default function virtual(BaseComponent) {
             }
 
             return (
-                <BaseComponent
-                    {...others}
-                    scrollToRow={scrollToRow}
-                    dataSource={newDataSource}
-                    entireDataSource={entireDataSource}
-                    components={components}
-                    fixedHeader={fixedHeader}
-                />
+                <VirtualContext.Provider value={this.getVirtualContextValue()}>
+                    <BaseComponent
+                        {...others}
+                        scrollToRow={scrollToRow}
+                        dataSource={newDataSource}
+                        entireDataSource={entireDataSource}
+                        components={components}
+                        fixedHeader={fixedHeader}
+                    />
+                </VirtualContext.Provider>
             );
         }
     }

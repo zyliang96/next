@@ -2,6 +2,7 @@ import React from 'react';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import BodyComponent from '../base/body';
+import { VirtualContext, FixedContext, LockContext, BaseContext } from '../context';
 
 /* eslint-disable react/prefer-stateless-function */
 export default class VirtualBody extends React.Component {
@@ -13,28 +14,15 @@ export default class VirtualBody extends React.Component {
         tableWidth: PropTypes.number,
     };
 
-    static contextTypes = {
-        maxBodyHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-        onBodyScroll: PropTypes.func,
-        onFixedScrollSync: PropTypes.func,
-        onVirtualScroll: PropTypes.func,
-        onLockBodyScroll: PropTypes.func,
-        bodyHeight: PropTypes.number,
-        innerTop: PropTypes.number,
-        getNode: PropTypes.func,
-        getBodyNode: PropTypes.func,
-        getLockNode: PropTypes.func,
-        lockType: PropTypes.oneOf(['left', 'right']),
-    };
-
     componentDidMount() {
         const bodyNode = findDOMNode(this);
-        // // for fixed
-        this.context.getNode('body', bodyNode);
+        const lockType = this._baseContext && this._baseContext.lockType;
+        // for fixed
+        this._fixedContext && this._fixedContext.getNode('body', bodyNode);
         // for virtual
-        this.context.getBodyNode(bodyNode, this.context.lockType);
+        this._virtualContext && this._virtualContext.getBodyNode(bodyNode, lockType);
         // for lock
-        this.context.getLockNode('body', bodyNode, this.context.lockType);
+        this._lockContext && this._lockContext.getLockNode('body', bodyNode, lockType);
     }
 
     tableRef = table => {
@@ -47,43 +35,73 @@ export default class VirtualBody extends React.Component {
 
     onScroll = current => {
         // for fixed
-        this.context.onFixedScrollSync(current);
+        this._fixedContext && this._fixedContext.onFixedScrollSync(current);
         // for lock
-        this.context.onLockBodyScroll(current);
+        this._lockContext && this._lockContext.onLockBodyScroll(current);
         // for virtual
-        this.context.onVirtualScroll();
+        this._virtualContext && this._virtualContext.onVirtualScroll();
     };
 
     render() {
-        const { prefix, className, colGroup, tableWidth, ...others } = this.props;
-        const { maxBodyHeight, bodyHeight, innerTop } = this.context;
-        const style = {
-            width: tableWidth,
-        };
-        const wrapperStyle = {
-            position: 'relative',
-        };
-        // todo 2.0 ，这里最好自己画滚动条
-        if (bodyHeight > maxBodyHeight) {
-            wrapperStyle.height = bodyHeight;
-        }
+
+
         return (
-            <div style={{ maxHeight: maxBodyHeight }} className={className} onScroll={this.onScroll}>
-                <div style={wrapperStyle} ref={this.virtualScrollRef}>
-                    <div
-                        style={{
-                            position: 'relative',
-                            transform: `translateY(${innerTop}px)`,
-                            willChange: 'transform',
-                        }}
-                    >
-                        <table ref={this.tableRef} style={style}>
-                            {colGroup}
-                            <BodyComponent {...others} prefix={prefix} />
-                        </table>
-                    </div>
-                </div>
-            </div>
+            <VirtualContext.Consumer>
+                {virtualContext => {
+                    this._virtualContext = virtualContext;
+                    return (
+                        <FixedContext.Consumer>
+                            {fixedContext => {
+                                this._fixedContext = fixedContext;
+                                return (
+                                    <LockContext.Consumer>
+                                        {lockContext => {
+                                            this._lockContext = lockContext;
+                                            return (
+                                                <BaseContext.Consumer>
+                                                    {baseContext => {
+                                                        this._baseContext = baseContext;
+                                                        const { maxBodyHeight, bodyHeight, innerTop } = virtualContext;
+                                                        const { prefix, className, colGroup, tableWidth, ...others } = this.props;
+                                                        const style = {
+                                                            width: tableWidth,
+                                                        };
+                                                        const wrapperStyle = {
+                                                            position: 'relative',
+                                                        };
+                                                        // todo 2.0 ，这里最好自己画滚动条
+                                                        if (bodyHeight > maxBodyHeight) {
+                                                            wrapperStyle.height = bodyHeight;
+                                                        }
+                                                        return (
+                                                            <div style={{ maxHeight: maxBodyHeight }} className={className} onScroll={this.onScroll}>
+                                                                <div style={wrapperStyle} ref={this.virtualScrollRef}>
+                                                                    <div
+                                                                        style={{
+                                                                            position: 'relative',
+                                                                            transform: `translateY(${innerTop}px)`,
+                                                                            willChange: 'transform',
+                                                                        }}
+                                                                    >
+                                                                        <table ref={this.tableRef} style={style}>
+                                                                            {colGroup}
+                                                                            <BodyComponent {...others} prefix={prefix} />
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    }}
+                                                </BaseContext.Consumer>
+                                            );
+                                        }}
+                                    </LockContext.Consumer>
+                                );
+                            }}
+                        </FixedContext.Consumer>
+                    );
+                }}
+            </VirtualContext.Consumer>
         );
     }
 }

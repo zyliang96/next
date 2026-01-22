@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const onRowClick = function (record, index, e) {
         console.log(record, index, e);
@@ -56,17 +57,24 @@ class App extends React.Component {
             return <a onClick={this.onRemove.bind(this, record.id)}>Remove({record.id})</a>;
         };
         return (
-            <div>
-                <p>
-                    <Button onClick={this.onAdd}>Add Item</Button>
-                </p>
-                <Table dataSource={this.state.dataSource} onRowClick={onRowClick}>
-                    <Table.Column title="Id" dataIndex="id" />
-                    <Table.Column title="Title" dataIndex="title.name" />
-                    <Table.Column title="Time" dataIndex="time" />
-                    <Table.Column cell={renderOper} width="20%" />
-                </Table>
-            </div>
+            <APAConfigProvider
+                regionName="CRUD示例"
+                regionId="Table-crud-demo"
+                regionDesc="CRUD示例"
+                isRegisterChildren
+            >
+                <div>
+                    <p>
+                        <Button onClick={this.onAdd}>Add Item</Button>
+                    </p>
+                    <Table dataSource={this.state.dataSource} onRowClick={onRowClick}>
+                        <Table.Column title="Id" dataIndex="id" />
+                        <Table.Column title="Title" dataIndex="title.name" />
+                        <Table.Column title="Time" dataIndex="time" />
+                        <Table.Column cell={renderOper} width="20%" />
+                    </Table>
+                </div>
+            </APAConfigProvider>
         );
     }
 }

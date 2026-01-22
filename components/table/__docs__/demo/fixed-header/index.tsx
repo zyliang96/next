@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Button, Select, Box } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const Option = Select.Option;
 const dataSource = length => {
@@ -58,26 +59,38 @@ class App extends React.Component {
     }
     render() {
         return (
-            <div>
-                <Box direction="row" spacing={20}>
-                    <Button onClick={this.onSwitch.bind(this, 'sticky')}>enable sticky</Button>
-                    <Button onClick={this.onSwitch.bind(this, 'lock')}>enable lock</Button>
-                    <Button onClick={this.onSwitch.bind(this, 'dataSource')}>
-                        toggle dataSource
-                    </Button>
-                </Box>
-                <br />
-                <Table
-                    dataSource={this.state.dataSource}
-                    fixedHeader
-                    stickyHeader={this.state.sticky}
-                >
-                    <Table.Column title="Id" dataIndex="id" width={200} lock={this.state.lock} />
-                    <Table.Column title="Title" dataIndex="title.name" width={200} />
-                    <Table.Column title="Time" dataIndex="time" width={200} />
-                    <Table.Column title="test" cell={render} width={200} />
-                </Table>
-            </div>
+            <APAConfigProvider
+                regionName="Fixed Header示例"
+                regionId="Table-fixed-header-demo"
+                regionDesc="Fixed Header示例"
+                isRegisterChildren
+            >
+                <div>
+                    <Box direction="row" spacing={20}>
+                        <Button onClick={this.onSwitch.bind(this, 'sticky')}>enable sticky</Button>
+                        <Button onClick={this.onSwitch.bind(this, 'lock')}>enable lock</Button>
+                        <Button onClick={this.onSwitch.bind(this, 'dataSource')}>
+                            toggle dataSource
+                        </Button>
+                    </Box>
+                    <br />
+                    <Table
+                        dataSource={this.state.dataSource}
+                        fixedHeader
+                        stickyHeader={this.state.sticky}
+                    >
+                        <Table.Column
+                            title="Id"
+                            dataIndex="id"
+                            width={200}
+                            lock={this.state.lock}
+                        />
+                        <Table.Column title="Title" dataIndex="title.name" width={200} />
+                        <Table.Column title="Time" dataIndex="time" width={200} />
+                        <Table.Column title="test" cell={render} width={200} />
+                    </Table>
+                </div>
+            </APAConfigProvider>
         );
     }
 }

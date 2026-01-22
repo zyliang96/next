@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const columns = new Array(4).fill({
     dataIndex: 'data',
@@ -45,27 +46,34 @@ const dataSource = [
 ];
 
 ReactDOM.render(
-    <Table.StickyLock
-        type="primary"
-        dataSource={dataSource}
-        cellProps={(rowIndex, colIndex) => {
-            if (colIndex === 0) {
-                return {
-                    colSpan: 1,
-                    rowSpan: 2,
-                };
-            }
-            if (colIndex === columns.length - 1) {
-                return {
-                    colSpan: 1,
-                    rowSpan: 3,
-                };
-            }
-        }}
+    <APAConfigProvider
+        regionName="colspan锁列示例"
+        regionId="Table-colspan-lock-columns-demo"
+        regionDesc="colspan锁列示例"
+        isRegisterChildren
     >
-        {columns.map((col, i) => {
-            return <Table.Column key={i} {...col} />;
-        })}
-    </Table.StickyLock>,
+        <Table.StickyLock
+            type="primary"
+            dataSource={dataSource}
+            cellProps={(rowIndex, colIndex) => {
+                if (colIndex === 0) {
+                    return {
+                        colSpan: 1,
+                        rowSpan: 2,
+                    };
+                }
+                if (colIndex === columns.length - 1) {
+                    return {
+                        colSpan: 1,
+                        rowSpan: 3,
+                    };
+                }
+            }}
+        >
+            {columns.map((col, i) => {
+                return <Table.Column key={i} {...col} />;
+            })}
+        </Table.StickyLock>
+    </APAConfigProvider>,
     mountNode
 );

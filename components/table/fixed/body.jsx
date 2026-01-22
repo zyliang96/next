@@ -2,6 +2,7 @@ import React from 'react';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import BodyComponent from '../base/body';
+import { FixedContext } from '../context';
 
 /* eslint-disable react/prefer-stateless-function */
 export default class FixedBody extends React.Component {
@@ -14,22 +15,13 @@ export default class FixedBody extends React.Component {
         tableWidth: PropTypes.number,
     };
 
-    static contextTypes = {
-        fixedHeader: PropTypes.bool,
-        maxBodyHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-        onFixedScrollSync: PropTypes.func,
-        getNode: PropTypes.func,
-    };
-
     componentDidMount() {
-        const { getNode } = this.context;
-        getNode && getNode('body', findDOMNode(this));
+        this._fixedContext && this._fixedContext.getNode('body', findDOMNode(this));
     }
 
     onBodyScroll = event => {
-        const { onFixedScrollSync } = this.context;
         // sync scroll left to header
-        onFixedScrollSync && onFixedScrollSync(event);
+        this._fixedContext && this._fixedContext.onFixedScrollSync(event);
 
         // sync scroll top/left to lock columns
         if ('onLockScroll' in this.props && typeof this.props.onLockScroll === 'function') {
@@ -38,21 +30,28 @@ export default class FixedBody extends React.Component {
     };
 
     render() {
-        /*eslint-disable no-unused-vars */
-        const { className, colGroup, onLockScroll, tableWidth, ...others } = this.props;
-        const { maxBodyHeight, fixedHeader } = this.context;
-        const style = {};
-        if (fixedHeader) {
-            style.maxHeight = maxBodyHeight;
-            style.position = 'relative';
-        }
         return (
-            <div style={style} className={className} onScroll={this.onBodyScroll}>
-                <table style={{ width: tableWidth }}>
-                    {colGroup}
-                    <BodyComponent {...others} colGroup={colGroup} />
-                </table>
-            </div>
+            <FixedContext.Consumer>
+                {fixedContext => {
+                    this._fixedContext = fixedContext;
+                    /*eslint-disable no-unused-vars */
+                    const { className, colGroup, onLockScroll, tableWidth, ...others } = this.props;
+                    const { maxBodyHeight, fixedHeader } = fixedContext;
+                    const style = {};
+                    if (fixedHeader) {
+                        style.maxHeight = maxBodyHeight;
+                        style.position = 'relative';
+                    }
+                    return (
+                        <div style={style} className={className} onScroll={this.onBodyScroll}>
+                            <table style={{ width: tableWidth }}>
+                                {colGroup}
+                                <BodyComponent {...others} colGroup={colGroup} />
+                            </table>
+                        </div>
+                    );
+                }}
+            </FixedContext.Consumer>
         );
     }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 /*eslint-disable react/prop-types, react/no-multi-comp*/
 class ExpandedApp extends React.Component {
     constructor(props) {
@@ -129,36 +130,43 @@ class App extends React.Component {
             );
         };
         return (
-            <span>
-                <p>
-                    {' '}
-                    <Button onClick={this.disabledExpandedCol.bind(this)}>
+            <APAConfigProvider
+                regionName="展开复杂示例"
+                regionId="Table-expanded-complex-demo"
+                regionDesc="展开复杂示例"
+                isRegisterChildren
+            >
+                <span>
+                    <p>
                         {' '}
-                        disable fourth row{' '}
-                    </Button>
-                    <span style={{ marginRight: 20 }} />
-                    <Button onClick={this.toggleCol.bind(this)}> hide + </Button>
-                </p>
-                <Table
-                    dataSource={this.state.dataSource}
-                    expandedIndexSimulate
-                    isZebra={this.state.isZebra}
-                    hasBorder={this.state.hasBorder}
-                    onSort={this.onSort.bind(this)}
-                    expandedRowRender={expandedRowRender}
-                    expandedRowIndent={[1, 1]}
-                    openRowKeys={this.state.openRowKeys}
-                    getExpandedColProps={this.state.getExpandedColProps}
-                    hasExpandedRowCtrl={this.state.hasExpandedRowCtrl}
-                    onRowOpen={this.onRowOpen.bind(this)}
-                    rowProps={this.rowProps.bind(this)}
-                >
-                    <Table.Column title="Id" dataIndex="id" sortable />
-                    <Table.Column title="Title" dataIndex="title" cell={renderTitle} />
-                    <Table.Column title="Time" dataIndex="time" width={200} />
-                    <Table.Column cell={render} width={200} />
-                </Table>
-            </span>
+                        <Button onClick={this.disabledExpandedCol.bind(this)}>
+                            {' '}
+                            disable fourth row{' '}
+                        </Button>
+                        <span style={{ marginRight: 20 }} />
+                        <Button onClick={this.toggleCol.bind(this)}> hide + </Button>
+                    </p>
+                    <Table
+                        dataSource={this.state.dataSource}
+                        expandedIndexSimulate
+                        isZebra={this.state.isZebra}
+                        hasBorder={this.state.hasBorder}
+                        onSort={this.onSort.bind(this)}
+                        expandedRowRender={expandedRowRender}
+                        expandedRowIndent={[1, 1]}
+                        openRowKeys={this.state.openRowKeys}
+                        getExpandedColProps={this.state.getExpandedColProps}
+                        hasExpandedRowCtrl={this.state.hasExpandedRowCtrl}
+                        onRowOpen={this.onRowOpen.bind(this)}
+                        rowProps={this.rowProps.bind(this)}
+                    >
+                        <Table.Column title="Id" dataIndex="id" sortable />
+                        <Table.Column title="Title" dataIndex="title" cell={renderTitle} />
+                        <Table.Column title="Time" dataIndex="time" width={200} />
+                        <Table.Column cell={render} width={200} />
+                    </Table>
+                </span>
+            </APAConfigProvider>
         );
     }
 }

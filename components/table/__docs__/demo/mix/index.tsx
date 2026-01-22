@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const data = [
     {
@@ -142,31 +143,38 @@ const tableMixTreeLock = (
 );
 
 ReactDOM.render(
-    <div className="mix-demo">
-        <div className="row">
-            <h4>tree & select</h4>
-            {tableMixTree}
+    <APAConfigProvider
+        regionName="Mix示例"
+        regionId="Table-mix-demo"
+        regionDesc="Mix示例"
+        isRegisterChildren
+    >
+        <div className="mix-demo">
+            <div className="row">
+                <h4>tree & select</h4>
+                {tableMixTree}
+            </div>
+            <div className="row">
+                <h4>extra & select</h4>
+                {tableMixExpanded}
+            </div>
+            <div className="row">
+                <h4>tree & lock column & select</h4>
+                {tableMixSelectionTreeLock}
+            </div>
+            <div className="row">
+                <h4>extra & lock column & select</h4>
+                {tableMixExpandedLock}
+            </div>
+            <div className="row">
+                <h4>lock column & select</h4>
+                {tableMixLock}
+            </div>
+            <div className="row">
+                <h4>tree & lock column</h4>
+                {tableMixTreeLock}
+            </div>
         </div>
-        <div className="row">
-            <h4>extra & select</h4>
-            {tableMixExpanded}
-        </div>
-        <div className="row">
-            <h4>tree & lock column & select</h4>
-            {tableMixSelectionTreeLock}
-        </div>
-        <div className="row">
-            <h4>extra & lock column & select</h4>
-            {tableMixExpandedLock}
-        </div>
-        <div className="row">
-            <h4>lock column & select</h4>
-            {tableMixLock}
-        </div>
-        <div className="row">
-            <h4>tree & lock column</h4>
-            {tableMixTreeLock}
-        </div>
-    </div>,
+    </APAConfigProvider>,
     mountNode
 );

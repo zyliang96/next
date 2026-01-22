@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Input } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const result = [
     {
@@ -89,13 +90,20 @@ class Demo extends React.Component {
 
     render() {
         return (
-            <div>
-                <Table dataSource={this.state.dataSource}>
-                    <Table.Column title="Id" dataIndex="id" />
-                    <Table.Column title="Title" dataIndex="title.name" cell={this.renderCell} />
-                    <Table.Column title="Time" dataIndex="time" />
-                </Table>
-            </div>
+            <APAConfigProvider
+                regionName="可编辑示例"
+                regionId="Table-editable-demo"
+                regionDesc="可编辑示例"
+                isRegisterChildren
+            >
+                <div>
+                    <Table dataSource={this.state.dataSource}>
+                        <Table.Column title="Id" dataIndex="id" />
+                        <Table.Column title="Title" dataIndex="title.name" cell={this.renderCell} />
+                        <Table.Column title="Time" dataIndex="time" />
+                    </Table>
+                </div>
+            </APAConfigProvider>
         );
     }
 }

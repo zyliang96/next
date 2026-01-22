@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Button, Select, Box } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const Option = Select.Option;
 const dataSource = length => {
@@ -45,39 +46,46 @@ class App extends React.Component {
     };
     render() {
         return (
-            <div>
-                <Box direction="row" spacing={20}>
-                    <Button onClick={this.changeContainer}>change container</Button>
-                </Box>
-                <br />
-                <div
-                    id="abc"
-                    style={{
-                        height: 300,
-                        background: 'purple',
-                        padding: 20,
-                        width: '100%',
-                        overflow: 'auto',
-                    }}
-                >
-                    <Table
-                        affixProps={{ container: this.state.container }}
-                        dataSource={this.state.dataSource}
-                        fixedHeader
-                        stickyHeader
+            <APAConfigProvider
+                regionName="Sticky Header示例"
+                regionId="Table-sticky-header-demo"
+                regionDesc="Sticky Header示例"
+                isRegisterChildren
+            >
+                <div>
+                    <Box direction="row" spacing={20}>
+                        <Button onClick={this.changeContainer}>change container</Button>
+                    </Box>
+                    <br />
+                    <div
+                        id="abc"
+                        style={{
+                            height: 300,
+                            background: 'purple',
+                            padding: 20,
+                            width: '100%',
+                            overflow: 'auto',
+                        }}
                     >
-                        <Table.Column
-                            title="Id"
-                            dataIndex="id"
-                            width={200}
-                            lock={this.state.lock}
-                        />
-                        <Table.Column title="Title" dataIndex="title.name" width={200} />
-                        <Table.Column title="Time" dataIndex="time" width={200} />
-                        <Table.Column title="test" cell={render} width={200} />
-                    </Table>
+                        <Table
+                            affixProps={{ container: this.state.container }}
+                            dataSource={this.state.dataSource}
+                            fixedHeader
+                            stickyHeader
+                        >
+                            <Table.Column
+                                title="Id"
+                                dataIndex="id"
+                                width={200}
+                                lock={this.state.lock}
+                            />
+                            <Table.Column title="Title" dataIndex="title.name" width={200} />
+                            <Table.Column title="Time" dataIndex="time" width={200} />
+                            <Table.Column title="test" cell={render} width={200} />
+                        </Table>
+                    </div>
                 </div>
-            </div>
+            </APAConfigProvider>
         );
     }
 }

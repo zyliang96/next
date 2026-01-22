@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Button } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource = () => {
         const result = [];
@@ -45,25 +46,32 @@ class App extends React.Component {
     }
     render() {
         return (
-            <div>
-                <p>
-                    <Button onClick={this.toggleIndent.bind(this)}> Update indent </Button>
-                </p>
-                <Table
-                    dataSource={this.state.dataSource}
-                    isZebra={this.state.isZebra}
-                    hasBorder={false}
-                    onSort={this.onSort.bind(this)}
-                    expandedRowRender={record => record.title}
-                    onRowClick={() => console.log('rowClick')}
-                    expandedRowIndent={this.state.expandedRowIndent}
-                >
-                    <Table.Column title="Id" dataIndex="id" sortable />
-                    <Table.Column title="Title" dataIndex="title" />
-                    <Table.Column title="Time" dataIndex="time" />
-                    <Table.Column cell={render} width={200} />
-                </Table>
-            </div>
+            <APAConfigProvider
+                regionName="展开示例"
+                regionId="Table-expanded-demo"
+                regionDesc="展开示例"
+                isRegisterChildren
+            >
+                <div>
+                    <p>
+                        <Button onClick={this.toggleIndent.bind(this)}> Update indent </Button>
+                    </p>
+                    <Table
+                        dataSource={this.state.dataSource}
+                        isZebra={this.state.isZebra}
+                        hasBorder={false}
+                        onSort={this.onSort.bind(this)}
+                        expandedRowRender={record => record.title}
+                        onRowClick={() => console.log('rowClick')}
+                        expandedRowIndent={this.state.expandedRowIndent}
+                    >
+                        <Table.Column title="Id" dataIndex="id" sortable />
+                        <Table.Column title="Title" dataIndex="title" />
+                        <Table.Column title="Time" dataIndex="time" />
+                        <Table.Column cell={render} width={200} />
+                    </Table>
+                </div>
+            </APAConfigProvider>
         );
     }
 }

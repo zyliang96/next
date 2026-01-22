@@ -3,15 +3,9 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { log } from '../../util';
 import Row from '../base/row';
+import { ListContext, SelectionContext, BaseContext } from '../context';
 
 export default class GroupListRow extends Row {
-    static contextTypes = {
-        listHeader: PropTypes.any,
-        listFooter: PropTypes.any,
-        rowSelection: PropTypes.object,
-        notRenderCellIndex: PropTypes.array,
-        lockType: PropTypes.oneOf(['left', 'right']),
-    };
 
     render() {
         /* eslint-disable no-unused-vars*/
@@ -42,38 +36,67 @@ export default class GroupListRow extends Row {
             [className]: className,
         });
 
-        // clear notRenderCellIndex, incase of cached data
-        this.context.notRenderCellIndex = [];
-
         return (
-            <table
-                className={cls}
-                role="row"
-                {...others}
-                onClick={this.onClick}
-                onMouseEnter={this.onMouseEnter}
-                onMouseLeave={this.onMouseLeave}
-            >
-                {colGroup}
-                <tbody>
-                    {this.renderContent('header')}
-                    {this.renderChildren()}
-                    {this.renderContent('footer')}
-                </tbody>
-            </table>
+            <ListContext.Consumer>
+                {listContext => {
+                    this._listContext = listContext;
+                    return (
+                        <SelectionContext.Consumer>
+                            {selectionContext => {
+                                this._selectionContext = selectionContext;
+                                return (
+                                    <BaseContext.Consumer>
+                                        {baseContext => {
+                                            this._baseContext = baseContext;
+                                            // 设置 context 以便父类方法使用
+                                            this.context = {
+                                                ...listContext,
+                                                ...selectionContext,
+                                                ...baseContext,
+                                            };
+                                            // clear notRenderCellIndex, incase of cached data
+                                            if (this.context.notRenderCellIndex) {
+                                                this.context.notRenderCellIndex.length = 0;
+                                            }
+
+                                            return (
+                                                <table
+                                                    className={cls}
+                                                    role="row"
+                                                    {...others}
+                                                    onClick={this.onClick}
+                                                    onMouseEnter={this.onMouseEnter}
+                                                    onMouseLeave={this.onMouseLeave}
+                                                >
+                                                    {colGroup}
+                                                    <tbody>
+                                                        {this.renderContent('header')}
+                                                        {this.renderChildren()}
+                                                        {this.renderContent('footer')}
+                                                    </tbody>
+                                                </table>
+                                            );
+                                        }}
+                                    </BaseContext.Consumer>
+                                );
+                            }}
+                        </SelectionContext.Consumer>
+                    );
+                }}
+            </ListContext.Consumer>
         );
     }
 
     isChildrenSelection() {
-        return this.context.listHeader && this.context.listHeader.hasChildrenSelection;
+        return this.context && this.context.listHeader && this.context.listHeader.hasChildrenSelection;
     }
 
     isFirstLevelDataWhenNoChildren() {
-        return this.context.listHeader && this.context.listHeader.useFirstLevelDataWhenNoChildren;
+        return this.context && this.context.listHeader && this.context.listHeader.useFirstLevelDataWhenNoChildren;
     }
 
     isSelection() {
-        return this.context.listHeader && this.context.listHeader.hasSelection;
+        return this.context && this.context.listHeader && this.context.listHeader.hasSelection;
     }
 
     renderChildren() {
@@ -100,7 +123,7 @@ export default class GroupListRow extends Row {
                     }
                     return <tr key={child[primaryKey]}>{cells}</tr>;
                 }
-                if (this.context.rowSelection) {
+                if (this.context && this.context.rowSelection) {
                     cells.shift();
                     cells[0] =
                         cells[0] &&
@@ -117,7 +140,7 @@ export default class GroupListRow extends Row {
     renderContent(type) {
         const { columns, prefix, record, rowIndex } = this.props;
         const cameType = type.charAt(0).toUpperCase() + type.substr(1);
-        const list = this.context[`list${cameType}`];
+        const list = this.context && this.context[`list${cameType}`];
         let listNode;
         if (list) {
             if (React.isValidElement(list.cell)) {
@@ -130,7 +153,7 @@ export default class GroupListRow extends Row {
             }
             if (listNode) {
                 let cells = this.renderCells(record);
-                if (type === 'header' && this.context.rowSelection && this.isSelection()) {
+                if (type === 'header' && this.context && this.context.rowSelection && this.isSelection()) {
                     cells = cells.slice(0, 1);
                     cells.push(
                         <td colSpan={columns.length - 1} key="listNode">

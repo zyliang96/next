@@ -1,13 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
+import { APAActionEnabled, APAActionDisabled, APAAction } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import RowComponent from './tree/row';
 import CellComponent from './tree/cell';
 import { statics } from './util';
+import { TreeContext } from './context';
 
 const noop = () => {};
 
+export const treeStaticProps = {
+    TreeRow: RowComponent,
+    TreeCell: CellComponent,
+};
+
 export default function tree(BaseComponent) {
+    @APAActionEnabled
     class TreeTable extends React.Component {
         static TreeRow = RowComponent;
         static TreeCell = CellComponent;
@@ -53,30 +62,48 @@ export default function tree(BaseComponent) {
             indent: 12,
         };
 
-        static childContextTypes = {
-            openTreeRowKeys: PropTypes.array,
-            indent: PropTypes.number,
-            treeStatus: PropTypes.array,
-            onTreeNodeClick: PropTypes.func,
-            isTree: PropTypes.bool,
-        };
-
-        constructor(props, context) {
-            super(props, context);
+        constructor(props) {
+            super(props);
             this.state = {
                 openRowKeys: props.openRowKeys || props.defaultOpenRowKeys || [],
             };
+            // 缓存 context value
+            this._treeContextValue = null;
+            this._lastOpenRowKeys = null;
+            this._lastIndent = null;
+            this._lastIsTree = null;
         }
 
-        getChildContext() {
-            return {
-                openTreeRowKeys: this.state.openRowKeys,
-                indent: this.props.indent,
-                treeStatus: this.getTreeNodeStatus(this.ds),
-                onTreeNodeClick: this.onTreeNodeClick,
-                isTree: this.props.isTree,
-            };
-        }
+        // 缓存 TreeContext value
+        getTreeContextValue = () => {
+            const { indent, isTree } = this.props;
+            const { openRowKeys } = this.state;
+            const treeStatus = this.getTreeNodeStatus(this.ds);
+            
+            // treeStatus 是每次计算的数组，需要特殊处理
+            const treeStatusKey = treeStatus.join(',');
+            
+            if (
+                this._treeContextValue === null ||
+                this._lastOpenRowKeys !== openRowKeys ||
+                this._lastIndent !== indent ||
+                this._lastIsTree !== isTree ||
+                this._lastTreeStatusKey !== treeStatusKey
+            ) {
+                this._lastOpenRowKeys = openRowKeys;
+                this._lastIndent = indent;
+                this._lastIsTree = isTree;
+                this._lastTreeStatusKey = treeStatusKey;
+                this._treeContextValue = {
+                    openTreeRowKeys: openRowKeys,
+                    indent,
+                    treeStatus,
+                    onTreeNodeClick: this.onTreeNodeClick,
+                    isTree,
+                };
+            }
+            return this._treeContextValue;
+        };
 
         static getDerivedStateFromProps(nextProps) {
             if ('openRowKeys' in nextProps) {
@@ -130,6 +157,18 @@ export default function tree(BaseComponent) {
                 });
             });
             return ret;
+        }
+
+        @APAActionDisabled({ actionName: 'onTreeNodeClick', defaultDisabled: true })
+        get apaOnTreeNodeClickDisabled() {
+            return !this.props.isTree;
+        }
+
+        @APAAction({ name: 'onTreeNodeClick', desc: '点击树节点', params: z.object({ index: z.number().describe('树节点索引') }) })
+        apaOnTreeNodeClick(index){
+            const { dataSource } = this.props;
+            const targetRecord = dataSource[index];
+            return this.onTreeNodeClick(targetRecord);
         }
 
         onTreeNodeClick = record => {
@@ -194,7 +233,11 @@ export default function tree(BaseComponent) {
 
                 dataSource = this.normalizeDataSource(dataSource);
             }
-            return <BaseComponent {...others} dataSource={dataSource} components={components} />;
+            return (
+                <TreeContext.Provider value={this.getTreeContextValue()}>
+                    <BaseComponent {...others} dataSource={dataSource} components={components} />
+                </TreeContext.Provider>
+            );
         }
     }
     statics(TreeTable, BaseComponent);

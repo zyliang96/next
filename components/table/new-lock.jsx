@@ -9,6 +9,14 @@ import LockBody from './lock/body';
 import LockHeader from './lock/header';
 import LockWrapper from './fixed/wrapper';
 import { statics, setStickyStyle } from './util';
+import { LockContext } from './context';
+
+export const newLockStaticProps = {
+    LockRow: LockRow,
+    LockBody: LockBody,
+    LockHeader: LockHeader,
+    LockWrapper: LockWrapper,
+};
 
 export default function stickyLock(BaseComponent) {
     /** Table */
@@ -29,15 +37,9 @@ export default function stickyLock(BaseComponent) {
             ...BaseComponent.defaultProps,
         };
 
-        static childContextTypes = {
-            getTableInstance: PropTypes.func,
-            getLockNode: PropTypes.func,
-            onLockBodyScroll: PropTypes.func,
-        };
-
         state = {};
 
-        constructor(props, context) {
+        constructor(props) {
             super(props);
 
             this.state = {
@@ -47,15 +49,21 @@ export default function stickyLock(BaseComponent) {
 
             this.pingLeft = false;
             this.pingRight = false;
+            // 缓存 context value
+            this._lockContextValue = null;
         }
 
-        getChildContext() {
-            return {
-                getTableInstance: this.getTableInstance,
-                getLockNode: this.getNode,
-                onLockBodyScroll: this.onLockBodyScroll,
-            };
-        }
+        // 缓存 LockContext value，方法引用稳定无需比较
+        getLockContextValue = () => {
+            if (this._lockContextValue === null) {
+                this._lockContextValue = {
+                    getTableInstance: this.getTableInstance,
+                    getLockNode: this.getNode,
+                    onLockBodyScroll: this.onLockBodyScroll,
+                };
+            }
+            return this._lockContextValue;
+        };
 
         componentDidMount() {
             const { dataSource } = this.props;
@@ -384,14 +392,16 @@ export default function stickyLock(BaseComponent) {
             });
 
             return (
-                <BaseComponent
-                    {...others}
-                    dataSource={dataSource}
-                    columns={normalizedChildren}
-                    prefix={prefix}
-                    components={components}
-                    className={className}
-                />
+                <LockContext.Provider value={this.getLockContextValue()}>
+                    <BaseComponent
+                        {...others}
+                        dataSource={dataSource}
+                        columns={normalizedChildren}
+                        prefix={prefix}
+                        components={components}
+                        className={className}
+                    />
+                </LockContext.Provider>
             );
         }
     }

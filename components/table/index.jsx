@@ -1,14 +1,15 @@
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import ConfigProvider from '../config-provider';
-import Base from './base';
-import tree from './tree';
-import fixed from './fixed';
-import selection from './selection';
-import expanded from './expanded';
-import virtual from './virtual';
-import lock from './lock';
-import stickyLock from './new-lock';
-import list from './list';
-import sticky from './sticky';
+import Base, { staticProps } from './base';
+import tree, { treeStaticProps } from './tree';
+import fixed, { fixedStaticProps } from './fixed';
+import selection, { selectionStaticProps } from './selection';
+import expanded, { expandedStaticProps } from './expanded';
+import virtual, { virtualStaticProps } from './virtual';
+import lock, { lockStaticProps } from './lock';
+import stickyLock, { newLockStaticProps } from './new-lock';
+import list, { listStaticProps } from './list';
+import sticky, { stickyStaticProps } from './sticky';
 import ListHeader from './list-header';
 import ListFooter from './list-footer';
 import { env } from '../util';
@@ -25,6 +26,72 @@ lock._typeMark = 'lock';
 expanded._typeMark = 'expanded';
 fixed._typeMark = 'fixed';
 
+Table.displayName = 'Table';
+const apaProprsConfig = [
+    {
+        key: 'hasHeader',
+        name: '是否显示头部',
+        desc: '是否显示头部',
+    },
+    {
+        key: 'columns',
+        name: '列配置',
+        desc: '列配置',
+    },
+    {
+        key: 'loading',
+        name: '加载状态',
+        desc: '加载状态',
+    },
+    {
+        key: 'useVirtual',
+        name: '是否使用虚拟滚动',
+        desc: '是否使用虚拟滚动',
+    },
+    {
+        key: 'isTree',
+        name: '是否树形结构',
+        desc: '是否树形结构',
+    },
+    {
+        key: 'isTree',
+        name: '是否树形结构',
+        desc: '是否树形结构',
+    },
+    {
+        key: 'hasExpandedRowCtrl',
+        name: '是否启用展开行控制',
+        desc: '是否启用展开行控制',
+    },
+    {
+        key: 'sort',
+        name: '排序',
+        desc: '排序',
+    },
+    {
+        key: 'filterParams',
+        name: '过滤参数',
+        desc: '过滤参数',
+    },
+];
+
+const APATable = APAConfigProvider.config(Table, {
+    isRegisterChildren: true,
+    desc: '表格组件',
+    props: apaProprsConfig,
+    staticProps: {
+        ...staticProps,
+        ...fixedStaticProps,
+        ...selectionStaticProps,
+        ...expandedStaticProps,
+        ...virtualStaticProps,
+        ...lockStaticProps,
+        ...listStaticProps,
+        ...stickyStaticProps,
+        ...treeStaticProps,
+    },
+});
+
 const StickyLockTable = ORDER_LIST.reduce((ret, current) => {
     const newLock = !ieVersion;
     if (current._typeMark === 'lock') {
@@ -38,25 +105,43 @@ const StickyLockTable = ORDER_LIST.reduce((ret, current) => {
     }
     return ret;
 }, Base);
+StickyLockTable.displayName = 'Table';
+const ApaStickyLockTable = APAConfigProvider.config(StickyLockTable, {
+    isRegisterChildren: false,
+    desc: '粘性锁定的表格组件',
+    props: apaProprsConfig,
+    staticProps: {
+        ...staticProps,
+        ...fixedStaticProps,
+        ...selectionStaticProps,
+        ...expandedStaticProps,
+        ...virtualStaticProps,
+        ...lockStaticProps,
+        ...listStaticProps,
+        ...stickyStaticProps,
+        ...treeStaticProps,
+        ...newLockStaticProps,
+    },
+});
 
-Table.Base = Base;
-Table.fixed = fixed;
-Table.lock = lock;
-Table.selection = selection;
-Table.expanded = expanded;
-Table.tree = tree;
-Table.virtual = virtual;
-Table.list = list;
-Table.sticky = sticky;
+APATable.Base = Base;
+APATable.fixed = fixed;
+APATable.lock = lock;
+APATable.selection = selection;
+APATable.expanded = expanded;
+APATable.tree = tree;
+APATable.virtual = virtual;
+APATable.list = list;
+APATable.sticky = sticky;
 
-Table.GroupHeader = ListHeader;
-Table.GroupFooter = ListFooter;
+APATable.GroupHeader = ListHeader;
+APATable.GroupFooter = ListFooter;
 
-Table.StickyLock = ConfigProvider.config(StickyLockTable, {
+APATable.StickyLock = ConfigProvider.config(ApaStickyLockTable, {
     componentName: 'Table',
 });
 
-export default ConfigProvider.config(Table, {
+export default ConfigProvider.config(APATable, {
     componentName: 'Table',
     transform: /* istanbul ignore next */ (props, deprecated) => {
         // fix https://github.com/alibaba-fusion/next/issues/4062

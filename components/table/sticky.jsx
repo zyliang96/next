@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 import Header from './fixed/header';
 import StickyHeader from './sticky/header';
 import { statics } from './util';
+import { StickyContext } from './context';
+
+export const stickyStaticProps = {
+    StickyHeader: StickyHeader,
+};
 
 export default function sticky(BaseComponent) {
     /** Table */
@@ -30,21 +35,39 @@ export default function sticky(BaseComponent) {
             ...BaseComponent.defaultProps,
         };
 
-        static childContextTypes = {
-            Header: PropTypes.any,
-            offsetTop: PropTypes.number,
-            affixProps: PropTypes.object,
-        };
-
         state = {};
 
-        getChildContext() {
-            return {
-                Header: this.props.components.Header || Header,
-                offsetTop: this.props.offsetTop,
-                affixProps: this.props.affixProps,
-            };
+        constructor(props) {
+            super(props);
+            // 缓存 context value
+            this._stickyContextValue = null;
+            this._lastHeader = null;
+            this._lastOffsetTop = null;
+            this._lastAffixProps = null;
         }
+
+        // 缓存 StickyContext value
+        getStickyContextValue = () => {
+            const { components, offsetTop, affixProps } = this.props;
+            const HeaderComp = components.Header || Header;
+            
+            if (
+                this._stickyContextValue === null ||
+                this._lastHeader !== HeaderComp ||
+                this._lastOffsetTop !== offsetTop ||
+                this._lastAffixProps !== affixProps
+            ) {
+                this._lastHeader = HeaderComp;
+                this._lastOffsetTop = offsetTop;
+                this._lastAffixProps = affixProps;
+                this._stickyContextValue = {
+                    Header: HeaderComp,
+                    offsetTop,
+                    affixProps,
+                };
+            }
+            return this._stickyContextValue;
+        };
 
         render() {
             /* eslint-disable no-unused-vars */
@@ -57,12 +80,14 @@ export default function sticky(BaseComponent) {
                 maxBodyHeight = Math.max(maxBodyHeight, 10000);
             }
             return (
-                <BaseComponent
-                    {...others}
-                    components={components}
-                    fixedHeader={fixedHeader}
-                    maxBodyHeight={maxBodyHeight}
-                />
+                <StickyContext.Provider value={this.getStickyContextValue()}>
+                    <BaseComponent
+                        {...others}
+                        components={components}
+                        fixedHeader={fixedHeader}
+                        maxBodyHeight={maxBodyHeight}
+                    />
+                </StickyContext.Provider>
             );
         }
     }

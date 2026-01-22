@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const dataSource = () => {
     const result = [];
@@ -36,10 +37,17 @@ const setCellProps = (rowIndex, colIndex, dataIndex, record) => {
 };
 
 ReactDOM.render(
-    <Table dataSource={dataSource()} rowProps={setRowProps} cellProps={setCellProps}>
-        <Table.Column title="Id" dataIndex="id" />
-        <Table.Column title="Title" dataIndex="title.name" />
-        <Table.Column title="Time" dataIndex="time" />
-    </Table>,
+    <APAConfigProvider
+        regionName="Get Row Props示例"
+        regionId="Table-get-row-props-demo"
+        regionDesc="Get Row Props示例"
+        isRegisterChildren
+    >
+        <Table dataSource={dataSource()} rowProps={setRowProps} cellProps={setCellProps}>
+            <Table.Column title="Id" dataIndex="id" />
+            <Table.Column title="Title" dataIndex="title.name" />
+            <Table.Column title="Time" dataIndex="time" />
+        </Table>
+    </APAConfigProvider>,
     mountNode
 );
