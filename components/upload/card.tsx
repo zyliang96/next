@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type ComponentRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
@@ -60,7 +60,7 @@ class Card extends Base<CardProps, CardState> {
         };
     }
 
-    uploaderRef: InstanceType<typeof Upload>;
+    uploaderRef: ComponentRef<typeof Upload>;
 
     componentDidMount() {
         this.updateUploaderRef(this.uploaderRef);
@@ -107,11 +107,11 @@ class Card extends Base<CardProps, CardState> {
         return this.uploaderRef.isUploading();
     }
 
-    saveRef(ref: InstanceType<typeof Upload> | null) {
+    saveRef(ref: ComponentRef<typeof Upload> | null) {
         this.saveUploaderRef(ref);
     }
 
-    updateUploaderRef(uploaderRef: InstanceType<typeof Upload>) {
+    updateUploaderRef(uploaderRef: ComponentRef<typeof Upload>) {
         this.setState({ uploaderRef });
     }
 

@@ -222,6 +222,9 @@ class Item extends Component<ItemProps> {
     }
 }
 
+// 导出原始类供类型引用
+export { Item };
+
 export default APAConfigProvider.config(Item, {
     desc: '菜单项组件',
     props: [

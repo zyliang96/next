@@ -1,4 +1,4 @@
-import React, { type DragEvent, Component } from 'react';
+import React, { type DragEvent, Component, type ComponentRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from '../icon';
@@ -36,7 +36,7 @@ class Dragger extends Component<DraggerProps> {
         locale: zhCN.Upload,
     };
 
-    uploaderRef: InstanceType<typeof Upload>;
+    uploaderRef: ComponentRef<typeof Upload>;
 
     state = {
         dragOver: false,
@@ -75,18 +75,18 @@ class Dragger extends Component<DraggerProps> {
     }
 
     saveUploaderRef = (
-        ref: InstanceType<typeof Upload> | { getInstance: () => InstanceType<typeof Upload> } | null
+        ref: ComponentRef<typeof Upload> | { getInstance: () => ComponentRef<typeof Upload> } | null
     ) => {
         if (
             ref &&
-            typeof (ref as { getInstance: () => InstanceType<typeof Upload> }).getInstance ===
+            typeof (ref as { getInstance: () => ComponentRef<typeof Upload> }).getInstance ===
                 'function'
         ) {
             this.uploaderRef = (
-                ref as { getInstance: () => InstanceType<typeof Upload> }
+                ref as { getInstance: () => ComponentRef<typeof Upload> }
             ).getInstance();
         } else {
-            this.uploaderRef = ref as InstanceType<typeof Upload>;
+            this.uploaderRef = ref as ComponentRef<typeof Upload>;
         }
     };
 
@@ -117,6 +117,8 @@ class Dragger extends Component<DraggerProps> {
                 listType={listType}
                 dragable
                 style={style}
+                // TODO 后续看类型怎么修改
+                // @ts-expect-error Upload 被 APAConfigProvider.config 包裹后 props 类型丢失
                 onDragOver={this.onDragOver}
                 onDragLeave={this.onDragLeave}
                 onDrop={this.onDrop}

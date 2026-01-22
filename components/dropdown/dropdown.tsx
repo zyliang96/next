@@ -1,7 +1,5 @@
 import React, { Component, Children } from 'react';
 import * as PropTypes from 'prop-types';
-import Overlay from '../overlay';
-import { func } from '../util';
 import {
     APAActionEnabled,
     APAStateEnabled,
@@ -10,6 +8,8 @@ import {
     APAConfigProvider,
 } from '@alifd/apa-sdk';
 import { z } from 'zod';
+import Overlay from '../overlay';
+import { func } from '../util';
 import type { DropdownProps, DropdownState } from './types';
 
 const { noop, makeChain, bindCtx } = func;
@@ -167,6 +167,8 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
                 autoFocus={this.state.autoFocus}
                 trigger={newTrigger}
                 visible={this.getVisible()}
+                // TODO 后续看类型怎么修改
+                // @ts-expect-error Popup 被 APAConfigProvider.config 包裹后 onVisibleChange 类型不匹配
                 onVisibleChange={this.onVisibleChange}
                 canCloseByOutSideClick
             >

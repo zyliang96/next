@@ -302,6 +302,7 @@ class SubMenu extends Component<SubMenuProps> {
         others.rtl = rtl;
 
         return (
+            // @ts-expect-error PopupItem 被 APAConfigProvider.config 包裹后 props 类型丢失
             <PopupItem {...others} noIcon={noIcon} hasSubMenu>
                 <ul
                     role="menu"
@@ -322,6 +323,9 @@ class SubMenu extends Component<SubMenuProps> {
         return newMode === 'popup' ? this.renderPopup() : this.renderInline();
     }
 }
+
+// 导出原始类供类型引用
+export { SubMenu };
 
 export default APAConfigProvider.config(SubMenu, {
     desc: '子菜单组件',

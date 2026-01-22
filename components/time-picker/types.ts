@@ -251,9 +251,9 @@ export interface TimePickerPanelProps
             | 'renderTimeMenuItems'
             | 'locale'
         > {
-    showHour: boolean;
-    showSecond: boolean;
-    showMinute: boolean;
+    showHour?: boolean;
+    showSecond?: boolean;
+    showMinute?: boolean;
     value: Moment | null;
     onSelect: (value: Moment) => void;
     className?: string;

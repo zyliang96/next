@@ -30,7 +30,7 @@ class Input<P extends InputProps = InputProps> extends Base<P> {
         { name: 'value', desc: '输入框的值' },
         { name: 'composition', desc: '是否处于输入法输入状态' },
     ])
-    state!: { value: string | number; composition?: boolean };
+    state!: { value: string | number | null; composition?: boolean };
     static propTypes = {
         ...Base.propTypes,
         label: PropTypes.node,

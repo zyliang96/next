@@ -36,7 +36,7 @@ import {
     getFirstAvaliablelChildKey,
 } from './util';
 import type { ItemProps, K2N, MenuChildElement, MenuChildProps, MenuProps, P2N } from '../types';
-import type MenuItem from './item';
+import { type Item as MenuItem } from './item';
 import type SelectableItem from './selectable-item';
 
 const { bindCtx } = func;

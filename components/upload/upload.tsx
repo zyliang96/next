@@ -2,14 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
-
-import { func, obj } from '../util';
-import Icon from '../icon';
-import Base from './base';
-import Uploader from './runtime/index';
-import html5Uploader from './runtime/html5-uploader';
-import List from './list';
-import { fileToObject, getFileItem, errorCode } from './util';
 import {
     APAActionEnabled,
     APAStateEnabled,
@@ -18,6 +10,14 @@ import {
     APAConfigProvider,
 } from '@alifd/apa-sdk';
 import { z } from 'zod';
+import { func, obj } from '../util';
+import Icon from '../icon';
+import Base from './base';
+import Uploader from './runtime/index';
+import html5Uploader from './runtime/html5-uploader';
+import List from './list';
+import { fileToObject, getFileItem, errorCode } from './util';
+
 import type {
     ObjectFile,
     UploadError,
@@ -542,9 +542,7 @@ class Upload extends Base<UploadProps, UploadState> {
     }
 }
 
-const UploadWithPolyfill = polyfill(Upload);
-
-export default APAConfigProvider.config(UploadWithPolyfill, {
+const ApaUpload = APAConfigProvider.config(polyfill(Upload), {
     isRegisterChildren: true,
     desc: '文件上传组件',
     props: [
@@ -556,3 +554,5 @@ export default APAConfigProvider.config(UploadWithPolyfill, {
         { key: 'multiple', name: 'multiple', desc: '是否支持多选文件' },
     ],
 });
+
+export default ApaUpload;

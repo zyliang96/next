@@ -3,6 +3,7 @@ import React, {
     type KeyboardEvent,
     type CSSProperties,
     type ReactElement,
+    type ComponentRef,
 } from 'react';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
@@ -28,7 +29,7 @@ interface NavState {
     dropdownTabs: ReactElement[];
 }
 
-type AnimateInstanceType = InstanceType<typeof Animate>;
+type AnimateInstanceType = ComponentRef<typeof Animate>;
 class Nav extends React.Component<NavProps, NavState> {
     static displayName = 'Nav';
     static propTypes = {

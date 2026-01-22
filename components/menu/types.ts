@@ -2,9 +2,9 @@ import React from 'react';
 import type { CommonProps } from '../util';
 import type { OverlayProps, PopupProps } from '../overlay';
 import type SelectableItem from './view/selectable-item';
-import type MenuItem from './view/item';
+import { type Item as MenuItem } from './view/item';
 import { type Menu } from './view/menu';
-import type SubMenu from './view/sub-menu';
+import { type SubMenu } from './view/sub-menu';
 
 /**
  * 子菜单打开的模式
