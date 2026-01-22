@@ -1,5 +1,6 @@
 import React, { Component, type ComponentPropsWithRef } from 'react';
 import PropTypes from 'prop-types';
+import { APAActionEnabled, APAStateEnabled, type APAConfigOptions } from '@alifd/apa-sdk';
 import Overlay from '../overlay';
 import zhCN from '../locale/zh-cn';
 import { focus, obj, func, events, dom, env } from '../util';
@@ -29,9 +30,17 @@ function _getSize(dom: HTMLElement, name: CustomCSSStyleKey) {
     }
 }
 
+const overlayMergeConfig: APAConfigOptions = {
+    mergeToParent: true,
+    mergeToParentAction: [],
+    mergeToParentState: [],
+};
+
 /**
  * Dialog
  */
+@APAActionEnabled
+@APAStateEnabled
 export default class Dialog extends Component<DialogV1Props> {
     static propTypes = {
         prefix: PropTypes.string,
@@ -368,7 +377,7 @@ export default class Dialog extends Component<DialogV1Props> {
         // useCSS && !hasMask : isFullScreen 并且 没有 mask 的情况下，需要关闭 isChildrenInMask 功能，以防止 children 不渲染
         // 其他模式下维持 mask 与 children 同级的关系
         return (
-            <Overlay {...newOverlayProps}>
+            <Overlay {...newOverlayProps} __apaConfig={overlayMergeConfig}>
                 {useCSS && !hasMask ? (
                     <div className={`${prefix}dialog-container`} dir={rtl ? 'rtl' : undefined}>
                         {inner}

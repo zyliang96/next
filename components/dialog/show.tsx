@@ -13,6 +13,7 @@ import zhCN from '../locale/zh-cn';
 import dialog from './dialog';
 import Dialog2Ins from './dialog-v2';
 import type { ShowModalInnerProps, ModelProps, ModalState, ShowConfig } from './types';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const Dialog = ConfigProvider.config(dialog);
 const Dialog2 = ConfigProvider.config(
@@ -239,12 +240,14 @@ class Modal extends Component<ModelProps, ModalState> {
 
 const ConfigModal = ConfigProvider.config(Modal, { componentName: 'Dialog' });
 
+let showCount = 0;
 /**
  * 创建对话框
  * @param config - 配置项
  * @returns 包含有 hide 方法，可用来关闭对话框
  */
 export const show = (config: ShowConfig = {}) => {
+    showCount++;
     const container = document.createElement('div');
     const unmount = () => {
         if (config.afterClose) {
@@ -264,15 +267,21 @@ export const show = (config: ShowConfig = {}) => {
 
     // eslint-disable-next-line react/no-deprecated
     ReactDOM.render(
-        <ConfigProvider {...newContext}>
-            <ConfigModal
-                {...config}
-                afterClose={unmount}
-                ref={ref => {
-                    myRef = ref;
-                }}
-            />
-        </ConfigProvider>,
+        <APAConfigProvider
+            regionName={`global-dialog-${showCount}`}
+            regionId={`global-dialog-${showCount}`}
+            isRegisterChildren
+        >
+            <ConfigProvider {...newContext}>
+                <ConfigModal
+                    {...config}
+                    afterClose={unmount}
+                    ref={ref => {
+                        myRef = ref;
+                    }}
+                />
+            </ConfigProvider>
+        </APAConfigProvider>,
         container,
         function () {
             instance = myRef;
@@ -336,27 +345,31 @@ export const withContext = <P extends WithContextDialogProps, C>(
 ) => {
     type Props = React.JSX.LibraryManagedAttributes<C, Omit<P, 'contextDialog'>>;
     const HOC = (props: Props) => {
+        const regionId = `global-dialog-withContext-${showCount}`;
+        const regionName = `全局对话框（withContext）`;
         return (
-            <ConfigProvider.Consumer>
-                {contextConfig => (
-                    <WrappedComponent
-                        // why AnyProps? see: https://react-typescript-cheatsheet.netlify.app/docs/hoc/react_hoc_docs
-                        {...(props as AnyProps)}
-                        contextDialog={
-                            {
-                                show: (config = {}) => show({ ...config, contextConfig }),
-                                alert: (config = {}) => alert({ ...config, contextConfig }),
-                                confirm: (config = {}) => confirm({ ...config, contextConfig }),
-                                success: (config = {}) => success({ ...config, contextConfig }),
-                                error: (config = {}) => error({ ...config, contextConfig }),
-                                warning: (config = {}) => warning({ ...config, contextConfig }),
-                                notice: (config = {}) => notice({ ...config, contextConfig }),
-                                help: (config = {}) => help({ ...config, contextConfig }),
-                            } as ContextDialog
-                        }
-                    />
-                )}
-            </ConfigProvider.Consumer>
+            <APAConfigProvider regionName={regionName} regionId={regionId} isRegisterChildren>
+                <ConfigProvider.Consumer>
+                    {contextConfig => (
+                        <WrappedComponent
+                            // why AnyProps? see: https://react-typescript-cheatsheet.netlify.app/docs/hoc/react_hoc_docs
+                            {...(props as AnyProps)}
+                            contextDialog={
+                                {
+                                    show: (config = {}) => show({ ...config, contextConfig }),
+                                    alert: (config = {}) => alert({ ...config, contextConfig }),
+                                    confirm: (config = {}) => confirm({ ...config, contextConfig }),
+                                    success: (config = {}) => success({ ...config, contextConfig }),
+                                    error: (config = {}) => error({ ...config, contextConfig }),
+                                    warning: (config = {}) => warning({ ...config, contextConfig }),
+                                    notice: (config = {}) => notice({ ...config, contextConfig }),
+                                    help: (config = {}) => help({ ...config, contextConfig }),
+                                } as ContextDialog
+                            }
+                        />
+                    )}
+                </ConfigProvider.Consumer>
+            </APAConfigProvider>
         );
     };
     return HOC;

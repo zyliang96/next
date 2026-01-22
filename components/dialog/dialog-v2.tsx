@@ -11,6 +11,8 @@ import React, {
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import Overlay from '@alifd/overlay';
+import { z } from 'zod';
+import { useApaAction, useApaState } from '@alifd/apa-sdk';
 
 import Inner from './inner';
 import Animate from '../animate';
@@ -76,7 +78,10 @@ const Dialog = (props: DialogV2Props) => {
     }
 
     const [firstVisible, setFirst] = useState(pvisible || false);
-    const [visible, setVisible] = useState(pvisible);
+    const [visible, setVisible] = useApaState(pvisible ?? false, {
+        name: 'visible',
+        desc: '对话框是否显示',
+    });
     const getContainer =
         typeof popupContainer === 'string'
             ? () => document.getElementById(popupContainer)
@@ -121,7 +126,7 @@ const Dialog = (props: DialogV2Props) => {
     // visible 受控
     useEffect(() => {
         if ('visible' in props) {
-            setVisible(pvisible);
+            setVisible(pvisible!);
         }
     }, [pvisible]);
 
@@ -204,14 +209,6 @@ const Dialog = (props: DialogV2Props) => {
         };
     }, []);
 
-    if (firstVisible === false || !container) {
-        return null;
-    }
-
-    if (!visible && !cache && isAnimationEnd.current) {
-        return null;
-    }
-
     const handleCancel = (e: MouseEvent) => {
         if (typeof onCancel === 'function') {
             onCancel(e);
@@ -219,6 +216,68 @@ const Dialog = (props: DialogV2Props) => {
             handleClose('cancelBtn', e);
         }
     };
+
+    /**
+     * APA Action: 暴露取消对话框的方法
+     * 因为内部使用了hooks，所以需要在  return null 的逻辑之前，否则会报错
+     */
+    useApaAction(
+        () => {
+            // 创建模拟的 React SyntheticEvent
+            const nativeEvent = new MouseEvent('click');
+            const syntheticEvent = {
+                nativeEvent,
+                currentTarget: null,
+                target: null,
+                bubbles: nativeEvent.bubbles,
+                cancelable: nativeEvent.cancelable,
+                defaultPrevented: nativeEvent.defaultPrevented,
+                eventPhase: nativeEvent.eventPhase,
+                isTrusted: nativeEvent.isTrusted,
+                preventDefault: () => nativeEvent.preventDefault(),
+                stopPropagation: () => nativeEvent.stopPropagation(),
+                isDefaultPrevented: () => nativeEvent.defaultPrevented,
+                isPropagationStopped: () => false,
+                persist: () => {},
+                timeStamp: nativeEvent.timeStamp,
+                type: nativeEvent.type,
+                // MouseEvent 特有属性
+                altKey: false,
+                button: 0,
+                buttons: 0,
+                clientX: 0,
+                clientY: 0,
+                ctrlKey: false,
+                metaKey: false,
+                movementX: 0,
+                movementY: 0,
+                pageX: 0,
+                pageY: 0,
+                relatedTarget: null,
+                screenX: 0,
+                screenY: 0,
+                shiftKey: false,
+                detail: 0,
+                view: window,
+                getModifierState: () => false,
+            } as unknown as MouseEvent<Element>;
+            handleCancel(syntheticEvent);
+        },
+        {
+            name: 'cancel',
+            desc: '取消对话框',
+            params: z.tuple([]),
+            disabled: !visible,
+        }
+    );
+
+    if (firstVisible === false || !container) {
+        return null;
+    }
+
+    if (!visible && !cache && isAnimationEnd.current) {
+        return null;
+    }
 
     const handleMaskClick = (e: MouseEvent<Element>) => {
         if (!canCloseByMask) {

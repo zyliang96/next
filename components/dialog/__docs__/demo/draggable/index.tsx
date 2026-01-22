@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Button, Dialog } from '@alifd/next';
 import Draggable, { type DraggableCoreProps } from 'react-draggable';
 import type { DialogProps } from '@alifd/next/types/dialog';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 class App extends React.Component {
     state = {
@@ -55,40 +56,47 @@ class App extends React.Component {
     render() {
         const { bounds, disabled, visible } = this.state;
         return (
-            <div>
-                <Button onClick={this.showModal}>Open Draggable Modal</Button>
-                <Dialog
-                    title={
-                        <div
-                            style={{ width: '100%', cursor: 'move' }}
-                            onMouseOver={this.toogleDisabled.bind(this, false)}
-                            onMouseOut={this.toogleDisabled.bind(this, true)}
-                        >
-                            Draggable Dialog
-                        </div>
-                    }
-                    visible={visible}
-                    onOk={this.handleCancel}
-                    onClose={this.handleClose}
-                    v2
-                    cache
-                    dialogRender={modal => (
-                        <Draggable
-                            disabled={disabled}
-                            bounds={bounds}
-                            onStart={(event, uiData) => this.onStart(event, uiData)}
-                        >
-                            <div ref={this.draggleRef} style={{ margin: '0 auto' }}>
-                                {modal}
+            <APAConfigProvider
+                regionName="Dialog拖拽 Demo"
+                regionId="Dialog-draggable-demo"
+                regionDesc="Dialog拖拽示例"
+                isRegisterChildren
+            >
+                <div>
+                    <Button onClick={this.showModal}>Open Draggable Modal</Button>
+                    <Dialog
+                        title={
+                            <div
+                                style={{ width: '100%', cursor: 'move' }}
+                                onMouseOver={this.toogleDisabled.bind(this, false)}
+                                onMouseOut={this.toogleDisabled.bind(this, true)}
+                            >
+                                Draggable Dialog
                             </div>
-                        </Draggable>
-                    )}
-                >
-                    <p>use react-draggable to drag Dialog</p>
-                    <br />
-                    <p>use cache, so can save position when open again</p>
-                </Dialog>
-            </div>
+                        }
+                        visible={visible}
+                        onOk={this.handleCancel}
+                        onClose={this.handleClose}
+                        v2
+                        cache
+                        dialogRender={modal => (
+                            <Draggable
+                                disabled={disabled}
+                                bounds={bounds}
+                                onStart={(event, uiData) => this.onStart(event, uiData)}
+                            >
+                                <div ref={this.draggleRef} style={{ margin: '0 auto' }}>
+                                    {modal}
+                                </div>
+                            </Draggable>
+                        )}
+                    >
+                        <p>use react-draggable to drag Dialog</p>
+                        <br />
+                        <p>use cache, so can save position when open again</p>
+                    </Dialog>
+                </div>
+            </APAConfigProvider>
         );
     }
 }

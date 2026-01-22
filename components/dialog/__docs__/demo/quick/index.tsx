@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Dialog, ConfigProvider, Box } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const config = {
     v2: true,
@@ -29,15 +30,22 @@ const popupShow = () => {
 };
 
 ReactDOM.render(
-    <ConfigProvider>
-        <Box direction="row" spacing={8}>
-            <Button onClick={() => Dialog.success(config)}>Success</Button>
-            <Button onClick={popupError}>Error</Button>
-            <Button onClick={() => Dialog.warning(config)}>Warning</Button>
-            <Button onClick={() => Dialog.notice(config)}>Notice</Button>
-            <Button onClick={() => Dialog.help(config)}>Help</Button>
-            <Button onClick={popupShow}>show</Button>
-        </Box>
-    </ConfigProvider>,
+    <APAConfigProvider
+        regionName="Dialog Quick Demo"
+        regionId="Dialog-quick-demo"
+        regionDesc="Dialog Quick示例"
+        isRegisterChildren
+    >
+        <ConfigProvider>
+            <Box direction="row" spacing={8}>
+                <Button onClick={() => Dialog.success(config)}>Success</Button>
+                <Button onClick={popupError}>Error</Button>
+                <Button onClick={() => Dialog.warning(config)}>Warning</Button>
+                <Button onClick={() => Dialog.notice(config)}>Notice</Button>
+                <Button onClick={() => Dialog.help(config)}>Help</Button>
+                <Button onClick={popupShow}>show</Button>
+            </Box>
+        </ConfigProvider>
+    </APAConfigProvider>,
     mountNode
 );

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Dialog, ConfigProvider } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const NormalDialog = () => {
     return (
@@ -39,31 +40,38 @@ const DialogWitchContext = Dialog.withContext(({ contextDialog }) => {
 class Demo extends React.Component {
     render() {
         return (
-            <ConfigProvider
-                locale={{
-                    Dialog: {
-                        close: '关闭（根组件文案）',
-                        ok: '确认（根组件文案）',
-                        cancel: '取消（根组件文案）',
-                    },
-                }}
+            <APAConfigProvider
+                regionName="Dialog withContext Demo"
+                regionId="Dialog-withContext-demo"
+                regionDesc="Dialog withContext示例"
+                isRegisterChildren
             >
                 <ConfigProvider
                     locale={{
                         Dialog: {
-                            close: '关闭（局部文案）',
-                            ok: '确认（局部文案）',
-                            cancel: '取消（局部文案）',
+                            close: '关闭（根组件文案）',
+                            ok: '确认（根组件文案）',
+                            cancel: '取消（根组件文案）',
                         },
                     }}
                 >
-                    <div>
-                        <NormalDialog />
-                        <br />
-                        <DialogWitchContext />
-                    </div>
+                    <ConfigProvider
+                        locale={{
+                            Dialog: {
+                                close: '关闭（局部文案）',
+                                ok: '确认（局部文案）',
+                                cancel: '取消（局部文案）',
+                            },
+                        }}
+                    >
+                        <div>
+                            <NormalDialog />
+                            <br />
+                            <DialogWitchContext />
+                        </div>
+                    </ConfigProvider>
                 </ConfigProvider>
-            </ConfigProvider>
+            </APAConfigProvider>
         );
     }
 }

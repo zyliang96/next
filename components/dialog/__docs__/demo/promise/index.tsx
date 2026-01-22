@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Message, Dialog } from '@alifd/next';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 
 const Demo = () => {
     const [visible, setVisible] = useState(false);
@@ -79,18 +80,25 @@ const popupConfirmPromise = () => {
 const style = { marginLeft: 8 };
 
 ReactDOM.render(
-    <div>
-        <Button onClick={popupConfirm}>Confirm</Button>
-        <Button onClick={popupCustomIcon} style={style}>
-            Custom Icon
-        </Button>
+    <APAConfigProvider
+        regionName="Dialog Promise Demo"
+        regionId="Dialog-promise-demo"
+        regionDesc="Dialog Promise示例"
+        isRegisterChildren
+    >
+        <div>
+            <Button onClick={popupConfirm}>Confirm</Button>
+            <Button onClick={popupCustomIcon} style={style}>
+                Custom Icon
+            </Button>
 
-        <br />
-        <br />
-        <Button onClick={popupConfirmPromise}>Confirm Promise</Button>
+            <br />
+            <br />
+            <Button onClick={popupConfirmPromise}>Confirm Promise</Button>
 
-        <Demo />
-        <br />
-    </div>,
+            <Demo />
+            <br />
+        </div>
+    </APAConfigProvider>,
     mountNode
 );
