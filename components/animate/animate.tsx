@@ -1,7 +1,6 @@
 import React, { Component, Children, type ReactNode, ReactElement } from 'react';
 import PropTypes from 'prop-types';
 import { TransitionGroup } from 'react-transition-group';
-import { APAActionEnabled, APAConfigProvider } from '@alifd/apa-sdk';
 import AnimateChild from './child';
 import type { AnimateProps } from './types';
 
@@ -14,8 +13,7 @@ const FirstChild = (props: { children: ReactNode }) => {
 /**
  * Animate
  */
-@APAActionEnabled
-class Animate extends Component<AnimateProps> {
+export default class Animate extends Component<AnimateProps> {
     static displayName = 'Animate';
     static propTypes = {
         animation: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
@@ -122,14 +120,3 @@ class Animate extends Component<AnimateProps> {
         );
     }
 }
-
-export default APAConfigProvider.config(Animate, {
-    desc: '动画组件',
-    props: [
-        {
-            key: 'animation',
-            name: '动画的类名',
-            desc: '动画的className',
-        },
-    ],
-});
