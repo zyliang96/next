@@ -30,6 +30,8 @@ module.exports = function(options) {
         react: 'var window.React',
         'react-dom': 'var window.ReactDOM',
         moment: 'var window.moment',
+        '@alifd/apa-sdk': 'var window.APASdk',
+        zod: 'var window.Zod',
     };
     config.plugins.push(
         new webpack.optimize.CommonsChunkPlugin({

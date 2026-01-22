@@ -47,6 +47,22 @@ async function pack(minimize = false) {
                 amd: 'moment',
             },
         },
+        {
+            '@alifd/apa-sdk': {
+                root: 'APASDK',
+                commonjs2: '@alifd/apa-sdk',
+                commonjs: '@alifd/apa-sdk',
+                amd: '@alifd/apa-sdk',
+            },
+        },
+        {
+            zod: {
+                root: 'Zod',
+                commonjs2: 'zod',
+                commonjs: 'zod',
+                amd: 'zod',
+            },
+        },
     ];
     config.plugins.push(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/));
 

@@ -29,7 +29,7 @@ export default defineConfig({
                             },
                             {
                                 find: '@alifd/apa-sdk',
-                                replacement: path.resolve(__dirname, 'dependencies/apa-sdk'),
+                                replacement: path.resolve(__dirname, 'dependencies/apa-sdk/esm'),
                             },
                         ],
                     },

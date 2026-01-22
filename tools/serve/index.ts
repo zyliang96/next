@@ -14,6 +14,7 @@ import createDocParser from '@alifd/doc-parser';
 import MagicString from 'magic-string';
 import { kebabCase } from 'lodash';
 import { glob } from 'glob';
+import postcssSass from 'postcss-scss';
 import {
     ARGV,
     SRC_DIR_PATH,
@@ -26,7 +27,7 @@ import {
 } from '../utils';
 import { marked } from '../build/docs/utils';
 import { parseDemoMd } from '../build/docs/generate-docs';
-import postcssSass from 'postcss-scss';
+
 
 type Lang = 'zh' | 'en';
 
@@ -141,7 +142,7 @@ const demoPlugin = (dirName: string): VitePlugin => {
                         },
                         {
                             find: '@alifd/apa-sdk',
-                            replacement: resolve(CWD, 'dependencies/apa-sdk'),
+                            replacement: resolve(CWD, 'dependencies/apa-sdk/esm'),
                         },
                     ],
                 },

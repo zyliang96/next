@@ -17,6 +17,9 @@ module.exports = function (options = {}) {
         output: {},
         resolve: {
             extensions: ['.js', '.jsx', '.ts', '.tsx'],
+            alias: {
+                '@alifd/apa-sdk': path.resolve(__dirname, '../../../dependencies/apa-sdk/esm'),
+            },
         },
         module: {
             rules: [

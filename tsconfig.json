@@ -21,8 +21,8 @@
             "@alifd/next/es/*": ["./components/*"],
             "@alifd/next/lib/*": ["./components/*"],
             "@alifd/next/types/*": ["./components/*"],
-            "@alifd/apa-sdk": ["./dependencies/apa-sdk"],
-            "@alifd/apa-sdk/*": ["./dependencies/apa-sdk/*"]
+            "@alifd/apa-sdk": ["./dependencies/apa-sdk/types"],
+            "@alifd/apa-sdk/*": ["./dependencies/apa-sdk/types/*"]
         }
     },
     "include": ["*.ts", "cypress/**/*.ts", "./components/**/*.ts", "./components/**/*.tsx", "tools"]
