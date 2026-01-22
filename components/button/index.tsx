@@ -36,7 +36,7 @@ export default ConfigProvider.config(WithSubButton, {
                         dark: 'dark',
                         light: 'light',
                     } as const
-                )[type || Button.defaultProps.type];
+                )[type || Button!.defaultProps!.type!]; // TODO 这里类型的问题后续看一下
             }
 
             const text = shape === 'text';
