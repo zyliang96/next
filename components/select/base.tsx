@@ -40,6 +40,12 @@ const popupMergeConfig: APAConfigOptions = {
     mergeToParentState: [],
 };
 
+export const inputMergeConfig: APAConfigOptions = {
+    mergeToParent: true,
+    mergeToParentAction: [],
+    mergeToParentState: [],
+};
+
 export interface BaseState {
     dataStore: DataStore;
     value?: DataSourceItem | DataSourceItem[];

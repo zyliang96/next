@@ -23,7 +23,7 @@ import Tag from '../tag';
 import Input from '../input';
 import Icon from '../icon';
 import zhCN from '../locale/zh-cn';
-import Base, { type BaseState } from './base';
+import Base, { type BaseState, inputMergeConfig } from './base';
 import { isNull, getValueDataSource, valueToSelectKey } from './util';
 import type {
     BaseProps,
@@ -1097,6 +1097,7 @@ class Select extends Base<SelectProps, SelectState> {
                     hasBorder={hasBorder}
                     hasClear={false}
                     htmlSize="1"
+                    __apaConfig={inputMergeConfig}
                     inputRender={(inputEl: ReactElement) => {
                         return this.renderSearchInput(valueNodes, _placeholder, inputEl);
                     }}
