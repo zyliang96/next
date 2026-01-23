@@ -36,8 +36,8 @@ function preventDefault(e: UIEvent) {
 
 const popupMergeConfig: APAConfigOptions = {
     mergeToParent: true,
-    mergeToParentAction: ['setVisible'],
-    mergeToParentState: ['visible'],
+    mergeToParentAction: [],
+    mergeToParentState: [],
 };
 
 export interface BaseState {
