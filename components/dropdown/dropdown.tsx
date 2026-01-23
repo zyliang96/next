@@ -6,6 +6,7 @@ import {
     APAState,
     APAAction,
     APAConfigProvider,
+    type APAConfigOptions,
 } from '@alifd/apa-sdk';
 import { z } from 'zod';
 import Overlay from '../overlay';
@@ -14,6 +15,12 @@ import type { DropdownProps, DropdownState } from './types';
 
 const { noop, makeChain, bindCtx } = func;
 const Popup = Overlay.Popup;
+
+const popupMergeConfig: APAConfigOptions = {
+    mergeToParent: true,
+    mergeToParentState: ['visible'],
+    mergeToParentAction: ['setVisible'],
+};
 
 @APAActionEnabled
 @APAStateEnabled
@@ -171,6 +178,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
                 // @ts-expect-error Popup 被 APAConfigProvider.config 包裹后 onVisibleChange 类型不匹配
                 onVisibleChange={this.onVisibleChange}
                 canCloseByOutSideClick
+                __apaConfig={popupMergeConfig}
             >
                 {content}
             </Popup>
