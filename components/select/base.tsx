@@ -8,6 +8,7 @@ import React, {
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { type APAConfigOptions } from '@alifd/apa-sdk';
 import { func, dom, events, obj } from '../util';
 import Menu, { type ItemProps, type MenuProps } from '../menu';
 import Overlay, { type PopupProps } from '../overlay';
@@ -32,6 +33,12 @@ const { noop, bindCtx, makeChain } = func;
 function preventDefault(e: UIEvent) {
     e.preventDefault();
 }
+
+const popupMergeConfig: APAConfigOptions = {
+    mergeToParent: true,
+    mergeToParentAction: ['setVisible'],
+    mergeToParentState: ['visible'],
+};
 
 export interface BaseState {
     dataStore: DataStore;
@@ -726,7 +733,7 @@ export default class Base<
         const Tag = popupComponent ? popupComponent : Popup;
 
         return (
-            <Tag {..._props} trigger={this.renderSelect()}>
+            <Tag {..._props} trigger={this.renderSelect()} __apaConfig={popupMergeConfig}>
                 {popupContent ? (
                     <div
                         className={`${prefix}select-popup-wrap`}
