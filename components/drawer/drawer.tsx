@@ -1,7 +1,13 @@
 import PropTypes from 'prop-types';
 import React, { Component, type ComponentRef, type ComponentType } from 'react';
 import Overlay from '../overlay';
-import { APAActionEnabled, APAStateEnabled, APAState, APAAction } from '@alifd/apa-sdk';
+import {
+    APAActionEnabled,
+    APAStateEnabled,
+    APAState,
+    APAAction,
+    type APAConfigOptions,
+} from '@alifd/apa-sdk';
 import { z } from 'zod';
 import Inner from './inner';
 import zhCN from '../locale/zh-cn';
@@ -11,6 +17,12 @@ import type { DrawerProps, InnerProps } from './types';
 const noop: InnerProps['onClose'] = () => {};
 const { Popup } = Overlay;
 const { pickOthers } = obj;
+
+const popupMergeConfig: APAConfigOptions = {
+    mergeToParent: true,
+    mergeToParentState: ['visible'],
+    mergeToParentAction: [{ key: 'setVisible', targetKey: 'setVisible' }],
+};
 
 interface CloseConfig {
     canCloseByEsc?: boolean;
@@ -275,7 +287,7 @@ class Drawer extends Component<DrawerProps> {
         const inner = this.renderInner(canCloseByCloseClick);
 
         return (
-            <Popup {...newPopupProps} {...others}>
+            <Popup {...newPopupProps} {...others} __apaConfig={popupMergeConfig}>
                 {inner}
             </Popup>
         );
