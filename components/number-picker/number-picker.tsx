@@ -274,8 +274,16 @@ class NumberPicker extends React.Component<NumberPickerProps, NumberPickerState>
     @APAAction({
         name: 'onChange',
         desc: '数值被改变的事件',
-        params: z.string(),
+        params: z.string().describe('数值'),
     })
+    onChangeAction(value: string) {
+        const e = new Event('change') as unknown as
+            | React.ChangeEvent<HTMLInputElement>
+            | React.CompositionEvent<HTMLInputElement>
+            | React.KeyboardEvent<HTMLInputElement>;
+        this.onChange(value, e);
+    }
+
     onChange(
         value: string,
         e:
@@ -399,12 +407,22 @@ class NumberPicker extends React.Component<NumberPickerProps, NumberPickerState>
         onKeyDown && onKeyDown(e, ...args);
     };
 
-    @APAAction({ name: 'up', desc: '增加数值', params: z.boolean() })
+    @APAAction({ name: 'up', desc: '增加数值', params: z.boolean().describe('是否禁用') })
+    upAction(disabled: boolean) {
+        const e = new KeyboardEvent('keydown') as unknown as React.KeyboardEvent<HTMLInputElement>;
+        this.up(disabled, e);
+    }
+
     up(disabled: boolean, e: React.KeyboardEvent<HTMLInputElement>) {
         this.step('up', disabled, e);
     }
 
-    @APAAction({ name: 'down', desc: '减少数值', params: z.boolean() })
+    @APAAction({ name: 'down', desc: '减少数值', params: z.boolean().describe('是否禁用') })
+    downAction(disabled: boolean) {
+        const e = new KeyboardEvent('keydown') as unknown as React.KeyboardEvent<HTMLInputElement>;
+        this.down(disabled, e);
+    }
+
     down(disabled: boolean, e: React.KeyboardEvent<HTMLInputElement>) {
         this.step('down', disabled, e);
     }
