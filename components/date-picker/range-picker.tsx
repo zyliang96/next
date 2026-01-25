@@ -15,6 +15,7 @@ import {
     APAConfigProvider,
     APAState,
     APAStateEnabled,
+    APAConfigOptions,
 } from '@alifd/apa-sdk';
 import { z } from 'zod';
 import ConfigProvider from '../config-provider';
@@ -41,6 +42,11 @@ import { type TimePickerProps } from '../time-picker';
 
 const { Popup } = Overlay;
 
+const popupMergeConfig: APAConfigOptions = {
+    mergeToParent: true,
+    mergeToParentAction: ['setVisible'],
+    mergeToParentState: ['visible'],
+};
 function mapInputStateName(name: string) {
     return (
         {
@@ -82,8 +88,6 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
     @APAState([
         { name: 'startValue', desc: '开始日期，moment 对象' },
         { name: 'endValue', desc: '结束日期，moment 对象' },
-        { name: 'visible', desc: '显示状态，true 表示显示，false 表示隐藏' },
-        { name: 'panel', desc: '面板类型，可选择的值为 date-panel, time-panel' },
     ])
     state: RangePickerState & Record<string, unknown>;
 
@@ -587,11 +591,6 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
         this.onValueChange(values);
     };
 
-    @APAAction({
-        name: 'onVisibleChange',
-        desc: '显示状态变化时的回调',
-        params: z.tuple([z.boolean(), z.string()]),
-    })
     onVisibleChange = (visible: boolean, type: string) => {
         if (!('visible' in this.props)) {
             this.setState({
@@ -601,11 +600,6 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
         this.props.onVisibleChange(visible, type);
     };
 
-    @APAAction({
-        name: 'changePanel',
-        desc: '切换面板类型',
-        params: z.tuple([z.enum(['DATE', 'TIME'])]),
-    })
     changePanel = (panel: PanelType) => {
         const { startValue, endValue } = this.state;
         this.setState({
@@ -1132,6 +1126,7 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
                     style={popupStyle}
                     className={popupClassName}
                     trigger={trigger}
+                    __apaConfig={popupMergeConfig}
                 >
                     {popupContent ? (
                         popupContent

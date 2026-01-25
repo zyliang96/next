@@ -13,6 +13,7 @@ import {
     APAConfigProvider,
     APAState,
     APAStateEnabled,
+    APAConfigOptions,
 } from '@alifd/apa-sdk';
 import { z } from 'zod';
 import { polyfill } from 'react-lifecycles-compat';
@@ -30,16 +31,18 @@ const { Popup } = Overlay;
 
 type InnerWeekPickerProps = ClassPropsWithDefault<WeekPickerProps, typeof WeekPicker.defaultProps>;
 
+const popupMergeConfig: APAConfigOptions = {
+    mergeToParent: true,
+    mergeToParentAction: ['setVisible'],
+    mergeToParentState: ['visible'],
+};
 /**
  * DatePicker.WeekPicker
  */
 @APAActionEnabled
 @APAStateEnabled
 class WeekPicker extends Component<WeekPickerProps, WeekPickerState> {
-    @APAState([
-        { name: 'value', desc: '周值，moment 对象' },
-        { name: 'visible', desc: '显示状态，true 表示显示，false 表示隐藏' },
-    ])
+    @APAState([{ name: 'value', desc: '周值，moment 对象' }])
     state: WeekPickerState & Record<string, unknown>;
 
     static displayName = 'WeekPicker';
@@ -195,11 +198,6 @@ class WeekPicker extends Component<WeekPickerProps, WeekPickerState> {
         this.handleChange(date, this.state.value);
     };
 
-    @APAAction({
-        name: 'onVisibleChange',
-        desc: '显示状态变化时的回调',
-        params: z.tuple([z.boolean(), z.string()]),
-    })
     onVisibleChange = (visible: boolean, type: string) => {
         if (!('visible' in this.props)) {
             this.setState({
@@ -360,6 +358,7 @@ class WeekPicker extends Component<WeekPickerProps, WeekPickerState> {
                     style={popupStyle}
                     className={popupClassName}
                     trigger={trigger}
+                    __apaConfig={popupMergeConfig}
                 >
                     {popupContent ? (
                         popupContent

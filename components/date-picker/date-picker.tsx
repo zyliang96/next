@@ -39,8 +39,8 @@ type InnerDatePickerProps = ClassPropsWithDefault<DatePickerProps, typeof DatePi
 
 const popupMergeConfig: APAConfigOptions = {
     mergeToParent: true,
-    mergeToParentAction: [],
-    mergeToParentState: [],
+    mergeToParentAction: ['setVisible'],
+    mergeToParentState: ['visible'],
 };
 /**
  * DatePicker
@@ -119,11 +119,7 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
 
     readonly props: InnerDatePickerProps;
 
-    @APAState([
-        { name: 'value', desc: '日期值，moment 对象' },
-        { name: 'panel', desc: '当前展示的面板类型，可选择的值为 date-panel, time-panel' },
-        { name: 'visible', desc: '弹层是否显示' },
-    ])
+    @APAState([{ name: 'value', desc: '日期值，moment 对象' }])
     state: DatePickerState;
 
     constructor(props: DatePickerProps) {
@@ -370,11 +366,6 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
         }
     };
 
-    @APAAction({
-        name: 'onVisibleChange',
-        desc: '弹层显示状态变化时的回调',
-        params: z.tuple([z.boolean(), z.string()]),
-    })
     onVisibleChange = (visible: boolean, type: string) => {
         if (!('visible' in this.props)) {
             this.setState({

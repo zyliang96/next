@@ -14,6 +14,7 @@ import {
     APAConfigProvider,
     APAState,
     APAStateEnabled,
+    APAConfigOptions,
 } from '@alifd/apa-sdk';
 import { z } from 'zod';
 import Overlay from '../overlay';
@@ -29,6 +30,11 @@ const { Popup } = Overlay;
 
 type InnerYearPickerProps = ClassPropsWithDefault<YearPickerProps, typeof YearPicker.defaultProps>;
 
+const popupMergeConfig: APAConfigOptions = {
+    mergeToParent: true,
+    mergeToParentAction: ['setVisible'],
+    mergeToParentState: ['visible'],
+};
 /**
  * DatePicker.YearPicker
  */
@@ -90,10 +96,7 @@ class YearPicker extends Component<YearPickerProps, YearPickerState> {
 
     readonly props: InnerYearPickerProps;
 
-    @APAState([
-        { name: 'value', desc: '年值，moment 对象' },
-        { name: 'visible', desc: '显示状态，true 表示显示，false 表示隐藏' },
-    ])
+    @APAState([{ name: 'value', desc: '年值，moment 对象' }])
     state: YearPickerState & Record<string, unknown>;
 
     constructor(props: YearPickerProps) {
@@ -229,11 +232,6 @@ class YearPicker extends Component<YearPickerProps, YearPickerState> {
         }
     };
 
-    @APAAction({
-        name: 'onVisibleChange',
-        desc: '显示状态变化时的回调',
-        params: z.tuple([z.boolean().describe('是否显示'), z.string().describe('事件类型')]),
-    })
     onVisibleChange = (visible: boolean, reason: string) => {
         if (!('visible' in this.props)) {
             this.setState({
@@ -404,6 +402,7 @@ class YearPicker extends Component<YearPickerProps, YearPickerState> {
                     style={popupStyle}
                     className={popupClassName}
                     trigger={trigger}
+                    __apaConfig={popupMergeConfig}
                 >
                     {popupContent ? (
                         popupContent

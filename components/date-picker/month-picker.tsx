@@ -13,6 +13,7 @@ import {
     APAConfigProvider,
     APAState,
     APAStateEnabled,
+    APAConfigOptions,
 } from '@alifd/apa-sdk';
 import { z } from 'zod';
 import moment, { type Moment } from 'moment';
@@ -33,16 +34,18 @@ type InnerMonthPickerProps = ClassPropsWithDefault<
     typeof MonthPicker.defaultProps
 >;
 
+const popupMergeConfig: APAConfigOptions = {
+    mergeToParent: true,
+    mergeToParentAction: ['setVisible'],
+    mergeToParentState: ['visible'],
+};
 /**
  * DatePicker.MonthPicker
  */
 @APAActionEnabled
 @APAStateEnabled
 class MonthPicker extends Component<MonthPickerProps, MonthPickerState> {
-    @APAState([
-        { name: 'value', desc: '月份值，moment 对象' },
-        { name: 'visible', desc: '显示状态，true 表示显示，false 表示隐藏' },
-    ])
+    @APAState([{ name: 'value', desc: '月份值，moment 对象' }])
     state: MonthPickerState & Record<string, unknown>;
 
     static displayName = 'MonthPicker';
@@ -240,11 +243,6 @@ class MonthPicker extends Component<MonthPickerProps, MonthPickerState> {
         }
     };
 
-    @APAAction({
-        name: 'onVisibleChange',
-        desc: '显示状态变化时的回调',
-        params: z.tuple([z.boolean(), z.string()]),
-    })
     onVisibleChange = (visible: boolean, type: string) => {
         if (!('visible' in this.props)) {
             this.setState({
@@ -421,6 +419,7 @@ class MonthPicker extends Component<MonthPickerProps, MonthPickerState> {
                     style={popupStyle}
                     className={popupClassName}
                     trigger={trigger}
+                    __apaConfig={popupMergeConfig}
                 >
                     {popupContent ? (
                         popupContent
