@@ -89,10 +89,6 @@ class SubMenu extends Component<SubMenuProps> {
         }
     }
 
-    @APAAction({
-        name: 'getOpen',
-        desc: '获取弹层项是否打开',
-    })
     getOpen() {
         const { _key, root } = this.props as SubMenuInMenuProps;
         const { openKeys } = root.state;
@@ -131,7 +127,11 @@ class SubMenu extends Component<SubMenuProps> {
     @APAAction({
         name: 'handleOpen',
         desc: '处理子菜单的打开或关闭',
-        params: z.tuple([z.boolean(), z.string().optional(), z.any().optional()]),
+        params: z.tuple([
+            z.boolean().describe('是否打开'),
+            z.string().describe('触发类型').optional(),
+            z.any().describe('event事件').optional(),
+        ]),
     })
     handleOpen(open: boolean, triggerType?: string, e?: Event) {
         const { _key, root } = this.props as SubMenuInMenuProps;

@@ -77,10 +77,6 @@ class PopupItem extends Component<PopupItemProps> {
         this.popup = ref;
     }
 
-    @APAAction({
-        name: 'getOpen',
-        desc: '获取弹层项是否打开',
-    })
     getOpen() {
         const { _key, root } = this.props as PopupItemInMenuProps;
         const { openKeys } = root.state;
@@ -88,10 +84,6 @@ class PopupItem extends Component<PopupItemProps> {
         return openKeys.indexOf(_key) > -1;
     }
 
-    @APAAction({
-        name: 'getPopupProps',
-        desc: '获取弹层项的弹层属性',
-    })
     getPopupProps() {
         let { popupProps } = (this.props as PopupItemInMenuProps).root.props;
         if (typeof popupProps === 'function') {
@@ -103,7 +95,11 @@ class PopupItem extends Component<PopupItemProps> {
     @APAAction({
         name: 'handleOpen',
         desc: '处理弹层项的打开或关闭',
-        params: z.tuple([z.boolean(), z.string(), z.any()]),
+        params: z.tuple([
+            z.boolean().describe('是否打开'),
+            z.string().describe('触发类型').optional(),
+            z.any().describe('event事件').optional(),
+        ]),
     })
     handleOpen: NonNullable<PopupProps['onVisibleChange']> = (open, triggerType, e) => {
         const { _key, root } = this.props as PopupItemInMenuProps;
