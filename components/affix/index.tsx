@@ -134,6 +134,7 @@ class Affix extends Component<AffixProps, AffixState> {
         }
     }
 
+    @APAAction({ name: 'updatePosition', desc: '更新位置' })
     updatePosition = () => {
         this._updateNodePosition();
     };
@@ -202,11 +203,6 @@ class Affix extends Component<AffixProps, AffixState> {
         }
     };
 
-    @APAAction({
-        name: 'setAffixStyle',
-        desc: '设置固钉样式',
-        params: z.tuple([z.record(z.string(), z.any()).optional(), z.boolean().optional()]),
-    })
     _setAffixStyle(affixStyle: AffixState['style'], affixed = false) {
         if (obj.shallowEqual(affixStyle, this.state.style)) {
             return;
