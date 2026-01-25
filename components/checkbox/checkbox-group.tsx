@@ -131,6 +131,115 @@ class CheckboxGroup extends React.Component<GroupProps, GroupState> {
         this.props.onChange?.(newValue, event);
     }
 
+    @APAAction({
+        name: 'selectAll',
+        desc: '选中所有未禁用的复选框',
+        params: z.tuple([]),
+    })
+    selectAll() {
+        const allValues: ValueItem[] = [];
+
+        // 如果使用 dataSource
+        if (this.props.dataSource && this.props.dataSource.length > 0) {
+            (this.props.dataSource as Array<string | CheckboxData>).forEach(item => {
+                if (typeof item === 'string') {
+                    allValues.push(item);
+                } else if (item && typeof item === 'object' && !item.disabled) {
+                    allValues.push(item.value);
+                }
+            });
+        }
+        // 如果使用 children
+        else if (this.props.children) {
+            React.Children.forEach(this.props.children, child => {
+                if (React.isValidElement(child)) {
+                    const childProps = child.props as any;
+                    if (!childProps.disabled && childProps.value !== undefined) {
+                        allValues.push(childProps.value);
+                    }
+                }
+            });
+        }
+
+        this.setValue(allValues);
+    }
+
+    @APAAction({
+        name: 'clearAll',
+        desc: '清空所有选中的复选框',
+        params: z.tuple([]),
+    })
+    clearAll() {
+        this.setValue([]);
+    }
+
+    @APAAction({
+        name: 'toggleValue',
+        desc: '切换指定值的选中状态',
+        params: z.tuple([z.union([z.string(), z.number(), z.boolean()]).describe('要切换的值')]),
+    })
+    toggleValue(value: ValueItem) {
+        const currentValues = [...this.state.value];
+        const index = currentValues.indexOf(value);
+
+        if (index === -1) {
+            currentValues.push(value);
+        } else {
+            currentValues.splice(index, 1);
+        }
+
+        this.setValue(currentValues);
+    }
+
+    @APAAction({
+        name: 'selectByIndex',
+        desc: '通过索引选中复选框（可传入多个索引）',
+        params: z.tuple([
+            z.union([z.number(), z.array(z.number())]).describe('要选中的复选框索引或索引数组'),
+        ]),
+    })
+    selectByIndex(indexes: number | number[]) {
+        const indexArray = Array.isArray(indexes) ? indexes : [indexes];
+        const values: ValueItem[] = [];
+        const enabledItems: ValueItem[] = [];
+
+        // 如果使用 dataSource
+        if (this.props.dataSource && this.props.dataSource.length > 0) {
+            (this.props.dataSource as Array<string | CheckboxData>).forEach(item => {
+                if (typeof item === 'string') {
+                    enabledItems.push(item);
+                } else if (item && typeof item === 'object' && !item.disabled) {
+                    enabledItems.push(item.value);
+                }
+            });
+        }
+        // 如果使用 children
+        else if (this.props.children) {
+            React.Children.forEach(this.props.children, child => {
+                if (React.isValidElement(child)) {
+                    const childProps = child.props as any;
+                    if (!childProps.disabled && childProps.value !== undefined) {
+                        enabledItems.push(childProps.value);
+                    }
+                }
+            });
+        }
+
+        indexArray.forEach(idx => {
+            if (idx >= 0 && idx < enabledItems.length) {
+                values.push(enabledItems[idx]);
+            } else {
+                console.warn(
+                    `[CheckboxGroup] index ${idx} is out of range (0-${enabledItems.length - 1})`
+                );
+            }
+        });
+
+        if (values.length > 0) {
+            this.setValue(values);
+        }
+    }
+
     onChange(currentValue: ValueItem, event: React.ChangeEvent<HTMLInputElement>) {
         const { value } = this.state;
         const index = value.indexOf(currentValue);
