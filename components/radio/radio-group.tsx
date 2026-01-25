@@ -136,6 +136,20 @@ class RadioGroup extends Component<GroupProps, GroupState> {
         }
     }
 
+    @APAAction({
+        name: 'setValue',
+        desc: '设置选中的值',
+        params: z.tuple([z.union([z.string(), z.number(), z.boolean()]).describe('要选中的值')]),
+    })
+    setValue(value: RadioValue) {
+        const event = new Event('change', { bubbles: true }) as any;
+        Object.defineProperty(event, 'target', {
+            writable: false,
+            value: { value },
+        });
+        this.onChange(value, event);
+    }
+
     focus() {
         if (!this.hasFocus) {
             const availableRef = this.radioRefs.filter(ref => {
