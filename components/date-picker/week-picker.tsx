@@ -391,11 +391,6 @@ export default APAConfigProvider.config(polyfill(WeekPicker), {
     desc: '周选择器组件',
     props: [
         {
-            key: 'disabledDate',
-            name: '禁用日期的回调函数',
-            desc: '禁用日期的回调函数，返回 true 表示不可选择，可用于禁用部分日期',
-        },
-        {
             key: 'disabled',
             name: '是否禁用',
             desc: '是否禁用，true 表示禁用，false 表示启用',

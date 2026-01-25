@@ -142,7 +142,10 @@ class Calendar extends Component<CalendarProps, CalendarState> {
     @APAAction({
         name: 'onSelectCell',
         desc: '选择日期单元格时的回调',
-        params: z.tuple([z.any(), z.union([z.enum(['date', 'month', 'year']), z.any()])]),
+        params: z.tuple([
+            z.any().describe('日期值'),
+            z.enum(['date', 'month', 'year']).describe('面板模式'),
+        ]),
     })
     onSelectCell = (date: Moment, nextMode: CalendarMode | MouseEvent<HTMLElement>) => {
         const { visibleMonth } = this.state;
@@ -175,7 +178,7 @@ class Calendar extends Component<CalendarProps, CalendarState> {
     @APAAction({
         name: 'changeMode',
         desc: '切换面板模式',
-        params: z.tuple([z.enum(['date', 'month', 'year'])]),
+        params: z.enum(['date', 'month', 'year']).describe('面板模式'),
     })
     changeMode = (nextMode: CalendarMode) => {
         if (nextMode && this.MODES.indexOf(nextMode) > -1 && nextMode !== this.state.mode) {
@@ -187,7 +190,10 @@ class Calendar extends Component<CalendarProps, CalendarState> {
     @APAAction({
         name: 'changeVisibleMonth',
         desc: '切换展示的月份',
-        params: z.tuple([z.any(), z.string()]),
+        params: z.tuple([
+            z.any().describe('日期值'),
+            z.enum(['cellClick', 'buttonClick', 'yearSelect', 'monthSelect']).describe('切换原因'),
+        ]),
     })
     changeVisibleMonth = (date: Moment, reason: VisibleMonthChangeType) => {
         if (!isSameYearMonth(date, this.state.visibleMonth)) {
@@ -343,11 +349,6 @@ class Calendar extends Component<CalendarProps, CalendarState> {
 export default APAConfigProvider.config(polyfill(Calendar), {
     desc: '日历组件',
     props: [
-        {
-            key: 'disabledDate',
-            name: '不可选择的日期的回调函数',
-            desc: '不可选择的日期的回调函数，参数为当前日期，返回 true 表示不可选择，可用于禁用部分日期',
-        },
         {
             key: 'shape',
             name: '展现形态',

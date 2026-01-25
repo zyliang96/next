@@ -232,7 +232,7 @@ class YearPicker extends Component<YearPickerProps, YearPickerState> {
     @APAAction({
         name: 'onVisibleChange',
         desc: '显示状态变化时的回调',
-        params: z.tuple([z.boolean(), z.string()]),
+        params: z.tuple([z.boolean().describe('是否显示'), z.string().describe('事件类型')]),
     })
     onVisibleChange = (visible: boolean, reason: string) => {
         if (!('visible' in this.props)) {
@@ -427,11 +427,6 @@ export default APAConfigProvider.config(polyfill(YearPicker), {
             key: 'disabled',
             name: '是否禁用',
             desc: '是否禁用，true 表示禁用，false 表示启用',
-        },
-        {
-            key: 'disabledDate',
-            name: '禁用日期的回调函数',
-            desc: '禁用日期的回调函数，返回 true 表示不可选择，可用于禁用部分日期',
         },
         {
             key: 'format',
