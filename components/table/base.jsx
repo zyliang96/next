@@ -934,6 +934,13 @@ class Table extends React.Component {
                                                             others.dir = 'rtl';
                                                         }
 
+                                                        const { apaNode } = this._apaComponentConfigContext || {};
+                                                        if (apaNode) {
+                                                            apaNode.updateState({
+                                                                dataSource,
+                                                            });
+                                                        }
+
                                                         const loadingcls = classnames({
                                                             [`${prefix}table-loading-content`]: true,
                                                         });
