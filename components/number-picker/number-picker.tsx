@@ -274,7 +274,7 @@ class NumberPicker extends React.Component<NumberPickerProps, NumberPickerState>
     @APAAction({
         name: 'onChange',
         desc: '数值被改变的事件',
-        params: z.tuple([z.string(), z.any()]),
+        params: z.string(),
     })
     onChange(
         value: string,
@@ -399,12 +399,12 @@ class NumberPicker extends React.Component<NumberPickerProps, NumberPickerState>
         onKeyDown && onKeyDown(e, ...args);
     };
 
-    @APAAction({ name: 'up', desc: '增加数值', params: z.tuple([z.boolean(), z.any()]) })
+    @APAAction({ name: 'up', desc: '增加数值', params: z.boolean() })
     up(disabled: boolean, e: React.KeyboardEvent<HTMLInputElement>) {
         this.step('up', disabled, e);
     }
 
-    @APAAction({ name: 'down', desc: '减少数值', params: z.tuple([z.boolean(), z.any()]) })
+    @APAAction({ name: 'down', desc: '减少数值', params: z.boolean() })
     down(disabled: boolean, e: React.KeyboardEvent<HTMLInputElement>) {
         this.step('down', disabled, e);
     }
