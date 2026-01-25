@@ -82,7 +82,14 @@ class Switch extends React.Component<SwitchProps, SwitchState> {
         };
     }
 
-    @APAAction({ name: 'onChange', desc: '开关状态改变事件', params: z.tuple([z.any()]) })
+    @APAAction({ name: 'onChange', desc: '开关状态改变事件' })
+    onChangeAction() {
+        const ev = new Event('click') as unknown as
+            | MouseEvent<HTMLDivElement>
+            | KeyboardEvent<HTMLDivElement>;
+        this.onChange(ev);
+    }
+
     onChange(ev: MouseEvent<HTMLDivElement> | KeyboardEvent<HTMLDivElement>) {
         const checked = !this.state.checked;
 
