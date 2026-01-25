@@ -181,6 +181,21 @@ class Tab extends Component<TabProps, TabState> {
         return exist;
     }
 
+    /**
+     * 获取所有未禁用的标签页
+     */
+    private getEnabledTabs() {
+        const tabs: Array<{ key: string; element: ReactElement<ItemProps> }> = [];
+        React.Children.forEach(this.props.children, (child, index) => {
+            if (React.isValidElement<ItemProps>(child) && !child.props.disabled) {
+                tabs.push({
+                    key: String(child.key || index),
+                    element: child,
+                });
+            }
+        });
+        return tabs;
+    }
     @APAAction({
         name: 'setActiveKey',
         desc: '设置当前激活的标签页',
@@ -196,6 +211,70 @@ class Tab extends Component<TabProps, TabState> {
         this.setState({
             activeKey: key,
         });
+    }
+
+    @APAAction({
+        name: 'setActiveByIndex',
+        desc: '通过索引设置激活的标签页（从 0 开始）',
+        params: z.tuple([z.number().min(0).describe('标签页索引')]),
+    })
+    setActiveByIndex(index: number) {
+        const tabs = this.getEnabledTabs();
+        if (index >= 0 && index < tabs.length) {
+            const targetKey = tabs[index].key;
+            this.setActiveKey(targetKey);
+        } else {
+            console.warn(`Tab index ${index} is out of bounds. Total enabled tabs: ${tabs.length}`);
+        }
+    }
+
+    @APAAction({
+        name: 'nextTab',
+        desc: '切换到下一个标签页（循环）',
+        params: z.tuple([]),
+    })
+    nextTab() {
+        const nextKey = this.getNextActiveKey(true);
+        if (nextKey) {
+            this.setActiveKey(String(nextKey));
+        }
+    }
+
+    @APAAction({
+        name: 'prevTab',
+        desc: '切换到上一个标签页（循环）',
+        params: z.tuple([]),
+    })
+    prevTab() {
+        const prevKey = this.getNextActiveKey(false);
+        if (prevKey) {
+            this.setActiveKey(String(prevKey));
+        }
+    }
+
+    @APAAction({
+        name: 'setActiveByTitle',
+        desc: '通过标题设置激活的标签页（支持部分匹配）',
+        params: z.tuple([z.string().describe('标签页标题（支持部分匹配）')]),
+    })
+    setActiveByTitle(title: string) {
+        let targetKey: string | null = null;
+
+        React.Children.forEach(this.props.children, (child, index) => {
+            if (targetKey) return;
+            if (React.isValidElement<ItemProps>(child)) {
+                const childTitle = String(child.props.title || '');
+                if (childTitle.includes(title) && !child.props.disabled) {
+                    targetKey = String(child.key || index);
+                }
+            }
+        });
+
+        if (targetKey) {
+            this.setActiveKey(targetKey);
+        } else {
+            console.warn(`No tab found with title containing: "${title}"`);
+        }
     }
 
     handleTriggerEvent = (eventType: string, key: string) => {
