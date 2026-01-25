@@ -210,6 +210,61 @@ class Select extends Base<SelectProps, SelectState> {
     }
 
     @APAAction({
+        name: 'selectByIndex',
+        desc: '通过索引选择选项（从 0 开始）',
+        params: z.tuple([
+            z
+                .union([z.number(), z.array(z.number())])
+                .describe('要选择的选项索引，单选模式传数字，多选模式传数字数组'),
+        ]),
+    })
+    selectByIndex(index: number | number[]) {
+        if (this.props.disabled || this.props.readOnly) {
+            return;
+        }
+
+        // 获取当前可用的数据源
+        const enabledDataSource = this.dataStore.getEnableDS();
+
+        if (!enabledDataSource || enabledDataSource.length === 0) {
+            console.warn('[Select] dataSource is empty, cannot select by index');
+            return;
+        }
+
+        // 单选模式
+        if (typeof index === 'number') {
+            if (index < 0 || index >= enabledDataSource.length) {
+                console.warn(
+                    `[Select] index ${index} is out of range (0-${enabledDataSource.length - 1})`
+                );
+                return;
+            }
+            const selectedItem = enabledDataSource[index];
+            this.handleChange(selectedItem.value, 'itemClick' as VisibleChangeType);
+        }
+        // 多选模式
+        else if (Array.isArray(index)) {
+            const selectedValues: DataSourceItem[] = [];
+
+            for (const idx of index) {
+                if (idx < 0 || idx >= enabledDataSource.length) {
+                    console.warn(
+                        `[Select] index ${idx} is out of range (0-${
+                            enabledDataSource.length - 1
+                        }), skipping`
+                    );
+                    continue;
+                }
+                selectedValues.push(enabledDataSource[idx].value);
+            }
+
+            if (selectedValues.length > 0) {
+                this.handleChange(selectedValues, 'itemClick' as VisibleChangeType);
+            }
+        }
+    }
+
+    @APAAction({
         name: 'clear',
         desc: '清空选择',
         params: z.tuple([]),
