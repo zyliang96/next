@@ -177,12 +177,16 @@ export default function ShellBase(props: { componentName?: string }) {
             name: 'toggleAside',
             desc: '切换侧边栏',
             params: z.tuple([
-                z.enum(['Navigation', 'LocalNavigation', 'Ancillary', 'ToolDock']),
-                z.object({
-                    onCollapseChange: z.function().optional(),
-                    collapse: z.boolean().optional(),
-                }),
-                z.any(),
+                z
+                    .enum(['Navigation', 'LocalNavigation', 'Ancillary', 'ToolDock'])
+                    .describe('侧边栏类型'),
+                z
+                    .object({
+                        onCollapseChange: z.function().optional().describe('折叠状态变化时的回调'),
+                        collapse: z.boolean().optional().describe('折叠状态'),
+                    })
+                    .describe('侧边栏属性'),
+                z.any().describe('event事件'),
             ]),
         })
         toggleAside = (
