@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
 import { APAConfigProvider } from '@alifd/apa-sdk';
+import { reactNodeUtil } from '../../util';
 import type { TabItemProps, ItemProps } from '../types';
 
 /** Tab.Item */
@@ -56,7 +57,16 @@ export default APAConfigProvider.config(polyfill(TabItem), {
     isRegisterChildren: true,
     desc: '标签页项组件',
     props: [
-        { key: 'title', name: 'title', desc: '标签页标题' },
+        {
+            key: 'title',
+            name: 'title',
+            desc: '标签页标题',
+            format: (val: unknown) => {
+                // 如果 title 是 ReactNode，提取文本内容
+                const text = reactNodeUtil.getChildrenText(val);
+                return text;
+            },
+        },
         { key: 'disabled', name: 'disabled', desc: '是否禁用' },
         { key: 'closeable', name: 'closeable', desc: '是否可关闭' },
     ],
