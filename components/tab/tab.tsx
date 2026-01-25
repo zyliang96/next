@@ -199,11 +199,10 @@ class Tab extends Component<TabProps, TabState> {
         });
         return tabs;
     }
-    @APAAction({
-        name: 'setActiveKey',
-        desc: '设置当前激活的标签页',
-        params: z.tuple([z.string().describe('标签页的 key')]),
-    })
+    /**
+     * 原有的内部方法：设置 activeKey（仅更新 state，不触发 onChange）
+     * 用于内部逻辑，保持原有行为不变
+     */
     setActiveKey(key: string) {
         const { activeKey } = this.state;
 
@@ -216,6 +215,35 @@ class Tab extends Component<TabProps, TabState> {
         });
     }
 
+    /**
+     * APA Action：设置当前激活的标签页
+     * 正确处理受控/非受控模式，并触发 onChange 回调
+     */
+    @APAAction({
+        name: 'setActiveKey',
+        desc: '设置当前激活的标签页',
+        params: z.tuple([z.string().describe('标签页的 key')]),
+    })
+    apaSetActiveKey(key: string) {
+        const { activeKey } = this.state;
+        const { onChange } = this.props;
+
+        // 如果 key 没变，直接返回
+        if (key === activeKey) {
+            return;
+        }
+
+        // 非受控模式下才更新 state
+        if (!('activeKey' in this.props)) {
+            this.setState({
+                activeKey: key,
+            });
+        }
+
+        // 触发 onChange 回调
+        onChange!(key);
+    }
+
     @APAAction({
         name: 'setActiveByIndex',
         desc: '通过索引设置激活的标签页（从 0 开始）',
@@ -225,7 +253,7 @@ class Tab extends Component<TabProps, TabState> {
         const tabs = this.getEnabledTabs();
         if (index >= 0 && index < tabs.length) {
             const targetKey = tabs[index].key;
-            this.setActiveKey(targetKey);
+            this.apaSetActiveKey(targetKey);
         } else {
             console.warn(`Tab index ${index} is out of bounds. Total enabled tabs: ${tabs.length}`);
         }
