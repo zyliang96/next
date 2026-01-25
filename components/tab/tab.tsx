@@ -78,7 +78,10 @@ class Tab extends Component<TabProps, TabState> {
         icons: {},
     };
 
-    @APAState([{ name: 'activeKey', desc: '当前激活的标签页' }])
+    @APAState([
+        { name: 'activeKey', desc: '当前激活的标签页' },
+        { name: 'keys', desc: '所有标签页的 key 列表' },
+    ])
     state: TabState;
 
     constructor(props: TabProps) {

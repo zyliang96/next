@@ -19,7 +19,6 @@ const TabWithAPA = APAConfigProvider.config(Tab, {
     isRegisterChildren: true, // 需要注册子组件 Tab.Item
     desc: '标签页组件',
     props: [
-        { key: 'activeKey', name: 'activeKey', desc: '当前激活的标签页' },
         { key: 'shape', name: 'shape', desc: '标签页的形状' },
         { key: 'size', name: 'size', desc: '标签页的尺寸' },
         { key: 'tabPosition', name: 'tabPosition', desc: '标签页的位置' },
