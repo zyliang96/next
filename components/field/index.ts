@@ -66,7 +66,10 @@ class NextField extends Field {
     @APAAction({
         name: 'validate',
         desc: '校验字段',
-        params: z.tuple([z.array(z.string()).optional(), z.function().optional()]),
+        params: z.tuple([
+            z.array(z.string()).optional().describe('字段名列表'),
+            z.function().optional().describe('校验结果回调函数'),
+        ]),
     })
     validate(names?: string | string[] | ValidateCallback, callback?: ValidateCallback) {
         if (typeof names === 'function') {
@@ -97,7 +100,10 @@ class NextField extends Field {
     @APAAction({
         name: 'reset',
         desc: '重置字段',
-        params: z.tuple([z.array(z.string()).optional(), z.boolean().optional()]),
+        params: z.tuple([
+            z.array(z.string()).optional().describe('字段名列表'),
+            z.boolean().optional().describe('是否重置为默认值'),
+        ]),
     })
     reset(names?: string[] | string | boolean, backToDefault = false) {
         if (names === true) {
@@ -115,7 +121,11 @@ class NextField extends Field {
      * @param name - 字段名
      * @returns 字段值
      */
-    @APAAction({ name: 'getValue', desc: '获取字段值', params: z.tuple([z.string()]) })
+    @APAAction({
+        name: 'getValue',
+        desc: '获取字段值',
+        params: z.tuple([z.string().describe('字段名')]),
+    })
     getValue<T = unknown>(name: string): T | undefined {
         return super.getValue(name);
     }
@@ -125,7 +135,11 @@ class NextField extends Field {
      * @param names - 字段名列表
      * @returns 字段值
      */
-    @APAAction({ name: 'getValues', desc: '获取字段值', params: z.tuple([z.array(z.string())]) })
+    @APAAction({
+        name: 'getValues',
+        desc: '获取字段值',
+        params: z.tuple([z.array(z.string()).describe('字段名列表')]),
+    })
     getValues<T = Record<string, unknown>>(names?: string[]): T {
         return super.getValues(names);
     }
@@ -140,7 +154,12 @@ class NextField extends Field {
     @APAAction({
         name: 'setValue',
         desc: '设置字段值',
-        params: z.tuple([z.string(), z.any(), z.boolean().optional(), z.boolean().optional()]),
+        params: z.tuple([
+            z.string().describe('字段名'),
+            z.any().describe('字段值'),
+            z.boolean().optional().describe('是否重新渲染'),
+            z.boolean().optional().describe('是否触发 change 事件'),
+        ]),
     })
     setValue(name: string, value: unknown, reRender?: boolean, triggerChange?: boolean): void {
         return super.setValue(name, value, reRender, triggerChange);
@@ -154,7 +173,10 @@ class NextField extends Field {
     @APAAction({
         name: 'setValues',
         desc: '设置字段值',
-        params: z.tuple([z.record(z.string(), z.any()), z.boolean().optional()]),
+        params: z.tuple([
+            z.record(z.string(), z.any()).describe('字段值'),
+            z.boolean().optional().describe('是否重新渲染'),
+        ]),
     })
     setValues(fieldsValue?: Record<string, unknown>, reRender?: boolean): void {
         return super.setValues(fieldsValue, reRender);
@@ -165,7 +187,11 @@ class NextField extends Field {
      * @param name - 字段名
      * @returns 字段错误
      */
-    @APAAction({ name: 'getError', desc: '获取字段错误', params: z.tuple([z.string()]) })
+    @APAAction({
+        name: 'getError',
+        desc: '获取字段错误',
+        params: z.tuple([z.string().describe('字段名')]),
+    })
     getError(name: string): unknown[] | null {
         return super.getError(name);
     }
@@ -175,7 +201,11 @@ class NextField extends Field {
      * @param names - 字段名列表
      * @returns 字段错误
      */
-    @APAAction({ name: 'getErrors', desc: '获取字段错误', params: z.tuple([z.array(z.string())]) })
+    @APAAction({
+        name: 'getErrors',
+        desc: '获取字段错误信息',
+        params: z.tuple([z.array(z.string()).describe('字段名列表')]),
+    })
     getErrors(names?: string[]): Record<string, unknown[] | null> {
         return super.getErrors(names);
     }
@@ -185,7 +215,11 @@ class NextField extends Field {
      * @param name - 字段名
      * @param errors - 字段错误
      */
-    @APAAction({ name: 'setError', desc: '设置字段错误', params: z.tuple([z.string(), z.any()]) })
+    @APAAction({
+        name: 'setError',
+        desc: '设置字段错误',
+        params: z.tuple([z.string().describe('字段名'), z.any().describe('字段错误')]),
+    })
     setError(name: string, errors?: unknown): void {
         return super.setError(name, errors);
     }
@@ -197,7 +231,9 @@ class NextField extends Field {
     @APAAction({
         name: 'setErrors',
         desc: '设置字段错误',
-        params: z.tuple([z.record(z.string(), z.any())]),
+        params: z.tuple([
+            z.record(z.string(), z.any()).describe('字段错误，key 为字段名，value 为字段错误信息'),
+        ]),
     })
     setErrors(fieldsErrors?: Record<string, unknown>): void {
         return super.setErrors(fieldsErrors);
@@ -208,7 +244,11 @@ class NextField extends Field {
      * @param name - 字段名
      * @returns 字段状态
      */
-    @APAAction({ name: 'getState', desc: '获取字段状态', params: z.tuple([z.string()]) })
+    @APAAction({
+        name: 'getState',
+        desc: '获取字段状态',
+        params: z.tuple([z.string().describe('字段名')]),
+    })
     getState(name: string): FieldState {
         return super.getState(name);
     }
@@ -234,7 +274,7 @@ class NextField extends Field {
     @APAAction({
         name: 'validatePromise',
         desc: '校验字段',
-        params: z.tuple([z.array(z.string()).optional()]),
+        params: z.tuple([z.array(z.string()).optional().describe('字段名列表')]),
     })
     validatePromise<FormatterResults>(
         namesOrFormatter?:
@@ -259,7 +299,7 @@ class NextField extends Field {
     @APAAction({
         name: 'resetToDefault',
         desc: '重置字段为默认值',
-        params: z.tuple([z.array(z.string()).optional()]),
+        params: z.tuple([z.array(z.string()).optional().describe('字段名列表')]),
     })
     resetToDefault(names?: string | string[]): void {
         return super.resetToDefault(names);
