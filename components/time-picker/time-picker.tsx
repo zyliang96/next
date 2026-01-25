@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
 import classnames from 'classnames';
 import moment, { type Moment } from 'moment';
+import { z } from 'zod';
 import {
     APAAction,
     APAActionEnabled,
@@ -151,7 +152,15 @@ class TimePicker extends Component<TimePickerProps, TimePickerState> {
         }
     };
 
-    @APAAction({ name: 'onInputChange', desc: '输入框变化时的回调' })
+    @APAAction({
+        name: 'onInputChange',
+        desc: '输入框变化时的回调',
+        params: z.tuple([
+            z.string().describe('输入框值'),
+            z.any().describe('事件'),
+            z.string().describe('事件类型'),
+        ]),
+    })
     onInputChange = (inputValue: string, e?: SyntheticEvent, eventType?: string) => {
         if (!('value' in this.props)) {
             if (eventType === 'clear' || !inputValue) {
@@ -236,7 +245,11 @@ class TimePicker extends Component<TimePickerProps, TimePickerState> {
         }
     };
 
-    @APAAction({ name: 'onVisibleChange', desc: '弹层显示状态变化时的回调' })
+    @APAAction({
+        name: 'onVisibleChange',
+        desc: '弹层显示状态变化时的回调',
+        params: z.tuple([z.boolean().describe('是否显示'), z.string().describe('事件类型')]),
+    })
     onVisibleChange = (visible: boolean, type: string) => {
         if (!('visible' in this.props)) {
             this.setState({
@@ -417,21 +430,6 @@ export default APAConfigProvider.config(polyfill(TimePicker), {
             key: 'disabled',
             name: '是否禁用时间选择器',
             desc: '是否禁用时间选择器，true 表示禁用，false 表示启用',
-        },
-        {
-            key: 'disabledHours',
-            name: '禁用小时的回调函数',
-            desc: '禁用小时的回调函数，返回 true 表示禁用，false 表示启用',
-        },
-        {
-            key: 'disabledMinutes',
-            name: '禁用分钟的回调函数',
-            desc: '禁用分钟的回调函数，返回 true 表示禁用，false 表示启用',
-        },
-        {
-            key: 'disabledSeconds',
-            name: '禁用秒钟的回调函数',
-            desc: '禁用秒钟的回调函数，返回 true 表示禁用，false 表示启用',
         },
         {
             key: 'format',
