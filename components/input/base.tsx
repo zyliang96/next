@@ -107,11 +107,36 @@ class Base<
         this.props.onChange!(value, e);
     };
 
+    /**
+     * APA Action: 设置输入框的值（包裹层）
+     * 优先使用 ref.dispatchEvent()，无 ref 时创建事件对象
+     */
     @APAAction({
         name: 'setValue',
         desc: '设置输入框的值',
         params: z.tuple([z.union([z.string(), z.number()]).describe('要设置的值')]),
     })
+    apaSetValue(value: string | number) {
+        // 优先使用 ref.dispatchEvent()
+        if (this.inputRef) {
+            this.inputRef.value = String(value);
+            const event = new Event('input', { bubbles: true });
+            this.inputRef.dispatchEvent(event);
+        } else {
+            // 无 ref 时，创建事件对象并调用内部方法
+            const event = new Event('input', { bubbles: true }) as any;
+            Object.defineProperty(event, 'target', {
+                writable: false,
+                value: { value: String(value) },
+            });
+            this.onChange(event);
+        }
+    }
+
+    /**
+     * 内部方法：处理 change 事件
+     * 保持原有逻辑不变
+     */
     onChange(e: ChangeEvent<HTMLInputElement>) {
         if ('stopPropagation' in e) {
             e.stopPropagation();
@@ -199,6 +224,31 @@ class Base<
         }
     };
 
+    /**
+     * APA Action: 清空输入框（包裹层）
+     */
+    @APAAction({
+        name: 'clear',
+        desc: '清空输入框的值',
+    })
+    apaClear() {
+        // 优先使用 ref.dispatchEvent()
+        if (this.inputRef) {
+            this.inputRef.value = '';
+            const event = new Event('input', { bubbles: true });
+            this.inputRef.dispatchEvent(event);
+            this.focus();
+        } else {
+            // 无 ref 时，创建事件对象并调用内部方法
+            const event = new KeyboardEvent('keydown', { bubbles: true }) as any;
+            this.onClear(event);
+        }
+    }
+
+    /**
+     * 内部方法：清空输入框
+     * 保持原有逻辑不变
+     */
     onClear(e: KeyboardEvent<HTMLInputElement>) {
         if (this.props.disabled) {
             return;
@@ -299,6 +349,34 @@ class Base<
         return this.inputRef;
     }
 
+    /**
+     * APA Action: 聚焦输入框（包裹层）
+     */
+    @APAAction({
+        name: 'focus',
+        desc: '聚焦到输入框',
+    })
+    apaFocus() {
+        this.focus();
+    }
+
+    /**
+     * APA Action: 失焦输入框（包裹层）
+     */
+    @APAAction({
+        name: 'blur',
+        desc: '输入框失去焦点',
+    })
+    apaBlur() {
+        if (this.inputRef) {
+            this.inputRef.blur();
+        }
+    }
+
+    /**
+     * 内部方法：聚焦输入框
+     * 保持原有逻辑不变
+     */
     focus(start?: number, end?: number, preventScroll = false) {
         this.inputRef.focus({ preventScroll });
         if (typeof start === 'number') {
