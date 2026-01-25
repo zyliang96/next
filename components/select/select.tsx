@@ -182,14 +182,23 @@ class Select extends Base<SelectProps, SelectState> {
         { name: 'searchValue', desc: '搜索框的值' },
         { name: 'disabled', desc: '是否禁用选择器' },
         { name: 'mode', desc: '选择器模式' },
+        { name: 'dataSource', desc: '选择器的数据源（可用选项列表）' },
     ])
     get apaState() {
+        // 获取可用的数据源（已过滤禁用项）
+        const enabledDataSource = this.dataStore.getEnableDS();
+
         return {
             value: this.state.value,
             visible: this.state.visible,
             searchValue: this.state.searchValue,
             disabled: this.props.disabled,
             mode: this.props.mode,
+            dataSource: enabledDataSource.map(item => ({
+                value: item.value,
+                label: item.label,
+                disabled: item.disabled,
+            })),
         };
     }
 
