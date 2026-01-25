@@ -103,8 +103,6 @@ class Tag extends Component<TagProps, { visible: boolean }> {
         }
     }
 
-    // 标签体点击
-    @APAAction({ name: 'handleBodyClick', desc: '标签体点击', params: z.tuple([z.any()]) })
     handleBodyClick(e: MouseEvent<HTMLDivElement>) {
         const { closable, closeArea, onClick } = this.props;
         const node = e.currentTarget;
