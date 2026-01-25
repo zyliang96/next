@@ -145,7 +145,7 @@ class Pagination extends Component<PaginationProps, PaginationState> {
         return st;
     }
 
-    @APAAction({ name: 'handleJump', desc: '跳转页码', params: z.tuple([z.any()]) })
+    @APAAction({ name: 'handleJump', desc: '跳转页码' })
     handleJump = (e: KeyboardEvent<Element> | MouseEvent<Element>) => {
         const { total } = this.props;
         const { current, currentPageSize, inputValue } = this.state;
@@ -171,7 +171,7 @@ class Pagination extends Component<PaginationProps, PaginationState> {
     @APAAction({
         name: 'onPageItemClick',
         desc: '点击页码',
-        params: z.tuple([z.number(), z.any()]),
+        params: z.number().describe('页码'),
     })
     onPageItemClick(page: number, e: KeyboardEvent<Element> | MouseEvent<Element>) {
         if (!('current' in this.props)) {
@@ -182,14 +182,22 @@ class Pagination extends Component<PaginationProps, PaginationState> {
         this.props.onChange(page, e);
     }
 
-    @APAAction({ name: 'onInputChange', desc: '输入框值变化', params: z.tuple([z.string()]) })
+    @APAAction({
+        name: 'onInputChange',
+        desc: '输入框值变化',
+        params: z.string().describe('输入框值'),
+    })
     onInputChange(value: string) {
         this.setState({
             inputValue: value,
         });
     }
 
-    @APAAction({ name: 'onSelectSize', desc: '选择每页条数', params: z.tuple([z.number()]) })
+    @APAAction({
+        name: 'onSelectSize',
+        desc: '选择每页条数',
+        params: z.number().describe('每页条数'),
+    })
     onSelectSize(pageSize: number) {
         const newState: Partial<PaginationState> = {
             currentPageSize: pageSize,
