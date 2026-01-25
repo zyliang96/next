@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import {
     APAAction,
     APAActionEnabled,
+    APAConfigOptions,
     APAConfigProvider,
     APAState,
     APAStateEnabled,
@@ -18,6 +19,11 @@ export interface SelectableState {
     checked: boolean | undefined;
 }
 
+const selectableMergeConfig: APAConfigOptions = {
+    mergeToParent: true,
+    mergeToParentState: [],
+    mergeToParentAction: [],
+};
 @APAActionEnabled
 @APAStateEnabled
 class Selectable extends Component<SelectableProps, SelectableState> {
@@ -89,6 +95,7 @@ class Selectable extends Component<SelectableProps, SelectableState> {
                 aria-checked={isChecked}
                 className={clazz}
                 onClick={this.handleClick}
+                __apaConfig={selectableMergeConfig}
             />
         );
     }

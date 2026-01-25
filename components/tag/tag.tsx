@@ -80,7 +80,7 @@ class Tag extends Component<TagProps, { visible: boolean }> {
     @APAAction({
         name: 'handleClose',
         desc: '关闭标签',
-        params: z.tuple([z.enum(['tag', 'tail'])]),
+        params: z.enum(['tag', 'tail']),
     })
     handleClose(from: CloseArea) {
         const { animation, onClose } = this.props;
@@ -279,11 +279,6 @@ export default ConfigProvider.config(
                 key: 'disabled',
                 name: '标签是否被禁用',
                 desc: '标签是否被禁用，true 表示禁用，false 表示启用',
-            },
-            {
-                key: 'color',
-                name: '标签颜色',
-                desc: '标签颜色，可选值为 blue、green、orange、red、turquoise、yellow 和 hex 颜色值',
             },
         ],
     })

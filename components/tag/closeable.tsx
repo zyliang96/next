@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
-import { APAConfigProvider } from '@alifd/apa-sdk';
+import { APAConfigOptions, APAConfigProvider } from '@alifd/apa-sdk';
 import Tag from './tag';
 import type { CloseableProps } from './types';
 
+const tagMergeConfig: APAConfigOptions = {
+    mergeToParent: true,
+    mergeToParentState: ['visible'],
+    mergeToParentAction: ['handleClose'],
+};
 class Closeable extends Component<CloseableProps> {
     static defaultProps = {
         disabled: false,
@@ -37,6 +42,7 @@ class Closeable extends Component<CloseableProps> {
                 type={type}
                 size={size}
                 closable
+                __apaConfig={tagMergeConfig}
             >
                 {children}
             </Tag>
