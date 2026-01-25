@@ -1,7 +1,7 @@
 import React, { Component, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { APAAction, APAActionEnabled, APAConfigProvider } from '@alifd/apa-sdk';
+import { APAAction, APAActionEnabled, APAConfigProvider, APAState } from '@alifd/apa-sdk';
 import { z } from 'zod';
 import Animate from '../animate';
 import Icon from '../icon';
@@ -56,6 +56,9 @@ class Tag extends Component<TagProps, { visible: boolean }> {
 
     __destroyed: boolean;
     tagNode: HTMLDivElement | null = null;
+
+    @APAState([{ name: 'visible', desc: '标签是否可见' }])
+    state: { visible: boolean };
 
     constructor(props: TagProps) {
         super(props);
