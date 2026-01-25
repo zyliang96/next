@@ -3,7 +3,14 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Big from 'big.js';
 import { polyfill } from 'react-lifecycles-compat';
-
+import { z } from 'zod';
+import {
+    APAAction,
+    APAActionEnabled,
+    APAConfigProvider,
+    APAState,
+    APAStateEnabled,
+} from '@alifd/apa-sdk';
 import Icon from '../icon';
 import Button from '../button';
 import Input from '../input';
@@ -15,6 +22,8 @@ const MIN_SAFE_INTEGER = Number.MIN_SAFE_INTEGER || -Math.pow(2, 53) + 1;
 
 const { isNil } = obj;
 /** NumberPicker */
+@APAActionEnabled
+@APAStateEnabled
 class NumberPicker extends React.Component<NumberPickerProps, NumberPickerState> {
     static propTypes = {
         prefix: PropTypes.string,
@@ -75,6 +84,13 @@ class NumberPicker extends React.Component<NumberPickerProps, NumberPickerState>
     static displayName = 'NumberPicker';
 
     inputRef: React.ComponentRef<typeof Input> | null;
+
+    @APAState([
+        { name: 'value', desc: '当前值' },
+        { name: 'max', desc: '最大值' },
+        { name: 'min', desc: '最小值' },
+    ])
+    state: NumberPickerState;
 
     constructor(props: NumberPickerProps) {
         super(props);
@@ -255,6 +271,11 @@ class NumberPicker extends React.Component<NumberPickerProps, NumberPickerState>
         return true;
     }
 
+    @APAAction({
+        name: 'onChange',
+        desc: '数值被改变的事件',
+        params: z.tuple([z.string(), z.any()]),
+    })
     onChange(
         value: string,
         e:
@@ -349,6 +370,7 @@ class NumberPicker extends React.Component<NumberPickerProps, NumberPickerState>
         });
     }
 
+    @APAAction({ name: 'getPrecision', desc: '获取精度' })
     getPrecision() {
         const stepString = this.props.step!.toString();
         if (stepString.indexOf('e-') >= 0) {
@@ -377,10 +399,12 @@ class NumberPicker extends React.Component<NumberPickerProps, NumberPickerState>
         onKeyDown && onKeyDown(e, ...args);
     };
 
+    @APAAction({ name: 'up', desc: '增加数值', params: z.tuple([z.boolean(), z.any()]) })
     up(disabled: boolean, e: React.KeyboardEvent<HTMLInputElement>) {
         this.step('up', disabled, e);
     }
 
+    @APAAction({ name: 'down', desc: '减少数值', params: z.tuple([z.boolean(), z.any()]) })
     down(disabled: boolean, e: React.KeyboardEvent<HTMLInputElement>) {
         this.step('down', disabled, e);
     }
@@ -645,4 +669,12 @@ class NumberPicker extends React.Component<NumberPickerProps, NumberPickerState>
     }
 }
 
-export default polyfill(NumberPicker);
+export default APAConfigProvider.config(polyfill(NumberPicker), {
+    desc: '数字输入框组件',
+    props: [
+        { key: 'disabled', name: 'disabled', desc: '是否禁用' },
+        { key: 'step', name: 'step', desc: '步长' },
+        { key: 'precision', name: 'precision', desc: '精度' },
+        { key: 'editable', name: 'editable', desc: '是否可编辑' },
+    ],
+});
