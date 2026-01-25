@@ -16,7 +16,7 @@ export type ItemInMenuProps = ChildItemPropsInMenu<ItemWithDefaultsProps>;
 
 @APAActionEnabled
 class Item extends Component<ItemProps> {
-    static displayName = 'Item';
+    static displayName = 'MenuItem';
     static propTypes = {
         _key: PropTypes.string,
         level: PropTypes.number,
