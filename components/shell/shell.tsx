@@ -242,8 +242,12 @@ export default function ShellBase(props: { componentName?: string }) {
         @APAAction({
             name: 'toggleNavigation',
             desc: '切换导航栏',
-            params: z.tuple([z.any()]),
         })
+        toggleNavigationAction() {
+            const e = new Event('click') as unknown as React.MouseEvent<HTMLDivElement>;
+            this.toggleNavigation(e);
+        }
+
         toggleNavigation = (e: KeyboardEvent | MouseEvent) => {
             const mark = 'Navigation';
             const { props } = this.layout[mark]!;
@@ -258,8 +262,12 @@ export default function ShellBase(props: { componentName?: string }) {
         @APAAction({
             name: 'toggleLocalNavigation',
             desc: '切换本地导航栏',
-            params: z.tuple([z.any()]),
         })
+        toggleLocalNavigationAction() {
+            const e = new Event('click') as unknown as React.MouseEvent<HTMLDivElement>;
+            this.toggleLocalNavigation(e);
+        }
+
         toggleLocalNavigation = (e: KeyboardEvent | MouseEvent) => {
             const mark = 'LocalNavigation';
             const { props } = this.layout[mark]!;
@@ -274,8 +282,12 @@ export default function ShellBase(props: { componentName?: string }) {
         @APAAction({
             name: 'toggleAncillary',
             desc: '切换辅助栏',
-            params: z.tuple([z.any()]),
         })
+        toggleAncillaryAction() {
+            const e = new Event('click') as unknown as React.MouseEvent<HTMLDivElement>;
+            this.toggleAncillary(e);
+        }
+
         toggleAncillary = (e: KeyboardEvent | MouseEvent) => {
             const mark = 'Ancillary';
             const { props } = this.layout[mark]!;
@@ -290,8 +302,12 @@ export default function ShellBase(props: { componentName?: string }) {
         @APAAction({
             name: 'toggleToolDock',
             desc: '切换工具栏',
-            params: z.tuple([z.any()]),
         })
+        toggleToolDockAction() {
+            const e = new Event('click') as unknown as React.MouseEvent<HTMLDivElement>;
+            this.toggleToolDock(e);
+        }
+
         toggleToolDock = (e: KeyboardEvent | MouseEvent) => {
             const mark = 'ToolDock';
             const { props } = this.layout[mark]!;
@@ -733,11 +749,6 @@ export default function ShellBase(props: { componentName?: string }) {
                 key: 'fixedHeader',
                 name: '是否固定Header',
                 desc: '是否固定Header，采用sticky布局，不支持 IE11',
-            },
-            {
-                key: 'type',
-                name: '样式类型',
-                desc: '样式类型，分浅色主题、深色主题、主题色主题，可选值为 light、dark、brand',
             },
         ],
     });
