@@ -15,6 +15,7 @@ import {
     APAState,
     APAConfigProvider,
 } from '@alifd/apa-sdk';
+import { z } from 'zod';
 
 const noop = func.noop;
 function isChecked(
@@ -151,10 +152,37 @@ class Checkbox extends UIState<PrivateCheckboxProps, CheckboxState> {
         );
     }
 
+    checkboxRef: HTMLInputElement | null = null;
+
+    /**
+     * APA Action: 切换选中状态（包裹层）
+     */
     @APAAction({
         name: 'onChange',
         desc: '切换选中状态',
+        params: z.tuple([z.boolean().describe('是否选中')]),
     })
+    apaOnChange(checked: boolean) {
+        // 优先使用 ref.dispatchEvent()
+        if (this.checkboxRef) {
+            this.checkboxRef.checked = checked;
+            const event = new Event('change', { bubbles: true });
+            this.checkboxRef.dispatchEvent(event);
+        } else {
+            // 无 ref 时，创建事件对象并调用内部方法
+            const event = new Event('change', { bubbles: true }) as any;
+            Object.defineProperty(event, 'target', {
+                writable: false,
+                value: { checked },
+            });
+            this.onChange(event);
+        }
+    }
+
+    /**
+     * 内部方法：处理 change 事件
+     * 保持原有逻辑不变
+     */
     onChange(event: React.ChangeEvent<HTMLInputElement>) {
         const { context, value } = this.props;
         const checked = event.target.checked;
@@ -223,6 +251,9 @@ class Checkbox extends UIState<PrivateCheckboxProps, CheckboxState> {
                 onChange={this.onChange}
                 aria-checked={indeterminate ? 'mixed' : checked}
                 className={`${prefix}checkbox-input`}
+                ref={e => {
+                    this.checkboxRef = e;
+                }}
             />
         );
 

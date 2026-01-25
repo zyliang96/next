@@ -122,7 +122,13 @@ class CheckboxGroup extends React.Component<GroupProps, GroupState> {
         if (!('value' in this.props)) {
             this.setState({ value: newValue });
         }
-        this.props.onChange?.(newValue, {} as React.ChangeEvent<HTMLInputElement>);
+        // 创建一个合适的事件对象
+        const event = new Event('change', { bubbles: true }) as any;
+        Object.defineProperty(event, 'target', {
+            writable: false,
+            value: { value: newValue },
+        });
+        this.props.onChange?.(newValue, event);
     }
 
     onChange(currentValue: ValueItem, event: React.ChangeEvent<HTMLInputElement>) {
