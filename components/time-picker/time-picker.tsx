@@ -34,8 +34,8 @@ const timePickerLocale = nextLocale.TimePicker;
 
 const popupMergeConfig: APAConfigOptions = {
     mergeToParent: true,
-    mergeToParentAction: [],
-    mergeToParentState: [],
+    mergeToParentAction: ['setVisible'],
+    mergeToParentState: ['visible'],
 };
 type InnerTimePickerProps = ClassPropsWithDefault<TimePickerProps, typeof TimePicker.defaultProps>;
 
@@ -45,10 +45,7 @@ type InnerTimePickerProps = ClassPropsWithDefault<TimePickerProps, typeof TimePi
 @APAActionEnabled
 @APAStateEnabled
 class TimePicker extends Component<TimePickerProps, TimePickerState> {
-    @APAState([
-        { name: 'value', desc: '时间选择器的值，moment 对象' },
-        { name: 'visible', desc: '时间选择器是否显示' },
-    ])
+    @APAState([{ name: 'value', desc: '时间选择器的值，moment 对象' }])
     state: TimePickerState & Record<string, unknown>;
 
     static propTypes = {
@@ -157,8 +154,8 @@ class TimePicker extends Component<TimePickerProps, TimePickerState> {
         desc: '输入框变化时的回调',
         params: z.tuple([
             z.string().describe('输入框值'),
-            z.any().describe('事件'),
-            z.string().describe('事件类型'),
+            z.any().describe('event事件').optional(),
+            z.string().describe('eventType类型').optional(),
         ]),
     })
     onInputChange = (inputValue: string, e?: SyntheticEvent, eventType?: string) => {
@@ -245,11 +242,6 @@ class TimePicker extends Component<TimePickerProps, TimePickerState> {
         }
     };
 
-    @APAAction({
-        name: 'onVisibleChange',
-        desc: '弹层显示状态变化时的回调',
-        params: z.tuple([z.boolean().describe('是否显示'), z.string().describe('事件类型')]),
-    })
     onVisibleChange = (visible: boolean, type: string) => {
         if (!('visible' in this.props)) {
             this.setState({
