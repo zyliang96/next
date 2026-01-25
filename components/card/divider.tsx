@@ -40,10 +40,4 @@ class CardDivider extends Component<CardDividerProps> {
     }
 }
 
-const APACardDivider = APAConfigProvider.config(CardDivider, {
-    isRegisterChildren: true,
-    desc: '卡片分割线组件',
-    props: [],
-});
-
-export default ConfigProvider.config(APACardDivider);
+export default ConfigProvider.config(CardDivider);

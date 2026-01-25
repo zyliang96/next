@@ -9,7 +9,7 @@ import {
 } from '@alifd/apa-sdk';
 import type { ButtonProps } from '../types';
 import ConfigProvider from '../../config-provider';
-import { obj, log } from '../../util';
+import { obj, log, reactNodeUtil } from '../../util';
 
 function mapIconSize(size: NonNullable<ButtonProps['size']>): ButtonProps['iconSize'] {
     return {
@@ -73,7 +73,7 @@ class Button extends Component<ButtonProps> {
 
     button: HTMLButtonElement | HTMLAnchorElement | unknown;
 
-    @APAAction({ name: 'onMouseUp', desc: '按钮点击事件' })
+    @APAAction({ name: 'onClick', desc: '按钮点击事件' })
     onMouseUp = (e: React.MouseEvent<HTMLElement>) => {
         // @ts-expect-error fixme: may have no blur
         this.button.blur();
@@ -214,12 +214,26 @@ export const ApaButtonProps: APAComponentConfigPropsItem[] = [
     {
         key: 'disabled',
         name: '禁用状态',
-        desc: '是否禁用按钮，true 表示禁用，false 表示启用，禁用状态不能触发点击事件',
+        desc: '是否禁用按钮',
     },
     {
         key: 'loading',
         name: '加载状态',
-        desc: '是否处于加载状态，true 表示加载中，不可点击，false 表示正常状态，可点击',
+        desc: '是否处于加载状态',
+    },
+    {
+        key: 'children',
+        targetKey: 'content',
+        name: '按钮名称',
+        desc: '按钮名称',
+        format: (val: unknown, props: Record<string, unknown>) => {
+            const labelKey = 'aria-label';
+            if (props[labelKey]) {
+                return props[labelKey];
+            }
+            const text = reactNodeUtil.getChildrenText(val);
+            return text;
+        },
     },
 ];
 

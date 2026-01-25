@@ -240,32 +240,28 @@ export default APAConfigProvider.config(Form, {
         {
             key: 'disabled',
             name: '禁用状态',
-            desc: '是否禁用表单，true 表示禁用，false 表示启用，禁用状态不能触发提交事件',
+            desc: '是否禁用表单，禁用状态不能触发提交事件',
         },
         {
             key: 'isPreview',
             name: '预览态',
-            desc: '是否开启预览态，true 表示开启，false 表示关闭',
+            desc: '是否开启预览态',
         },
-        {
-            key: 'inline',
-            name: '内联',
-            desc: '是否开启内联，true 表示开启，false 表示关闭',
-        },
-        {
-            key: 'labelAlign',
-            name: '标签位置',
-            desc: '标签位置，top 表示在上，left 表示在左，inset 表示在右',
-        },
-        {
-            key: 'labelTextAlign',
-            name: '标签对齐方式',
-            desc: '标签对齐方式，left 表示左对齐，right 表示右对齐',
-        },
-        {
-            key: 'rtl',
-            name: '从右到左 布局',
-            desc: '是否开启 从右到左 布局，true 表示开启，false 表示默认从左到右布局',
-        },
+        // TODO 先删除，感觉对于Agent来说，如何布局好像没什么意义，更多的是知道有哪些内容
+        // {
+        //     key: 'inline',
+        //     name: '内联',
+        //     desc: '是否开启内联',
+        // },
+        // {
+        //     key: 'labelAlign',
+        //     name: '标签位置',
+        //     desc: '标签位置，top 表示在上，left 表示在左，inset 表示在右',
+        // },
+        // {
+        //     key: 'labelTextAlign',
+        //     name: '标签对齐方式',
+        //     desc: '标签对齐方式，left(左对齐)，right(右对齐)',
+        // },
     ],
 });

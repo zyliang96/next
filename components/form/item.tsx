@@ -1,11 +1,18 @@
-import React, { Children, Component, type ReactElement, type ReactNode, cloneElement } from 'react';
+import React, {
+    Children,
+    Component,
+    type ReactElement,
+    type ReactNode,
+    cloneElement,
+    isValidElement,
+} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { APAConfigProvider } from '@alifd/apa-sdk';
 
 import Grid from '../grid';
 import RGrid from '../responsive-grid';
-import { obj } from '../util';
+import { obj, reactNodeUtil } from '../util';
 import Error from './error';
 import { getFieldInitCfg } from './enhance';
 import type { ChildExtraProperties, ItemProps } from './types';
@@ -409,7 +416,7 @@ export default APAConfigProvider.config(Item, {
         {
             key: 'required',
             name: '是否必填',
-            desc: '是否必填，true 表示必填，false 表示非必填',
+            desc: '是否必填',
         },
         {
             key: 'label',
@@ -424,12 +431,18 @@ export default APAConfigProvider.config(Item, {
         {
             key: 'isPreview',
             name: '是否预览态',
-            desc: '是否预览态，true 表示预览态，false 表示非预览态',
+            desc: '是否预览态',
         },
         {
             key: 'disabled',
             name: '是否禁用',
-            desc: '是否禁用，true 表示禁用，false 表示非禁用',
+            desc: '是否禁用',
+        },
+        {
+            key: 'help',
+            targetKey: 'errorMessage',
+            name: '错误信息',
+            desc: '错误信息，有值则说明存在错误信息，否则表示通过校验',
         },
     ],
 });

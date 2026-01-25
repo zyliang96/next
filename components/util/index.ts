@@ -12,6 +12,7 @@ import _guid from './guid';
 import _KEYCODE from './keycode';
 import _date from './date';
 import _pickAttrs from './pick-attrs';
+import * as _reactNode from './react-node';
 
 export const dom = _dom;
 export const env = _env;
@@ -28,3 +29,4 @@ export const htmlId = _htmlId;
 export const datejs = _date;
 export const pickAttrs = _pickAttrs;
 export * from './types';
+export const reactNodeUtil = _reactNode;

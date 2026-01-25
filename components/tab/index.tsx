@@ -1,5 +1,5 @@
-import ConfigProvider from '../config-provider';
 import { APAConfigProvider } from '@alifd/apa-sdk';
+import ConfigProvider from '../config-provider';
 import Tab from './tab';
 import Item from './tabs/tab-item';
 import { assignSubComponent } from '../util/component';

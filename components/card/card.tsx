@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { APAConfigProvider } from '@alifd/apa-sdk';
+import { APAConfigProvider, type APAConfigOptions } from '@alifd/apa-sdk';
 
 import ConfigProvider from '../config-provider';
 import BulletHeader from './bullet-header';
@@ -42,6 +42,25 @@ class Card extends Component<CardProps> {
         hasBorder: true,
         contentHeight: 120,
     };
+
+    /**
+     * 卡片标题组件的APA配置
+     */
+    bulletHeaderApaConfig: APAConfigOptions = {
+        mergeToParent: false,
+        mergeToParentAction: false,
+        mergeToParentState: false,
+    };
+
+    componentDidMount(): void {
+        this.bulletHeaderApaConfig.mergeToParent = !this.props.title;
+    }
+
+    componentDidUpdate(prevProps: Readonly<CardProps>): void {
+        if (this.props.title !== prevProps.title) {
+            this.bulletHeaderApaConfig.mergeToParent = !this.props.title;
+        }
+    }
 
     render() {
         const {
@@ -84,6 +103,7 @@ class Card extends Component<CardProps> {
                     subTitle={subTitle}
                     extra={extra}
                     showTitleBullet={showTitleBullet}
+                    __apaConfig={this.bulletHeaderApaConfig}
                 />
                 {free ? (
                     children
