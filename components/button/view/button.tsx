@@ -10,6 +10,7 @@ import {
 import type { ButtonProps } from '../types';
 import ConfigProvider from '../../config-provider';
 import { obj, log, reactNodeUtil } from '../../util';
+import { createReactMouseSyntheticEvent } from '../../util/react-event';
 
 function mapIconSize(size: NonNullable<ButtonProps['size']>): ButtonProps['iconSize'] {
     return {
@@ -73,13 +74,30 @@ class Button extends Component<ButtonProps> {
 
     button: HTMLButtonElement | HTMLAnchorElement | unknown;
 
-    @APAAction({ name: 'onClick', desc: '按钮点击事件' })
+    @APAAction({ name: 'onMouseUp', desc: '鼠标抬起事件' })
     onMouseUp = (e: React.MouseEvent<HTMLElement>) => {
         // @ts-expect-error fixme: may have no blur
         this.button.blur();
 
         if (this.props.onMouseUp) {
             this.props.onMouseUp(e);
+        }
+    };
+
+    @APAAction({ name: 'onClick', desc: '按钮点击事件' })
+    apaActionClick = () => {
+        if (this.props.disabled) {
+            return;
+        }
+        if (this.props.loading) {
+            return;
+        }
+        if (this.props.onClick) {
+            const e = createReactMouseSyntheticEvent(
+                new MouseEvent('click'),
+                this.button as EventTarget
+            );
+            this.props.onClick(e);
         }
     };
 

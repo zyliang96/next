@@ -21,6 +21,7 @@ import { log, func, dom, focus, guid } from '../util';
 import scrollLocker from './scroll-locker';
 import type { DialogV2Props } from './types';
 import type { CustomCSSStyle } from '../util/dom';
+import { createReactMouseSyntheticEvent } from '../util/react-event';
 
 const { OverlayContext } = Overlay;
 const noop = func.noop;
@@ -225,42 +226,7 @@ const Dialog = (props: DialogV2Props) => {
         () => {
             // 创建模拟的 React SyntheticEvent
             const nativeEvent = new MouseEvent('click');
-            const syntheticEvent = {
-                nativeEvent,
-                currentTarget: null,
-                target: null,
-                bubbles: nativeEvent.bubbles,
-                cancelable: nativeEvent.cancelable,
-                defaultPrevented: nativeEvent.defaultPrevented,
-                eventPhase: nativeEvent.eventPhase,
-                isTrusted: nativeEvent.isTrusted,
-                preventDefault: () => nativeEvent.preventDefault(),
-                stopPropagation: () => nativeEvent.stopPropagation(),
-                isDefaultPrevented: () => nativeEvent.defaultPrevented,
-                isPropagationStopped: () => false,
-                persist: () => {},
-                timeStamp: nativeEvent.timeStamp,
-                type: nativeEvent.type,
-                // MouseEvent 特有属性
-                altKey: false,
-                button: 0,
-                buttons: 0,
-                clientX: 0,
-                clientY: 0,
-                ctrlKey: false,
-                metaKey: false,
-                movementX: 0,
-                movementY: 0,
-                pageX: 0,
-                pageY: 0,
-                relatedTarget: null,
-                screenX: 0,
-                screenY: 0,
-                shiftKey: false,
-                detail: 0,
-                view: window,
-                getModifierState: () => false,
-            } as unknown as MouseEvent<Element>;
+            const syntheticEvent = createReactMouseSyntheticEvent(nativeEvent);
             handleCancel(syntheticEvent);
         },
         {
