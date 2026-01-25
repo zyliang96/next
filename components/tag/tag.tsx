@@ -83,7 +83,7 @@ class Tag extends Component<TagProps, { visible: boolean }> {
     @APAAction({
         name: 'handleClose',
         desc: '关闭标签',
-        params: z.enum(['tag', 'tail']).describe('关闭区域'),
+        params: z.tuple([z.enum(['tag', 'tail']).describe('关闭区域')]),
     })
     handleClose(from: CloseArea) {
         const { animation, onClose } = this.props;

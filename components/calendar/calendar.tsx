@@ -178,7 +178,7 @@ class Calendar extends Component<CalendarProps, CalendarState> {
     @APAAction({
         name: 'changeMode',
         desc: '切换面板模式',
-        params: z.enum(['date', 'month', 'year']).describe('面板模式'),
+        params: z.tuple([z.enum(['date', 'month', 'year']).describe('面板模式')]),
     })
     changeMode = (nextMode: CalendarMode) => {
         if (nextMode && this.MODES.indexOf(nextMode) > -1 && nextMode !== this.state.mode) {

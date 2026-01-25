@@ -366,7 +366,7 @@ class VirtualList extends Component<VirtualListProps, VirtualListState> {
         }
     }
 
-    @APAAction({ name: 'getSizeOf', desc: '获取 item 高度', params: z.number() })
+    @APAAction({ name: 'getSizeOf', desc: '获取 item 高度', params: z.tuple([z.number()]) })
     getSizeOf(index: number) {
         const { cache } = this;
         const { itemSizeGetter, jumpIndex } = this.props;
@@ -391,7 +391,7 @@ class VirtualList extends Component<VirtualListProps, VirtualListState> {
         }
     }
 
-    @APAAction({ name: 'scrollTo', desc: '滚动到指定位置', params: z.number() })
+    @APAAction({ name: 'scrollTo', desc: '滚动到指定位置', params: z.tuple([z.number()]) })
     scrollTo(index: number) {
         this.setScroll(this.getSpaceBefore(index, this.cacheAdd));
     }
