@@ -9,6 +9,7 @@ import {
     APAState,
     APAConfigProvider,
 } from '@alifd/apa-sdk';
+import { z } from 'zod';
 import UIState, { type UIStateState } from '../mixin-ui-state';
 import ConfigProvider from '../config-provider';
 import withContext from './with-context';
@@ -124,7 +125,34 @@ class Radio extends UIState<RadioWithContextProps, RadioState> {
         }
     }
 
-    @APAAction({ name: 'onChange', desc: '切换选中状态' })
+    /**
+     * APA Action: 切换选中状态（包裹层）
+     */
+    @APAAction({
+        name: 'onChange',
+        desc: '切换选中状态',
+        params: z.tuple([z.boolean().describe('是否选中')]),
+    })
+    apaOnChange(checked: boolean) {
+        // 优先使用 ref.dispatchEvent()
+        if (this.radioRef) {
+            this.radioRef.checked = checked;
+            const event = new Event('change', { bubbles: true });
+            this.radioRef.dispatchEvent(event);
+        } else {
+            // 无 ref 时，创建事件对象并调用内部方法
+            const event = new MouseEvent('change', { bubbles: true }) as any;
+            Object.defineProperty(event, 'target', {
+                writable: false,
+                value: { checked },
+            });
+            this.onChange(event);
+        }
+    }
+    /**
+     * 内部方法：处理 change 事件
+     * 保持原有逻辑不变
+     */
     onChange(e: ChangeEvent<HTMLInputElement>) {
         const checked = e.target.checked;
         const { context, value } = this.props;
