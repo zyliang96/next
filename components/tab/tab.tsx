@@ -184,7 +184,7 @@ class Tab extends Component<TabProps, TabState> {
     /**
      * 获取所有未禁用的标签页
      */
-    private getEnabledTabs() {
+    getEnabledTabs() {
         const tabs: Array<{ key: string; element: ReactElement<ItemProps> }> = [];
         React.Children.forEach(this.props.children, (child, index) => {
             if (React.isValidElement<ItemProps>(child) && !child.props.disabled) {
