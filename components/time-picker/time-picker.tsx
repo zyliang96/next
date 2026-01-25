@@ -11,6 +11,7 @@ import moment, { type Moment } from 'moment';
 import {
     APAAction,
     APAActionEnabled,
+    APAConfigOptions,
     APAConfigProvider,
     APAState,
     APAStateEnabled,
@@ -30,6 +31,11 @@ const { Popup } = Overlay;
 const { noop } = func;
 const timePickerLocale = nextLocale.TimePicker;
 
+const popupMergeConfig: APAConfigOptions = {
+    mergeToParent: true,
+    mergeToParentAction: [],
+    mergeToParentState: [],
+};
 type InnerTimePickerProps = ClassPropsWithDefault<TimePickerProps, typeof TimePicker.defaultProps>;
 
 /**
@@ -40,7 +46,7 @@ type InnerTimePickerProps = ClassPropsWithDefault<TimePickerProps, typeof TimePi
 class TimePicker extends Component<TimePickerProps, TimePickerState> {
     @APAState([
         { name: 'value', desc: '时间选择器的值，moment 对象' },
-        { name: 'visible', desc: '时间选择器的显示状态，true 表示显示，false 表示隐藏' },
+        { name: 'visible', desc: '时间选择器是否显示' },
     ])
     state: TimePickerState & Record<string, unknown>;
 
@@ -382,6 +388,7 @@ class TimePicker extends Component<TimePickerProps, TimePickerState> {
                     triggerType={popupTriggerType}
                     style={popupStyle}
                     className={popupClassName}
+                    __apaConfig={popupMergeConfig}
                 >
                     {popupContent ? (
                         popupContent

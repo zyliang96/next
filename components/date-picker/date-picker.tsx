@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import {
     APAAction,
     APAActionEnabled,
+    APAConfigOptions,
     APAConfigProvider,
     APAState,
     APAStateEnabled,
@@ -36,6 +37,11 @@ const { Popup } = Overlay;
 
 type InnerDatePickerProps = ClassPropsWithDefault<DatePickerProps, typeof DatePicker.defaultProps>;
 
+const popupMergeConfig: APAConfigOptions = {
+    mergeToParent: true,
+    mergeToParentAction: [],
+    mergeToParentState: [],
+};
 /**
  * DatePicker
  */
@@ -116,7 +122,7 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
     @APAState([
         { name: 'value', desc: '日期值，moment 对象' },
         { name: 'panel', desc: '当前展示的面板类型，可选择的值为 date-panel, time-panel' },
-        { name: 'visible', desc: '弹层显示状态，true 表示显示，false 表示隐藏' },
+        { name: 'visible', desc: '弹层是否显示' },
     ])
     state: DatePickerState;
 
@@ -649,6 +655,7 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
                     style={popupStyle}
                     className={popupClassName}
                     trigger={trigger}
+                    __apaConfig={popupMergeConfig}
                 >
                     {popupContent ? (
                         popupContent
