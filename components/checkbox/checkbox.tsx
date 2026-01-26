@@ -163,20 +163,18 @@ class Checkbox extends UIState<PrivateCheckboxProps, CheckboxState> {
         params: z.tuple([z.boolean().describe('是否选中')]),
     })
     apaOnChange(checked: boolean) {
-        // 优先使用 ref.dispatchEvent()
+        // 先设置 DOM 值
         if (this.checkboxRef) {
             this.checkboxRef.checked = checked;
-            const event = new Event('change', { bubbles: true });
-            this.checkboxRef.dispatchEvent(event);
-        } else {
-            // 无 ref 时，创建事件对象并调用内部方法
-            const event = new Event('change', { bubbles: true }) as any;
-            Object.defineProperty(event, 'target', {
-                writable: false,
-                value: { checked },
-            });
-            this.onChange(event);
         }
+
+        // 创建事件对象并直接调用 onChange
+        const event = new Event('change', { bubbles: true }) as any;
+        Object.defineProperty(event, 'target', {
+            writable: false,
+            value: { checked },
+        });
+        this.onChange(event);
     }
 
     /**
