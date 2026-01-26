@@ -109,7 +109,6 @@ class Base<
 
     /**
      * APA Action: 设置输入框的值（包裹层）
-     * 优先使用 ref.dispatchEvent()，无 ref 时创建事件对象
      */
     @APAAction({
         name: 'setValue',
@@ -117,20 +116,18 @@ class Base<
         params: z.tuple([z.union([z.string(), z.number()]).describe('要设置的值')]),
     })
     apaSetValue(value: string | number) {
-        // 优先使用 ref.dispatchEvent()
+        const stringValue = String(value);
+
+        // 先设置 DOM 值
         if (this.inputRef) {
-            this.inputRef.value = String(value);
-            const event = new Event('input', { bubbles: true });
-            this.inputRef.dispatchEvent(event);
-        } else {
-            // 无 ref 时，创建事件对象并调用内部方法
-            const event = new Event('input', { bubbles: true }) as any;
-            Object.defineProperty(event, 'target', {
-                writable: false,
-                value: { value: String(value) },
-            });
-            this.onChange(event);
+            this.inputRef.value = stringValue;
         }
+        const event = new Event('input', { bubbles: true }) as any;
+        Object.defineProperty(event, 'target', {
+            writable: false,
+            value: { value: stringValue },
+        });
+        this.onChange(event);
     }
 
     /**
@@ -232,17 +229,18 @@ class Base<
         desc: '清空输入框的值',
     })
     apaClear() {
-        // 优先使用 ref.dispatchEvent()
+        // 先设置 DOM 值
         if (this.inputRef) {
             this.inputRef.value = '';
-            const event = new Event('input', { bubbles: true });
-            this.inputRef.dispatchEvent(event);
-            this.focus();
-        } else {
-            // 无 ref 时，创建事件对象并调用内部方法
-            const event = new KeyboardEvent('keydown', { bubbles: true }) as any;
-            this.onClear(event);
         }
+        // 创建事件对象并直接调用 onChange
+        const event = new Event('input', { bubbles: true }) as any;
+        Object.defineProperty(event, 'target', {
+            writable: false,
+            value: { value: '' },
+        });
+        this.onChange(event);
+        this.focus();
     }
 
     /**
