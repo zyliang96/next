@@ -5,7 +5,13 @@ import { polyfill } from 'react-lifecycles-compat';
 import { obj } from '../util';
 import Checkbox from './checkbox';
 import type { CheckboxData, GroupProps, GroupState, ValueItem } from './types';
-import { APAActionEnabled, APAAction, APAStateEnabled, APAState } from '@alifd/apa-sdk';
+import {
+    APAActionEnabled,
+    APAAction,
+    APAStateEnabled,
+    APAState,
+    APAActionAnimate,
+} from '@alifd/apa-sdk';
 import { z } from 'zod';
 
 const { pickOthers } = obj;
@@ -15,6 +21,7 @@ const { pickOthers } = obj;
 @APAStateEnabled
 class CheckboxGroup extends React.Component<GroupProps, GroupState> {
     static displayName = 'CheckboxGroup';
+    apaAnimateRef: APAActionAnimate | null = null;
 
     @APAState([{ name: 'value', desc: '当前选中的值列表' }])
     state!: GroupState;
@@ -119,6 +126,7 @@ class CheckboxGroup extends React.Component<GroupProps, GroupState> {
         ]),
     })
     setValue(newValue: ValueItem[]) {
+        this.apaAnimateRef?.triggerAnimate();
         if (!('value' in this.props)) {
             this.setState({ value: newValue });
         }
@@ -137,6 +145,7 @@ class CheckboxGroup extends React.Component<GroupProps, GroupState> {
         params: z.tuple([]),
     })
     selectAll() {
+        this.apaAnimateRef?.triggerAnimate();
         const allValues: ValueItem[] = [];
 
         // 如果使用 dataSource
@@ -170,6 +179,7 @@ class CheckboxGroup extends React.Component<GroupProps, GroupState> {
         params: z.tuple([]),
     })
     clearAll() {
+        this.apaAnimateRef?.triggerAnimate();
         this.setValue([]);
     }
 
@@ -179,6 +189,7 @@ class CheckboxGroup extends React.Component<GroupProps, GroupState> {
         params: z.tuple([z.union([z.string(), z.number(), z.boolean()]).describe('要切换的值')]),
     })
     toggleValue(value: ValueItem) {
+        this.apaAnimateRef?.triggerAnimate();
         const currentValues = [...this.state.value];
         const index = currentValues.indexOf(value);
 
@@ -199,6 +210,7 @@ class CheckboxGroup extends React.Component<GroupProps, GroupState> {
         ]),
     })
     selectByIndex(indexes: number | number[]) {
+        this.apaAnimateRef?.triggerAnimate();
         const indexArray = Array.isArray(indexes) ? indexes : [indexes];
         const values: ValueItem[] = [];
         const enabledItems: ValueItem[] = [];
@@ -350,9 +362,11 @@ class CheckboxGroup extends React.Component<GroupProps, GroupState> {
         });
 
         return (
-            <span dir={rtl ? 'rtl' : undefined} {...others} className={cls} style={style}>
-                {children}
-            </span>
+            <APAActionAnimate ref={ref => (this.apaAnimateRef = ref)}>
+                <span dir={rtl ? 'rtl' : undefined} {...others} className={cls} style={style}>
+                    {children}
+                </span>
+            </APAActionAnimate>
         );
     }
 }

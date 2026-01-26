@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
 import { KEYCODE, obj } from '../util';
-import { APAActionEnabled, APAStateEnabled, APAState, APAAction } from '@alifd/apa-sdk';
+import {
+    APAActionEnabled,
+    APAStateEnabled,
+    APAState,
+    APAAction,
+    APAActionAnimate,
+} from '@alifd/apa-sdk';
 import { z } from 'zod';
 import TabNav from './tabs/nav';
 import TabContent from './tabs/content';
@@ -77,6 +83,8 @@ class Tab extends Component<TabProps, TabState> {
         locale: zhCN.Tab,
         icons: {},
     };
+
+    apaAnimateRef: APAActionAnimate | null = null;
 
     @APAState([
         { name: 'activeKey', desc: '当前激活的标签页' },
@@ -225,6 +233,7 @@ class Tab extends Component<TabProps, TabState> {
         params: z.tuple([z.string().describe('标签页的 key')]),
     })
     apaSetActiveKey(key: string) {
+        this.apaAnimateRef?.triggerAnimate();
         const { activeKey } = this.state;
         const { onChange } = this.props;
 
@@ -250,6 +259,7 @@ class Tab extends Component<TabProps, TabState> {
         params: z.tuple([z.number().min(0).describe('标签页索引')]),
     })
     setActiveByIndex(index: number) {
+        this.apaAnimateRef?.triggerAnimate();
         const tabs = this.getEnabledTabs();
         if (index >= 0 && index < tabs.length) {
             const targetKey = tabs[index].key;
@@ -389,13 +399,15 @@ class Tab extends Component<TabProps, TabState> {
         }
 
         return (
-            <div
-                dir={rtl ? 'rtl' : undefined}
-                className={classNames}
-                {...obj.pickOthers(Tab.propTypes, others)}
-            >
-                {tabChildren}
-            </div>
+            <APAActionAnimate ref={ref => (this.apaAnimateRef = ref)}>
+                <div
+                    dir={rtl ? 'rtl' : undefined}
+                    className={classNames}
+                    {...obj.pickOthers(Tab.propTypes, others)}
+                >
+                    {tabChildren}
+                </div>
+            </APAActionAnimate>
         );
     }
 }

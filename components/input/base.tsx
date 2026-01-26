@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
 import { z } from 'zod';
-import { APAActionEnabled, APAAction, APAStateEnabled } from '@alifd/apa-sdk';
+import { APAActionEnabled, APAAction, APAStateEnabled, APAActionAnimate } from '@alifd/apa-sdk';
 import ConfigProvider from '../config-provider';
 import { func } from '../util';
 import zhCN from '../locale/zh-cn';
@@ -74,6 +74,7 @@ class Base<
         locale: zhCN.Input,
     };
     inputRef: HTMLInputElement | HTMLTextAreaElement;
+    apaAnimateRef: APAActionAnimate | null = null;
 
     static getDerivedStateFromProps(nextProps: BaseProps, prevState: BaseState) {
         if ('value' in nextProps && nextProps.value !== prevState.value && !prevState.composition) {
@@ -116,6 +117,9 @@ class Base<
         params: z.tuple([z.union([z.string(), z.number()]).describe('要设置的值')]),
     })
     apaSetValue(value: string | number) {
+        // 触发动画
+        this.apaAnimateRef?.triggerAnimate();
+
         const stringValue = String(value);
 
         // 先设置 DOM 值
@@ -229,6 +233,9 @@ class Base<
         desc: '清空输入框的值',
     })
     apaClear() {
+        // 触发动画
+        this.apaAnimateRef?.triggerAnimate();
+
         // 先设置 DOM 值
         if (this.inputRef) {
             this.inputRef.value = '';
@@ -355,6 +362,8 @@ class Base<
         desc: '聚焦到输入框',
     })
     apaFocus() {
+        // 触发动画
+        this.apaAnimateRef?.triggerAnimate();
         this.focus();
     }
 
@@ -366,6 +375,8 @@ class Base<
         desc: '输入框失去焦点',
     })
     apaBlur() {
+        // 触发动画
+        this.apaAnimateRef?.triggerAnimate();
         if (this.inputRef) {
             this.inputRef.blur();
         }

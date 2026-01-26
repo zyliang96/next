@@ -6,6 +6,7 @@ import {
     APAState,
     APAAction,
     APAConfigProvider,
+    APAActionAnimate,
     type APAConfigOptions,
 } from '@alifd/apa-sdk';
 import { z } from 'zod';
@@ -62,6 +63,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
         onPosition: noop,
     };
     static displayName = 'Dropdown';
+    apaAnimateRef: APAActionAnimate | null = null;
 
     @APAState([
         { name: 'visible', desc: '下拉菜单是否显示' },
@@ -103,15 +105,21 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
         this.onVisibleChange(false, 'fromContent');
     }
 
+    // 内部方法，不触发动画
+    onVisibleChange(visible: boolean, from: string = 'apa') {
+        this.setState({ visible });
+
+        this.props.onVisibleChange!(visible, from);
+    }
+
     @APAAction({
         name: 'setVisible',
         desc: '设置下拉菜单显示或隐藏',
         params: z.tuple([z.boolean().describe('是否显示')]),
     })
-    onVisibleChange(visible: boolean, from: string = 'apa') {
-        this.setState({ visible });
-
-        this.props.onVisibleChange!(visible, from);
+    apaSetVisible(visible: boolean) {
+        this.apaAnimateRef?.triggerAnimate();
+        this.onVisibleChange(visible, 'apa');
     }
 
     @APAAction({
@@ -121,6 +129,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
     })
     openDropdown() {
         if (this.props.disabled) return;
+        this.apaAnimateRef?.triggerAnimate();
         this.onVisibleChange(true, 'apa');
     }
 
@@ -130,6 +139,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
         params: z.tuple([]),
     })
     closeDropdown() {
+        this.apaAnimateRef?.triggerAnimate();
         this.onVisibleChange(false, 'apa');
     }
 
@@ -168,20 +178,22 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
         });
 
         return (
-            <Popup
-                {...this.props}
-                rtl={rtl}
-                autoFocus={this.state.autoFocus}
-                trigger={newTrigger}
-                visible={this.getVisible()}
-                // TODO 后续看类型怎么修改
-                // @ts-expect-error Popup 被 APAConfigProvider.config 包裹后 onVisibleChange 类型不匹配
-                onVisibleChange={this.onVisibleChange}
-                canCloseByOutSideClick
-                __apaConfig={popupMergeConfig}
-            >
-                {content}
-            </Popup>
+            <APAActionAnimate ref={ref => (this.apaAnimateRef = ref)}>
+                <Popup
+                    {...this.props}
+                    rtl={rtl}
+                    autoFocus={this.state.autoFocus}
+                    trigger={newTrigger}
+                    visible={this.getVisible()}
+                    // TODO 后续看类型怎么修改
+                    // @ts-expect-error Popup 被 APAConfigProvider.config 包裹后 onVisibleChange 类型不匹配
+                    onVisibleChange={this.onVisibleChange}
+                    canCloseByOutSideClick
+                    __apaConfig={popupMergeConfig}
+                >
+                    {content}
+                </Popup>
+            </APAActionAnimate>
         );
     }
 }

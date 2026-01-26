@@ -8,6 +8,7 @@ import {
     APAState,
     APAAction,
     APAConfigProvider,
+    APAActionAnimate,
 } from '@alifd/apa-sdk';
 import { z } from 'zod';
 import { func, obj } from '../util';
@@ -112,6 +113,8 @@ class Upload extends Base<UploadProps, UploadState> {
         };
     }
 
+    apaAnimateRef: APAActionAnimate | null = null;
+
     @APAState([
         { name: 'value', desc: '文件列表' },
         { name: 'uploading', desc: '是否正在上传' },
@@ -191,11 +194,6 @@ class Upload extends Base<UploadProps, UploadState> {
     /**
      * 对外暴露 API, 添加文件
      */
-    @APAAction({
-        name: 'selectFiles',
-        desc: '选择文件',
-        params: z.tuple([z.array(z.any()).describe('文件列表')]),
-    })
     selectFiles(files: File[]) {
         const filesArr = files.length ? Array.prototype.slice.call(files) : [files];
 
@@ -222,11 +220,6 @@ class Upload extends Base<UploadProps, UploadState> {
     /**
      * 对外暴露 api，控制文件上传
      */
-    @APAAction({
-        name: 'startUpload',
-        desc: '开始上传',
-        params: z.tuple([]),
-    })
     startUpload() {
         this.uploadFiles(this.state.value);
     }
@@ -356,11 +349,6 @@ class Upload extends Base<UploadProps, UploadState> {
     /**
      * 删除文件
      */
-    @APAAction({
-        name: 'removeFile',
-        desc: '删除文件',
-        params: z.tuple([z.any().describe('要删除的文件')]),
-    })
     removeFile = (file: UploadFile) => {
         file.state = 'removed';
         this.uploaderRef.abort(file); // 删除组件时调用组件的 `abort` 方法中断上传
@@ -374,6 +362,25 @@ class Upload extends Base<UploadProps, UploadState> {
         }
     };
 
+    /**
+     * 根据索引删除文件
+     */
+    @APAAction({
+        name: 'removeFileByIndex',
+        desc: '根据索引删除文件',
+        params: z.tuple([z.number().describe('文件索引')]),
+    })
+    removeByIndex = (index: number) => {
+        const fileList = this.state.value;
+        if (index < 0 || index >= fileList.length) {
+            console.warn(`[Upload] index ${index} is out of range (0-${fileList.length - 1})`);
+            return;
+        }
+        this.apaAnimateRef?.triggerAnimate();
+        const file = fileList[index];
+        this.removeFile(file as UploadFile);
+    };
+
     updateUploadingState = () => {
         const inProgress = this.state.value.some(i => i.state === 'uploading');
         if (!inProgress) {
@@ -384,11 +391,6 @@ class Upload extends Base<UploadProps, UploadState> {
     /**
      * 取消上传
      */
-    @APAAction({
-        name: 'abort',
-        desc: '取消上传',
-        params: z.tuple([z.any().describe('要取消的文件')]),
-    })
     abort = (file: File) => {
         const fileList = this.state.value;
         const targetItem = getFileItem(file, fileList);
@@ -501,43 +503,45 @@ class Upload extends Base<UploadProps, UploadState> {
         const onRemoveFunc = disabled ? func.prevent : onRemove;
         const otherAttributes = obj.pickAttrsWith(this.props, 'data-');
         return (
-            <div className={cls} style={style} {...otherAttributes}>
-                <Uploader
-                    {...others}
-                    name={fileKeyName}
-                    beforeUpload={beforeUpload}
-                    dragable={dragable}
-                    disabled={disabled || isExceedLimit}
-                    className={innerCls}
-                    onSelect={this.onSelect}
-                    onDrop={this.onDrop}
-                    onProgress={this.onProgress}
-                    onSuccess={this.onSuccess}
-                    onError={this.onError}
-                    ref={this.saveUploaderRef}
-                >
-                    {children}
-                </Uploader>
-                {(listType && listType !== 'none') || list ? (
-                    <List
-                        useDataURL={useDataURL}
-                        fileNameRender={fileNameRender}
-                        actionRender={actionRender}
-                        uploader={this}
-                        listType={listType}
-                        value={this.state.value}
-                        closable={closable}
-                        onRemove={onRemoveFunc}
-                        progressProps={progressProps}
-                        onCancel={onCancel}
-                        onPreview={onPreview}
-                        extraRender={extraRender}
-                        rtl={rtl}
-                        previewOnFileName={previewOnFileName}
-                        itemRender={itemRender}
-                    />
-                ) : null}
-            </div>
+            <APAActionAnimate ref={ref => (this.apaAnimateRef = ref)}>
+                <div className={cls} style={style} {...otherAttributes}>
+                    <Uploader
+                        {...others}
+                        name={fileKeyName}
+                        beforeUpload={beforeUpload}
+                        dragable={dragable}
+                        disabled={disabled || isExceedLimit}
+                        className={innerCls}
+                        onSelect={this.onSelect}
+                        onDrop={this.onDrop}
+                        onProgress={this.onProgress}
+                        onSuccess={this.onSuccess}
+                        onError={this.onError}
+                        ref={this.saveUploaderRef}
+                    >
+                        {children}
+                    </Uploader>
+                    {(listType && listType !== 'none') || list ? (
+                        <List
+                            useDataURL={useDataURL}
+                            fileNameRender={fileNameRender}
+                            actionRender={actionRender}
+                            uploader={this}
+                            listType={listType}
+                            value={this.state.value}
+                            closable={closable}
+                            onRemove={onRemoveFunc}
+                            progressProps={progressProps}
+                            onCancel={onCancel}
+                            onPreview={onPreview}
+                            extraRender={extraRender}
+                            rtl={rtl}
+                            previewOnFileName={previewOnFileName}
+                            itemRender={itemRender}
+                        />
+                    ) : null}
+                </div>
+            </APAActionAnimate>
         );
     }
 }

@@ -9,7 +9,13 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { APAConfigProvider, APAState } from '@alifd/apa-sdk';
+import {
+    APAConfigProvider,
+    APAState,
+    APAActionAnimate,
+    APAActionEnabled,
+    APAStateEnabled,
+} from '@alifd/apa-sdk';
 import Icon from '../icon';
 import { obj, func } from '../util';
 import Base from './base';
@@ -22,6 +28,8 @@ function preventDefault(e: UIEvent) {
 }
 
 /** Input */
+@APAActionEnabled
+@APAStateEnabled
 class Input<P extends InputProps = InputProps> extends Base<P> {
     static displayName = 'Input';
     static getDerivedStateFromProps = Base.getDerivedStateFromProps;
@@ -309,18 +317,20 @@ class Input<P extends InputProps = InputProps> extends Base<P> {
         );
 
         const inputWrap = (
-            <span
-                {...dataProps}
-                dir={rtl ? 'rtl' : undefined}
-                className={cls}
-                style={hasAddon ? undefined : style}
-            >
-                {this.renderLabel()}
-                {this.renderInner(innerBefore, innerBeforeCls)}
-                {inputRender!(inputEl)}
-                {this.renderInner(innerAfter, innerAfterCls)}
-                {this.renderControl()}
-            </span>
+            <APAActionAnimate ref={ref => (this.apaAnimateRef = ref)}>
+                <span
+                    {...dataProps}
+                    dir={rtl ? 'rtl' : undefined}
+                    className={cls}
+                    style={hasAddon ? undefined : style}
+                >
+                    {this.renderLabel()}
+                    {this.renderInner(innerBefore, innerBeforeCls)}
+                    {inputRender!(inputEl)}
+                    {this.renderInner(innerAfter, innerAfterCls)}
+                    {this.renderControl()}
+                </span>
+            </APAActionAnimate>
         );
 
         const groupCls = classNames({

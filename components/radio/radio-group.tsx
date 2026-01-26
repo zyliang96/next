@@ -9,6 +9,7 @@ import {
     APAStateEnabled,
     APAState,
     APAConfigProvider,
+    APAActionAnimate,
 } from '@alifd/apa-sdk';
 import ConfigProvider from '../config-provider';
 import { obj, func, focus } from '../util';
@@ -79,6 +80,7 @@ class RadioGroup extends Component<GroupProps, GroupState> {
 
     radioRefs: unknown[];
     hasFocus: boolean;
+    apaAnimateRef: APAActionAnimate | null = null;
 
     @APAState([{ name: 'value', desc: '当前选中的值' }])
     state: GroupState;
@@ -142,6 +144,7 @@ class RadioGroup extends Component<GroupProps, GroupState> {
         params: z.tuple([z.union([z.string(), z.number(), z.boolean()]).describe('要选中的值')]),
     })
     setValue(value: RadioValue) {
+        this.apaAnimateRef?.triggerAnimate();
         const event = new Event('change', { bubbles: true }) as any;
         Object.defineProperty(event, 'target', {
             writable: false,
@@ -294,27 +297,29 @@ class RadioGroup extends Component<GroupProps, GroupState> {
 
         const TagName = component!;
         return (
-            <TagName
-                {...others}
-                aria-disabled={disabled}
-                role="radiogroup"
-                className={cls}
-                style={style}
-                onFocus={makeChain(
-                    function () {
-                        this.hasFocus = true;
-                    }.bind(this),
-                    this.props.onFocus
-                )}
-                onBlur={makeChain(
-                    function () {
-                        this.hasFocus = false;
-                    }.bind(this),
-                    this.props.onBlur
-                )}
-            >
-                {children}
-            </TagName>
+            <APAActionAnimate ref={ref => (this.apaAnimateRef = ref)}>
+                <TagName
+                    {...others}
+                    aria-disabled={disabled}
+                    role="radiogroup"
+                    className={cls}
+                    style={style}
+                    onFocus={makeChain(
+                        function () {
+                            this.hasFocus = true;
+                        }.bind(this),
+                        this.props.onFocus
+                    )}
+                    onBlur={makeChain(
+                        function () {
+                            this.hasFocus = false;
+                        }.bind(this),
+                        this.props.onBlur
+                    )}
+                >
+                    {children}
+                </TagName>
+            </APAActionAnimate>
         );
     }
 }

@@ -2,7 +2,13 @@ import React, { type CSSProperties, type DOMAttributes } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { APAState, APAActionEnabled, APAStateEnabled, APAConfigProvider } from '@alifd/apa-sdk';
+import {
+    APAState,
+    APAActionEnabled,
+    APAStateEnabled,
+    APAConfigProvider,
+    APAActionAnimate,
+} from '@alifd/apa-sdk';
 import zhCN from '../locale/zh-cn';
 import { obj, env } from '../util';
 import Base from './base';
@@ -64,6 +70,7 @@ class TextArea extends Base<TextAreaProps> {
     static propTypes = {
         ...Base.propTypes,
         hasBorder: PropTypes.bool,
+        hasClear: PropTypes.bool,
         state: PropTypes.oneOf(['error', 'warning']),
         autoHeight: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
         rows: PropTypes.number,
@@ -345,27 +352,34 @@ class TextArea extends Base<TextAreaProps> {
         }
 
         return (
-            <span className={cls} style={wrapStyle} dir={rtl ? 'rtl' : undefined} {...dataProps}>
-                <textarea
-                    {...others}
-                    {...props}
-                    {...compositionProps}
-                    data-real
-                    rows={rows}
-                    style={textareStyle}
-                    ref={this.saveRef.bind(this)}
-                    onKeyDown={this.onKeyDown.bind(this)}
-                />
-                {autoHeight ? (
+            <APAActionAnimate ref={ref => (this.apaAnimateRef = ref)}>
+                <span
+                    className={cls}
+                    style={wrapStyle}
+                    dir={rtl ? 'rtl' : undefined}
+                    {...dataProps}
+                >
                     <textarea
-                        data-fake
-                        ref={this.saveHelpRef.bind(this)}
-                        style={{ ...props.style, ...hiddenStyle }}
-                        rows={1}
+                        {...others}
+                        {...props}
+                        {...compositionProps}
+                        data-real
+                        rows={rows}
+                        style={textareStyle}
+                        ref={this.saveRef.bind(this)}
+                        onKeyDown={this.onKeyDown.bind(this)}
                     />
-                ) : null}
-                {this.renderControl()}
-            </span>
+                    {autoHeight ? (
+                        <textarea
+                            data-fake
+                            ref={this.saveHelpRef.bind(this)}
+                            style={{ ...props.style, ...hiddenStyle }}
+                            rows={1}
+                        />
+                    ) : null}
+                    {this.renderControl()}
+                </span>
+            </APAActionAnimate>
         );
     }
 }

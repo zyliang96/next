@@ -6,6 +6,7 @@ import {
     APAAction,
     APAConfigProvider,
     APAComponentConfigPropsItem,
+    APAActionAnimate,
 } from '@alifd/apa-sdk';
 import type { ButtonProps } from '../types';
 import ConfigProvider from '../../config-provider';
@@ -74,6 +75,9 @@ class Button extends Component<ButtonProps> {
 
     button: HTMLButtonElement | HTMLAnchorElement | unknown;
 
+    // APA Action 动画组件引用
+    apaAnimateRef: APAActionAnimate | null = null;
+
     @APAAction({ name: 'onMouseUp', desc: '鼠标抬起事件' })
     onMouseUp = (e: React.MouseEvent<HTMLElement>) => {
         // @ts-expect-error fixme: may have no blur
@@ -86,6 +90,9 @@ class Button extends Component<ButtonProps> {
 
     @APAAction({ name: 'onClick', desc: '按钮点击事件' })
     apaActionClick = () => {
+        // 触发 APA Action 动画
+        this.apaAnimateRef?.triggerAnimate();
+
         if (this.props.disabled) {
             return;
         }
@@ -215,15 +222,17 @@ class Button extends Component<ButtonProps> {
         }
 
         return (
-            <TagName
-                {...tagAttrs}
-                dir={rtl ? 'rtl' : undefined}
-                onMouseUp={this.onMouseUp}
-                ref={this.buttonRefHandler}
-            >
-                {loadingIcon}
-                {clonedChildren}
-            </TagName>
+            <APAActionAnimate ref={ref => (this.apaAnimateRef = ref)}>
+                <TagName
+                    {...tagAttrs}
+                    dir={rtl ? 'rtl' : undefined}
+                    onMouseUp={this.onMouseUp}
+                    ref={this.buttonRefHandler}
+                >
+                    {loadingIcon}
+                    {clonedChildren}
+                </TagName>
+            </APAActionAnimate>
         );
     }
 }

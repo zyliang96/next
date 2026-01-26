@@ -10,6 +10,7 @@ import {
     APAState,
     APAAction,
     APAConfigProvider,
+    APAActionAnimate,
 } from '@alifd/apa-sdk';
 import { z } from 'zod';
 import type { LoadingProps } from './types';
@@ -51,6 +52,8 @@ class Loading extends React.Component<LoadingProps> {
         disableScroll: false,
     };
 
+    apaAnimateRef: APAActionAnimate | null = null;
+
     @APAState([{ name: 'visible', desc: '加载状态是否可见' }])
     state = {
         visible: this.props.visible !== undefined ? this.props.visible : true,
@@ -71,6 +74,7 @@ class Loading extends React.Component<LoadingProps> {
         params: z.tuple([z.boolean().describe('是否显示加载状态')]),
     })
     setVisible(visible: boolean) {
+        this.apaAnimateRef?.triggerAnimate();
         if (!('visible' in this.props)) {
             // 非受控模式
             this.setState({ visible });
@@ -167,19 +171,21 @@ class Loading extends React.Component<LoadingProps> {
                 </Overlay>,
             ]
         ) : (
-            <div className={loadingCls} style={style} {...others}>
-                {visible ? (
-                    <div className={tipCls}>
-                        <div className={`${prefix}loading-indicator`}>{indicatorDom}</div>
-                        <div className={`${prefix}loading-tip-content`}>{tip}</div>
-                        <div className={`${prefix}loading-tip-placeholder`}>{tip}</div>
+            <APAActionAnimate ref={ref => (this.apaAnimateRef = ref)}>
+                <div className={loadingCls} style={style} {...others}>
+                    {visible ? (
+                        <div className={tipCls}>
+                            <div className={`${prefix}loading-indicator`}>{indicatorDom}</div>
+                            <div className={`${prefix}loading-tip-content`}>{tip}</div>
+                            <div className={`${prefix}loading-tip-placeholder`}>{tip}</div>
+                        </div>
+                    ) : null}
+                    <div className={contentCls}>
+                        {visible ? <div className={`${prefix}loading-masker`} /> : null}
+                        {children}
                     </div>
-                ) : null}
-                <div className={contentCls}>
-                    {visible ? <div className={`${prefix}loading-masker`} /> : null}
-                    {children}
                 </div>
-            </div>
+            </APAActionAnimate>
         );
     }
 }

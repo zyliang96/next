@@ -15,6 +15,7 @@ import {
     APAState,
     APAAction,
     APAConfigProvider,
+    APAActionAnimate,
 } from '@alifd/apa-sdk';
 import { z } from 'zod';
 
@@ -135,6 +136,7 @@ class Select extends Base<SelectProps, SelectState> {
 
     static displayName = 'Select';
     selectAllYet: boolean;
+    apaAnimateRef: APAActionAnimate | null = null;
 
     constructor(props: SelectProps) {
         super(props);
@@ -215,6 +217,7 @@ class Select extends Base<SelectProps, SelectState> {
         if (this.props.disabled || this.props.readOnly) {
             return;
         }
+        this.apaAnimateRef?.triggerAnimate();
         this.handleChange(value, 'itemClick' as VisibleChangeType);
     }
 
@@ -249,6 +252,7 @@ class Select extends Base<SelectProps, SelectState> {
                 return;
             }
             const selectedItem = enabledDataSource[index];
+            this.apaAnimateRef?.triggerAnimate();
             this.handleChange(selectedItem.value, 'itemClick' as VisibleChangeType);
         }
         // 多选模式
@@ -268,6 +272,7 @@ class Select extends Base<SelectProps, SelectState> {
             }
 
             if (selectedValues.length > 0) {
+                this.apaAnimateRef?.triggerAnimate();
                 this.handleChange(selectedValues, 'itemClick' as VisibleChangeType);
             }
         }
@@ -282,6 +287,7 @@ class Select extends Base<SelectProps, SelectState> {
         if (this.props.disabled || this.props.readOnly) {
             return;
         }
+        this.apaAnimateRef?.triggerAnimate();
         this.handleChange(undefined, 'clear' as VisibleChangeType);
     }
 
@@ -294,6 +300,7 @@ class Select extends Base<SelectProps, SelectState> {
         if (this.props.disabled || this.props.readOnly) {
             return;
         }
+        this.apaAnimateRef?.triggerAnimate();
         this.setVisible(true, 'fromTrigger' as VisibleChangeType);
     }
 
@@ -303,6 +310,7 @@ class Select extends Base<SelectProps, SelectState> {
         params: z.tuple([]),
     })
     closeMenu() {
+        this.apaAnimateRef?.triggerAnimate();
         this.setVisible(false, 'fromTrigger' as VisibleChangeType);
     }
 
@@ -1143,35 +1151,37 @@ class Select extends Base<SelectProps, SelectState> {
                 onMouseLeave={onMouseLeave}
                 onMouseDown={this.handleWrapClick}
             >
-                <Input
-                    aria-label="select"
-                    {...obj.pickOthers(othersData, others)}
-                    role="combobox"
-                    tabIndex={0}
-                    aria-expanded={this.state.visible ? 'true' : 'false'}
-                    aria-disabled={disabled}
-                    state={state}
-                    label={label}
-                    extra={extra}
-                    value={this.state.searchValue}
-                    size={size}
-                    readOnly={!this.hasSearch() || readOnly}
-                    disabled={disabled}
-                    placeholder={_placeholder}
-                    hasBorder={hasBorder}
-                    hasClear={false}
-                    htmlSize="1"
-                    __apaConfig={inputMergeConfig}
-                    inputRender={(inputEl: ReactElement) => {
-                        return this.renderSearchInput(valueNodes, _placeholder, inputEl);
-                    }}
-                    onChange={this.handleSearch}
-                    onKeyDown={this.handleSearchKeyDown}
-                    onFocus={onFocus}
-                    onBlur={onBlur}
-                    className={`${prefix}select-inner`}
-                    ref={this.saveInputRef}
-                />
+                <APAActionAnimate ref={ref => (this.apaAnimateRef = ref)}>
+                    <Input
+                        aria-label="select"
+                        {...obj.pickOthers(othersData, others)}
+                        role="combobox"
+                        tabIndex={0}
+                        aria-expanded={this.state.visible ? 'true' : 'false'}
+                        aria-disabled={disabled}
+                        state={state}
+                        label={label}
+                        extra={extra}
+                        value={this.state.searchValue}
+                        size={size}
+                        readOnly={!this.hasSearch() || readOnly}
+                        disabled={disabled}
+                        placeholder={_placeholder}
+                        hasBorder={hasBorder}
+                        hasClear={false}
+                        htmlSize="1"
+                        __apaConfig={inputMergeConfig}
+                        inputRender={(inputEl: ReactElement) => {
+                            return this.renderSearchInput(valueNodes, _placeholder, inputEl);
+                        }}
+                        onChange={this.handleSearch}
+                        onKeyDown={this.handleSearchKeyDown}
+                        onFocus={onFocus}
+                        onBlur={onBlur}
+                        className={`${prefix}select-inner`}
+                        ref={this.saveInputRef}
+                    />
+                </APAActionAnimate>
                 <span className={`${prefix}sr-only`} aria-live="polite">
                     {this.state.srReader}
                 </span>
