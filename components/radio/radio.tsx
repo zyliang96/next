@@ -134,20 +134,17 @@ class Radio extends UIState<RadioWithContextProps, RadioState> {
         params: z.tuple([z.boolean().describe('是否选中')]),
     })
     apaOnChange(checked: boolean) {
-        // 优先使用 ref.dispatchEvent()
         if (this.radioRef) {
             this.radioRef.checked = checked;
-            const event = new Event('change', { bubbles: true });
-            this.radioRef.dispatchEvent(event);
-        } else {
-            // 无 ref 时，创建事件对象并调用内部方法
-            const event = new MouseEvent('change', { bubbles: true }) as any;
-            Object.defineProperty(event, 'target', {
-                writable: false,
-                value: { checked },
-            });
-            this.onChange(event);
         }
+
+        // 创建事件对象并直接调用 onChange
+        const event = new MouseEvent('change', { bubbles: true }) as any;
+        Object.defineProperty(event, 'target', {
+            writable: false,
+            value: { checked },
+        });
+        this.onChange(event);
     }
     /**
      * 内部方法：处理 change 事件
