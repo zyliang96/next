@@ -193,15 +193,23 @@ class YearPicker extends Component<YearPickerProps, YearPickerState> {
     };
 
     @APAAction({
-        name: 'handleChange',
-        desc: '年值改变时的回调',
-        params: z.tuple([
-            z.any().nullable(),
-            z.any().nullable(),
-            z.record(z.string(), z.any()).optional(),
-            z.function().optional(),
-        ]),
+        name: 'selectYear',
+        desc: '选择年份',
+        params: z.tuple([z.string().describe('年份字符串，格式如 YYYY')]),
     })
+    selectYear = (yearString: string) => {
+        const { format } = this.props;
+        const newValue = yearString ? moment(yearString, format) : null;
+
+        if (newValue && !newValue.isValid()) {
+            return; // 无效年份，不处理
+        }
+
+        this.handleChange(newValue, this.state.value, { inputing: false }, () => {
+            this.onVisibleChange(false, 'calendarSelect');
+        });
+    };
+
     handleChange = (
         newValue: Moment | null,
         prevValue: Moment | null,

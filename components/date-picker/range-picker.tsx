@@ -464,7 +464,6 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
         }
     };
 
-    @APAAction({ name: 'onSelectStartTime', desc: '选择开始时间', params: z.tuple([z.any()]) })
     onSelectStartTime = (value: Moment) => {
         if (!('value' in this.props)) {
             this.setState({
@@ -479,7 +478,6 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
         }
     };
 
-    @APAAction({ name: 'onSelectEndTime', desc: '选择结束时间', params: z.tuple([z.any()]) })
     onSelectEndTime = (value: Moment) => {
         if (!('value' in this.props)) {
             this.setState({
@@ -568,10 +566,42 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
     };
 
     @APAAction({
-        name: 'handleChange',
-        desc: '日期范围值改变时的回调',
-        params: z.tuple([z.enum(['startValue', 'endValue']), z.any().nullable().optional()]),
+        name: 'selectDateRange',
+        desc: '选择日期范围',
+        params: z.tuple([
+            z.string().describe('开始日期字符串，格式如 YYYY-MM-DD 或 YYYY-MM-DD HH:mm:ss'),
+            z.string().describe('结束日期字符串，格式如 YYYY-MM-DD 或 YYYY-MM-DD HH:mm:ss'),
+        ]),
     })
+    selectDateRange = (startDateString: string, endDateString: string) => {
+        const { dateTimeFormat } = this.state;
+        const startValue = startDateString ? moment(startDateString, dateTimeFormat) : null;
+        const endValue = endDateString ? moment(endDateString, dateTimeFormat) : null;
+
+        if ((startValue && !startValue.isValid()) || (endValue && !endValue.isValid())) {
+            return; // 无效日期，不处理
+        }
+
+        // 判断起始时间是否大于结束时间
+        if (startValue && endValue && startValue.valueOf() > endValue.valueOf()) {
+            return;
+        }
+
+        if (!('value' in this.props)) {
+            this.setState({
+                startValue,
+                endValue,
+                inputing: false,
+            });
+        }
+
+        this.onValueChange([startValue, endValue]);
+
+        if (!this.props.showTime) {
+            this.onVisibleChange(false, 'calendarSelect');
+        }
+    };
+
     handleChange = (valueName: 'startValue' | 'endValue', newValue?: Moment | null) => {
         const values = (['startValue', 'endValue'] as const).map(name =>
             valueName === name ? newValue : this.state[name]
@@ -616,7 +646,7 @@ class RangePicker extends Component<RangePickerProps, RangePickerState> {
     @APAAction({
         name: 'onOk',
         desc: '点击确认按钮时的回调',
-        params: z.tuple([z.array(z.any().nullable()).optional()]),
+        params: z.tuple([z.array(z.any().describe('日期值，moment 对象').nullable()).optional()]),
     })
     onOk = (value?: (Moment | null | undefined)[]) => {
         this.onVisibleChange(false, 'okBtnClick');

@@ -204,15 +204,23 @@ class MonthPicker extends Component<MonthPickerProps, MonthPickerState> {
     };
 
     @APAAction({
-        name: 'handleChange',
-        desc: '月份值改变时的回调',
-        params: z.tuple([
-            z.any().nullable(),
-            z.any().nullable(),
-            z.record(z.string(), z.any()).optional(),
-            z.function().optional(),
-        ]),
+        name: 'selectMonth',
+        desc: '选择月份',
+        params: z.tuple([z.string().describe('月份字符串，格式如 YYYY-MM')]),
     })
+    selectMonth = (monthString: string) => {
+        const { format } = this.props;
+        const newValue = monthString ? moment(monthString, format) : null;
+
+        if (newValue && !newValue.isValid()) {
+            return; // 无效月份，不处理
+        }
+
+        this.handleChange(newValue, this.state.value, { inputing: false }, () => {
+            this.onVisibleChange(false, 'calendarSelect');
+        });
+    };
+
     handleChange = (
         newValue: Moment | null,
         prevValue: Moment | null,

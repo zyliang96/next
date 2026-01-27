@@ -130,10 +130,22 @@ class WeekPicker extends Component<WeekPickerProps, WeekPickerState> {
     }
 
     @APAAction({
-        name: 'handleChange',
-        desc: '周值改变时的回调',
-        params: z.tuple([z.any().nullable(), z.any().nullable()]),
+        name: 'selectWeek',
+        desc: '选择周',
+        params: z.tuple([z.string().describe('周日期字符串，格式如 YYYY-MM-DD（该周内任意一天）')]),
     })
+    selectWeek = (dateString: string) => {
+        const { format } = this.props;
+        const newValue = dateString ? moment(dateString, format) : null;
+
+        if (newValue && !newValue.isValid()) {
+            return; // 无效日期，不处理
+        }
+
+        this.handleChange(newValue, this.state.value);
+        this.onVisibleChange(false, 'calendarSelect');
+    };
+
     handleChange = (newValue: Moment | null, prevValue: Moment | null) => {
         if (!('value' in this.props)) {
             this.setState({
