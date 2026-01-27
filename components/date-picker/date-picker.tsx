@@ -9,6 +9,7 @@ import {
     APAConfigProvider,
     APAState,
     APAStateEnabled,
+    APAActionAnimate,
 } from '@alifd/apa-sdk';
 import { z } from 'zod';
 import moment, { type Moment } from 'moment';
@@ -122,6 +123,11 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
     @APAState([{ name: 'value', desc: '日期值，moment 对象' }])
     state: DatePickerState;
 
+    // Action 动画引用
+    clearValueAnimateRef: APAActionAnimate | null = null;
+    selectDateAnimateRef: APAActionAnimate | null = null;
+    onOkAnimateRef: APAActionAnimate | null = null;
+
     constructor(props: DatePickerProps) {
         super(props);
         const { format, timeFormat, dateTimeFormat } = getDateTimeFormat(
@@ -207,7 +213,6 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
         this.handleChange(value, this.state.value, { inputing: false });
     };
 
-    @APAAction({ name: 'clearValue', desc: '清空日期值' })
     clearValue = () => {
         this.setState({
             dateInputStr: '',
@@ -215,6 +220,13 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
         });
 
         this.handleChange(null, this.state.value, { inputing: false });
+    };
+
+    // APA Action 包装方法，带动画
+    @APAAction({ name: 'clearValue', desc: '清空日期值' })
+    apaClearValue = () => {
+        this.clearValueAnimateRef?.triggerAnimate();
+        this.clearValue();
     };
 
     onDateInputChange = (inputStr: string | null | undefined, e: UIEvent, eventType?: string) => {
@@ -321,13 +333,6 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
         this.onTimeInputChange(timeStr);
     };
 
-    @APAAction({
-        name: 'selectDate',
-        desc: '选择日期',
-        params: z.tuple([
-            z.string().describe('日期字符串，格式如 YYYY-MM-DD 或 YYYY-MM-DD HH:mm:ss'),
-        ]),
-    })
     selectDate = (dateString: string) => {
         const { dateTimeFormat } = this.state;
         const newValue = dateString ? moment(dateString, dateTimeFormat) : null;
@@ -341,6 +346,19 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
         if (!this.props.showTime) {
             this.onVisibleChange(false, 'calendarSelect');
         }
+    };
+
+    // APA Action 包装方法，带动画
+    @APAAction({
+        name: 'selectDate',
+        desc: '选择日期',
+        params: z.tuple([
+            z.string().describe('日期字符串，格式如 YYYY-MM-DD 或 YYYY-MM-DD HH:mm:ss'),
+        ]),
+    })
+    apaSelectDate = (dateString: string) => {
+        this.selectDateAnimateRef?.triggerAnimate();
+        this.selectDate(dateString);
     };
 
     handleChange = (newValue: Moment | null, prevValue: Moment | null, others = {}) => {
@@ -394,14 +412,20 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
         });
     };
 
+    onOk = (value?: Moment | null) => {
+        this.onVisibleChange(false, 'okBtnClick');
+        this.onValueChange(value || this.state.value, 'onOk');
+    };
+
+    // APA Action 包装方法，带动画
     @APAAction({
         name: 'onOk',
         desc: '点击确认按钮时的回调',
         params: z.tuple([z.any().describe('日期值，moment 对象').nullable().optional()]),
     })
-    onOk = (value?: Moment | null) => {
-        this.onVisibleChange(false, 'okBtnClick');
-        this.onValueChange(value || this.state.value, 'onOk');
+    apaOnOk = (value?: Moment | null) => {
+        this.onOkAnimateRef?.triggerAnimate();
+        this.onOk(value);
     };
 
     renderPreview(others: HTMLAttributes<HTMLDivElement>) {
@@ -618,29 +642,38 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
 
         const allowClear = value && hasClear;
         const trigger = (
-            <div className={`${prefix}date-picker-trigger`}>
-                <Input
-                    {...sharedInputProps}
-                    label={label}
-                    state={state}
-                    value={triggerInputValue}
-                    role="combobox"
-                    aria-expanded={visible}
-                    readOnly
-                    placeholder={
-                        placeholder || (showTime ? locale.datetimePlaceholder : locale.placeholder)
-                    }
-                    hint={
-                        <Icon
-                            type="calendar"
-                            className={`${prefix}date-picker-symbol-calendar-icon`}
-                        />
-                    }
-                    // @ts-expect-error allowClear 应该先做 boolean 化处理
-                    hasClear={allowClear}
-                    className={triggerInputCls}
-                />
-            </div>
+            <APAActionAnimate
+                ref={ref => {
+                    this.clearValueAnimateRef = ref;
+                    this.selectDateAnimateRef = ref;
+                    this.onOkAnimateRef = ref;
+                }}
+            >
+                <div className={`${prefix}date-picker-trigger`}>
+                    <Input
+                        {...sharedInputProps}
+                        label={label}
+                        state={state}
+                        value={triggerInputValue}
+                        role="combobox"
+                        aria-expanded={visible}
+                        readOnly
+                        placeholder={
+                            placeholder ||
+                            (showTime ? locale.datetimePlaceholder : locale.placeholder)
+                        }
+                        hint={
+                            <Icon
+                                type="calendar"
+                                className={`${prefix}date-picker-symbol-calendar-icon`}
+                            />
+                        }
+                        // @ts-expect-error allowClear 应该先做 boolean 化处理
+                        hasClear={allowClear}
+                        className={triggerInputCls}
+                    />
+                </div>
+            </APAActionAnimate>
         );
         const PopupComponent = popupComponent ? popupComponent : Popup;
 
