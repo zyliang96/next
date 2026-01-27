@@ -2,13 +2,13 @@ import React from 'react';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { APAConfigProvider } from '@alifd/apa-sdk';
 import { obj, dom } from '../../util';
 import { fetchDataByPath } from '../util';
 import { BaseContext } from '../context';
 
 const noop = () => {};
-
-export default class Row extends React.Component {
+class Row extends React.Component {
     static propTypes = {
         prefix: PropTypes.string,
         pure: PropTypes.bool,
@@ -230,3 +230,11 @@ export default class Row extends React.Component {
         );
     }
 }
+// 命名导出原始类，用于继承
+export { Row };
+
+// 默认导出包装后的组件
+export default APAConfigProvider.config(Row, {
+    desc: '表格行组件，用于渲染表格行',
+    props: [],
+});
