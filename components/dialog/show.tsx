@@ -6,6 +6,7 @@ import React, {
 } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import { APAConfigProvider, getNodeProps } from '@alifd/apa-sdk';
 import cx from 'classnames';
 import ConfigProvider from '../config-provider';
 import Message, { type MessageProps } from '../message';
@@ -13,7 +14,7 @@ import zhCN from '../locale/zh-cn';
 import dialog from './dialog';
 import Dialog2Ins from './dialog-v2';
 import type { ShowModalInnerProps, ModelProps, ModalState, ShowConfig } from './types';
-import { APAConfigProvider } from '@alifd/apa-sdk';
+import { ApaButtonProps, ButtonProps } from '../button';
 
 const Dialog = ConfigProvider.config(dialog);
 const Dialog2 = ConfigProvider.config(
@@ -238,7 +239,50 @@ class Modal extends Component<ModelProps, ModalState> {
     }
 }
 
-const ConfigModal = ConfigProvider.config(Modal, { componentName: 'Dialog' });
+const ApaModal = APAConfigProvider.config(Modal, {
+    isRegisterChildren: true,
+    desc: '对话框组件',
+    props: [
+        {
+            key: 'visible',
+            name: '是否显示',
+            desc: '是否显示',
+        },
+        {
+            key: 'title',
+            name: '标题',
+            desc: '标题',
+        },
+        {
+            key: 'footerActions',
+            name: '底部按钮',
+            desc: '底部按钮',
+        },
+        {
+            key: 'hasMask',
+            name: '是否显示遮罩',
+            desc: '是否显示遮罩, 默认显示, 有遮罩层且弹窗展示的时候，只能操作当前弹窗下的内容，不能操作其他内容',
+        },
+        {
+            key: 'okProps',
+            name: '确定按钮属性',
+            desc: '确定按钮属性',
+            format: (props: ButtonProps) => {
+                return getNodeProps(ApaButtonProps, props);
+            },
+        },
+        {
+            key: 'cancelProps',
+            name: '取消按钮属性',
+            desc: '取消按钮属性',
+            format: (props: ButtonProps) => {
+                return getNodeProps(ApaButtonProps, props);
+            },
+        },
+    ],
+});
+
+const ConfigModal = ConfigProvider.config(ApaModal, { componentName: 'Dialog' });
 
 let showCount = 0;
 /**

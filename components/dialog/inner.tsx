@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { APAAction, APAActionDisabled, APAActionEnabled, APAConfigOptions } from '@alifd/apa-sdk';
-import { z } from 'zod';
+import { APAActionEnabled, type APAConfigOptions } from '@alifd/apa-sdk';
 import Button from '../button';
 import Icon from '../icon';
 import zhCN from '../locale/zh-cn';
@@ -19,8 +18,9 @@ const defaultFooterActionConfig: Record<string, APAConfigOptions> = {
         mergeToParent: true,
         mergeToParentAction: [
             {
-                key: 'onMouseUp',
+                key: 'onClick',
                 targetKey: 'onOk',
+                desc: '点击确定按钮',
             },
         ],
         mergeToParentState: false,
@@ -29,8 +29,9 @@ const defaultFooterActionConfig: Record<string, APAConfigOptions> = {
         mergeToParent: true,
         mergeToParentAction: [
             {
-                key: 'onMouseUp',
+                key: 'onClick',
                 targetKey: 'onCancel',
+                desc: '点击取消按钮',
             },
         ],
         mergeToParentState: false,
@@ -165,43 +166,6 @@ export default class Inner extends Component<InnerProps> {
         }
         return null;
     }
-    // @APAActionDisabled({ actionName: 'ok', defaultDisabled: false })
-    // get okAPAActionDisabled(): boolean {
-    //     const { footerActions, okProps } = this.props;
-    //     if (Array.isArray(footerActions) && footerActions.includes('ok')) {
-    //         return okProps?.disabled ?? false;
-    //     }
-    //     return false;
-    // }
-
-    // @APAAction({
-    //     name: 'ok',
-    //     desc: '点击确定按钮',
-    //     params: z.tuple([]),
-    // })
-    // apaOkAction() {
-    //     const btnProps = this.props?.okProps;
-    //     makeChain(this.props?.onOk, btnProps?.onClick);
-    // }
-
-    // @APAActionDisabled({ actionName: 'cancel', defaultDisabled: false })
-    // get cancelAPAActionDisabled(): boolean {
-    //     const { footerActions, cancelProps } = this.props;
-    //     if (Array.isArray(footerActions) && footerActions.includes('cancel')) {
-    //         return cancelProps?.disabled ?? false;
-    //     }
-    //     return false;
-    // }
-
-    // @APAAction({
-    //     name: 'cancel',
-    //     desc: '点击取消按钮',
-    //     params: z.tuple([]),
-    // })
-    // apaCancelAction() {
-    //     const btnProps = this.props?.cancelProps;
-    //     makeChain(this.props?.onCancel, btnProps?.onClick);
-    // }
 
     renderFooter() {
         const { prefix, footer, footerAlign, footerActions, locale, height } = this.props;
