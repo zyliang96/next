@@ -322,14 +322,27 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
     };
 
     @APAAction({
-        name: 'handleChange',
-        desc: '日期值改变时的回调',
+        name: 'selectDate',
+        desc: '选择日期',
         params: z.tuple([
-            z.any().nullable(),
-            z.any().nullable(),
-            z.record(z.string(), z.any()).optional(),
+            z.string().describe('日期字符串，格式如 YYYY-MM-DD 或 YYYY-MM-DD HH:mm:ss'),
         ]),
     })
+    selectDate = (dateString: string) => {
+        const { dateTimeFormat } = this.state;
+        const newValue = dateString ? moment(dateString, dateTimeFormat) : null;
+
+        if (newValue && !newValue.isValid()) {
+            return; // 无效日期，不处理
+        }
+
+        this.handleChange(newValue, this.state.value, { inputing: false });
+
+        if (!this.props.showTime) {
+            this.onVisibleChange(false, 'calendarSelect');
+        }
+    };
+
     handleChange = (newValue: Moment | null, prevValue: Moment | null, others = {}) => {
         if (!('value' in this.props)) {
             this.setState({
@@ -384,7 +397,7 @@ class DatePicker extends Component<DatePickerProps, DatePickerState> {
     @APAAction({
         name: 'onOk',
         desc: '点击确认按钮时的回调',
-        params: z.tuple([z.any().nullable().optional()]),
+        params: z.tuple([z.any().describe('日期值，moment 对象').nullable().optional()]),
     })
     onOk = (value?: Moment | null) => {
         this.onVisibleChange(false, 'okBtnClick');
